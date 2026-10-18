@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Products | Subeesha Reseller Dashboard</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <script type="module"
+        src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.esm.js">
+    </script>
+
+    <script nomodule
+        src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.js">
+    </script>
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-top">
+
+            <a href="dashboard.html" class="brand">
+
+                <div class="brand-logo">
+                    <img src="assets/images/logo.jpg" alt="Subeesha">
+                </div>
+
+                <div>
+                    <h2>Subeesha</h2>
+                    <span>Reseller Panel</span>
+                </div>
+
+            </a>
+
+        </div>
+
+        <div class="menu">
+
+            <p class="menu-title">MAIN MENU</p>
+
+            <a href="dashboard.html" class="menu-item">
+                <ion-icon name="grid-outline"></ion-icon>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="products.html" class="menu-item">
+                <ion-icon name="bag-handle-outline"></ion-icon>
+                <span>Products</span>
+            </a>
+
+            <a href="orders.html" class="menu-item">
+                <ion-icon name="receipt-outline"></ion-icon>
+                <span>My Sales</span>
+            </a>
+
+            <a href="commission.html" class="menu-item">
+                <ion-icon name="cash-outline"></ion-icon>
+                <span>Commission</span>
+            </a>
+
+            <a href="withdraw.html" class="menu-item">
+                <ion-icon name="wallet-outline"></ion-icon>
+                <span>Withdraw</span>
+            </a>
+
+            <a href="profile.html" class="menu-item">
+                <ion-icon name="person-outline"></ion-icon>
+                <span>My Profile</span>
+            </a>
+
+        </div>
+
+        <div class="sidebar-bottom">
+
+            <div class="help-box">
+
+                <div class="help-icon">
+                    <ion-icon name="headset-outline"></ion-icon>
+                </div>
+
+                <div>
+                    <h4>Need Help?</h4>
+                    <p>Contact Support</p>
+                </div>
+
+            </div>
+
+            <button class="logout-btn"
+                onclick="showToast('Logout functionality will be connected with backend.')">
+
+                <ion-icon name="log-out-outline"></ion-icon>
+                Logout
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main-content">
+
+        <!-- HEADER -->
+
+        <header class="topbar">
+
+            <div class="top-left">
+
+                <button class="menu-toggle" id="menuToggle">
+                    <ion-icon name="menu-outline"></ion-icon>
+                </button>
+
+                <div>
+                    <h1>Good Morning, Aisha 👋</h1>
+                    <p>Here's what's happening with your sales today.</p>
+                </div>
+
+            </div>
+
+            <div class="top-right">
+
+                <button class="notification-btn"
+                    onclick="showToast('You have 3 new notifications!')">
+
+                    <ion-icon name="notifications-outline"></ion-icon>
+                    <span></span>
+
+                </button>
+
+                <div class="profile-mini">
+
+                    <div class="avatar">A</div>
+
+                    <div class="profile-info">
+                        <strong>Aisha Inamullah</strong>
+                        <span>Reseller</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- PRODUCTS -->
+
+        <section id="products" class="page-section">
+
+            <div class="section-heading">
+
+                <div>
+                    <span>SELL PRODUCTS</span>
+                    <h2>Available Products</h2>
+                    <p>Choose a product and sell it to your customers.</p>
+                </div>
+
+                <div class="search-box">
+
+                    <ion-icon name="search-outline"></ion-icon>
+
+                    <input
+                        type="text"
+                        id="productSearch"
+                        placeholder="Search products..."
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="product-grid">
+
+                <!-- PRODUCT 1 -->
+
+                <div class="product-card"
+                    data-product="Premium Wireless Headphones">
+
+                    <div class="product-image">
+
+                        <span class="commission-badge">
+                            15% Commission
+                        </span>
+
+                        <img
+                            src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80"
+                            alt="Product"
+                        >
+
+                    </div>
+
+                    <div class="product-info">
+
+                        <span class="category">Electronics</span>
+
+                        <h3>Premium Wireless Headphones</h3>
+
+                        <div class="product-price">
+
+                            <strong>Rs. 4,999</strong>
+                            <span>You Earn: Rs. 750</span>
+
+                        </div>
+
+                        <div class="product-actions">
+
+                            <button class="share-btn"
+                                onclick="shareProduct('Premium Wireless Headphones')">
+
+                                <ion-icon name="share-social-outline"></ion-icon>
+                                Share
+
+                            </button>
+
+                            <button class="order-btn"
+                                onclick="openOrderModal('Premium Wireless Headphones',4999,15)">
+
+                                <ion-icon name="add-circle-outline"></ion-icon>
+                                Create Order
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PRODUCT 2 -->
+
+                <div class="product-card"
+                    data-product="Classic Lifestyle Shoes">
+
+                    <div class="product-image">
+
+                        <span class="commission-badge">
+                            12% Commission
+                        </span>
+
+                        <img
+                            src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80"
+                            alt="Product"
+                        >
+
+                    </div>
+
+                    <div class="product-info">
+
+                        <span class="category">Fashion</span>
+
+                        <h3>Classic Lifestyle Shoes</h3>
+
+                        <div class="product-price">
+
+                            <strong>Rs. 4,499</strong>
+                            <span>You Earn: Rs. 540</span>
+
+                        </div>
+
+                        <div class="product-actions">
+
+                            <button class="share-btn"
+                                onclick="shareProduct('Classic Lifestyle Shoes')">
+
+                                <ion-icon name="share-social-outline"></ion-icon>
+                                Share
+
+                            </button>
+
+                            <button class="order-btn"
+                                onclick="openOrderModal('Classic Lifestyle Shoes',4499,12)">
+
+                                <ion-icon name="add-circle-outline"></ion-icon>
+                                Create Order
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PRODUCT 3 -->
+
+                <div class="product-card"
+                    data-product="Luxury Smart Watch">
+
+                    <div class="product-image">
+
+                        <span class="commission-badge">
+                            10% Commission
+                        </span>
+
+                        <img
+                            src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80"
+                            alt="Product"
+                        >
+
+                    </div>
+
+                    <div class="product-info">
+
+                        <span class="category">Accessories</span>
+
+                        <h3>Luxury Smart Watch</h3>
+
+                        <div class="product-price">
+
+                            <strong>Rs. 6,999</strong>
+                            <span>You Earn: Rs. 700</span>
+
+                        </div>
+
+                        <div class="product-actions">
+
+                            <button class="share-btn"
+                                onclick="shareProduct('Luxury Smart Watch')">
+
+                                <ion-icon name="share-social-outline"></ion-icon>
+                                Share
+
+                            </button>
+
+                            <button class="order-btn"
+                                onclick="openOrderModal('Luxury Smart Watch',6999,10)">
+
+                                <ion-icon name="add-circle-outline"></ion-icon>
+                                Create Order
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PRODUCT 4 -->
+
+                <div class="product-card"
+                    data-product="Premium Beauty Kit">
+
+                    <div class="product-image">
+
+                        <span class="commission-badge">
+                            18% Commission
+                        </span>
+
+                        <img
+                            src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=600&q=80"
+                            alt="Product"
+                        >
+
+                    </div>
+
+                    <div class="product-info">
+
+                        <span class="category">Beauty</span>
+
+                        <h3>Premium Beauty Kit</h3>
+
+                        <div class="product-price">
+
+                            <strong>Rs. 3,499</strong>
+                            <span>You Earn: Rs. 630</span>
+
+                        </div>
+
+                        <div class="product-actions">
+
+                            <button class="share-btn"
+                                onclick="shareProduct('Premium Beauty Kit')">
+
+                                <ion-icon name="share-social-outline"></ion-icon>
+                                Share
+
+                            </button>
+
+                            <button class="order-btn"
+                                onclick="openOrderModal('Premium Beauty Kit',3499,18)">
+
+                                <ion-icon name="add-circle-outline"></ion-icon>
+                                Create Order
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- CREATE ORDER MODAL -->
+
+<div class="modal-overlay" id="orderModal">
+
+    <div class="order-modal">
+
+        <div class="modal-header">
+
+            <div>
+                <span>NEW CUSTOMER ORDER</span>
+                <h2>Create Order</h2>
+            </div>
+
+            <button class="close-modal"
+                onclick="closeOrderModal()">
+
+                <ion-icon name="close-outline"></ion-icon>
+
+            </button>
+
+        </div>
+
+
+        <form id="createOrderForm">
+
+            <div class="selected-product">
+
+                <div class="selected-product-icon">
+                    <ion-icon name="bag-handle-outline"></ion-icon>
+                </div>
+
+                <div>
+
+                    <span>Selected Product</span>
+
+                    <h3 id="modalProductName">
+                        Product Name
+                    </h3>
+
+                    <p id="modalProductPrice">
+                        Rs. 0
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-title">
+                Customer Details
+            </div>
+
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>Customer Name</label>
+
+                    <input
+                        type="text"
+                        id="customerName"
+                        placeholder="Enter customer name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Phone Number</label>
+
+                    <input
+                        type="tel"
+                        id="customerPhone"
+                        placeholder="03XXXXXXXXX"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>City</label>
+
+                    <input
+                        type="text"
+                        id="customerCity"
+                        placeholder="Enter city"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Payment Method</label>
+
+                    <select>
+
+                        <option>Cash on Delivery</option>
+                        <option>Online Payment</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Complete Address</label>
+
+                <textarea
+                    id="customerAddress"
+                    placeholder="Enter complete delivery address"
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <!-- QUANTITY -->
+
+            <div class="quantity-section">
+
+                <div>
+
+                    <h4>Quantity</h4>
+
+                    <p>Select number of products</p>
+
+                </div>
+
+
+                <div class="quantity-box">
+
+                    <button
+                        type="button"
+                        onclick="changeQuantity(-1)"
+                    >
+
+                        <ion-icon name="remove-outline"></ion-icon>
+
+                    </button>
+
+
+                    <span id="quantityValue">
+                        1
+                    </span>
+
+
+                    <button
+                        type="button"
+                        onclick="changeQuantity(1)"
+                    >
+
+                        <ion-icon name="add-outline"></ion-icon>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ORDER SUMMARY -->
+
+            <div class="order-summary">
+
+                <h3>Order Summary</h3>
+
+                <div class="summary-row">
+
+                    <span>Product Price</span>
+
+                    <strong id="summaryPrice">
+                        Rs. 0
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-row">
+
+                    <span>Your Commission</span>
+
+                    <strong
+                        class="commission-value"
+                        id="summaryCommission"
+                    >
+                        Rs. 0
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-row total-row">
+
+                    <span>Total Amount</span>
+
+                    <strong id="summaryTotal">
+                        Rs. 0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="place-order-btn"
+            >
+
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+
+                Place Customer Order
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div class="toast" id="toast">
+
+    <ion-icon name="checkmark-circle-outline"></ion-icon>
+
+    <span id="toastMessage"></span>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="../../assets/js/firebase-config.js"></script>
+<script src="../../assets/js/sub-core.js"></script>
+<script src="assets/js/script.js"></script>
+<script src="assets/js/reseller-core.js"></script>
+<script src="assets/js/products.js"></script>
+
+</body>
+</html>

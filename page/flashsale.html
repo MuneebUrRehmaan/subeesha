@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Flash Sale | Subeesha</title>
+
+<link rel="stylesheet" href="../assets/css/flashsale.css">
+</head>
+
+<body data-page="flashsale">
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header>
+
+    <nav>
+
+        <a href="../index.html" class="brand">
+
+            <span class="brand-logo-circle">
+                <img src="../assets/images/logo.jpg" alt="Subeesha Logo">
+            </span>
+
+        </a>
+
+
+        <ul class="nav-links" id="navLinks">
+
+            <li>
+                <a href="../index.html">Home</a>
+            </li>
+
+            <li>
+                <a href="../page/Categories.html">Categories</a>
+            </li>
+
+            <li>
+                <a href="../page/shop.html">Shop</a>
+            </li>
+
+            <li>
+                <a href="../page/new-arrivals.html">New Arrivals</a>
+            </li>
+
+            <li>
+                <a href="../page/flashsale.html" class="active">
+                    Flash Sale
+                </a>
+            </li>
+
+            <li>
+                <a href="../page/loyalty.html">Rewards</a>
+            </li>
+
+            <li>
+                <a href="#footer">Contact</a>
+            </li>
+
+        </ul>
+
+
+        <div class="header-search">
+
+            <ion-icon name="search-outline"></ion-icon>
+
+            <input
+                type="search"
+                id="searchInput"
+                placeholder="Search flash sale..."
+                onkeyup="if(event.key === 'Enter') searchProduct()"
+            >
+
+            <button onclick="searchProduct()">
+                <ion-icon name="arrow-forward-outline"></ion-icon>
+            </button>
+
+        </div>
+
+
+        <div class="nav-actions">
+
+            <button class="icon-btn" onclick="showToast('Wishlist opened')">
+                <ion-icon name="heart-outline"></ion-icon>
+            </button>
+
+            <button class="icon-btn" onclick="showToast('Account page opened')">
+                <ion-icon name="person-outline"></ion-icon>
+            </button>
+
+            <button class="icon-btn" onclick="showCart()">
+
+                <ion-icon name="bag-handle-outline"></ion-icon>
+
+                <span class="cart-count" id="cartCount">
+                    0
+                </span>
+
+            </button>
+
+            <button class="icon-btn menu-btn" onclick="toggleMenu()">
+                <ion-icon name="menu-outline"></ion-icon>
+            </button>
+
+        </div>
+
+    </nav>
+
+</header>
+
+
+<!-- =====================================================
+     STICKY FLASH SALE COUNTDOWN
+===================================================== -->
+
+<div class="flash-sale-bar">
+
+    <div class="flash-sale-inner">
+
+
+        <div class="flash-sale-title">
+
+            <span class="flash-icon">
+                ⚡
+            </span>
+
+            <div>
+
+                <strong>
+                    FLASH SALE LIVE
+                </strong>
+
+                <small>
+                    Limited time offers — Shop before it's over!
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="top-countdown">
+
+            <div class="top-time-box">
+
+                <strong id="days">00</strong>
+
+                <span>Days</span>
+
+            </div>
+
+
+            <span class="colon">:</span>
+
+
+            <div class="top-time-box">
+
+                <strong id="hours">00</strong>
+
+                <span>Hours</span>
+
+            </div>
+
+
+            <span class="colon">:</span>
+
+
+            <div class="top-time-box">
+
+                <strong id="minutes">00</strong>
+
+                <span>Minutes</span>
+
+            </div>
+
+
+            <span class="colon">:</span>
+
+
+            <div class="top-time-box">
+
+                <strong id="seconds">00</strong>
+
+                <span>Seconds</span>
+
+            </div>
+
+        </div>
+
+
+        <a href="#flash-products" class="shop-sale-btn">
+
+            Shop Now
+
+            <ion-icon name="arrow-forward-outline"></ion-icon>
+
+        </a>
+
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="flash-hero">
+
+    <div class="hero-container">
+
+
+        <div class="hero-content">
+
+            <span class="hero-badge">
+                ⚡ LIMITED TIME OFFERS
+            </span>
+
+
+            <h1>
+                Subeesha
+                <span>Flash Sale</span>
+            </h1>
+
+
+            <p>
+                Grab your favourite products at exclusive discounted
+                prices. Limited stock, limited time and amazing deals
+                waiting for you.
+            </p>
+
+
+            <div class="hero-buttons">
+
+                <a href="#flash-products" class="primary-btn">
+                    Shop Flash Sale
+                </a>
+
+                <a href="#sale-info" class="secondary-btn">
+                    View Deals
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="sale-highlight">
+
+            <div class="sale-highlight-top">
+
+                <span class="hot-label">
+                    🔥 HOT DEAL
+                </span>
+
+                <span class="discount-big">
+                    50% OFF
+                </span>
+
+            </div>
+
+
+            <div class="sale-product-image">
+
+                <img
+                    src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=80"
+                    alt="Premium Smart Watch"
+                >
+
+            </div>
+
+
+            <h3>
+                Premium Smart Watch
+            </h3>
+
+
+            <div class="highlight-price">
+
+                <strong>
+                    Rs. 4,999
+                </strong>
+
+                <del>
+                    Rs. 9,999
+                </del>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FLASH PRODUCTS
+===================================================== -->
+
+<section class="section" id="flash-products">
+
+    <div class="container">
+
+
+        <div class="section-head">
+
+            <span class="kicker">
+                ⚡ FLASH DEALS
+            </span>
+
+            <h2>
+                Deals You Don't Want to Miss
+            </h2>
+
+            <p>
+                Hurry! These prices are available for a limited time only.
+            </p>
+
+        </div>
+
+
+        <div class="sale-info" id="sale-info">
+
+
+            <div class="sale-info-left">
+
+                <div class="sale-icon">
+                    <ion-icon name="flash-outline"></ion-icon>
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        Limited Stock Available
+                    </h3>
+
+                    <p>
+                        Products are selling fast. Add your favourites
+                        before they're gone.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="filter-buttons">
+
+                <button
+                    class="filter-btn active"
+                    onclick="filterProducts('all', this)"
+                >
+                    All Deals
+                </button>
+
+                <button
+                    class="filter-btn"
+                    onclick="filterProducts('fashion', this)"
+                >
+                    Fashion
+                </button>
+
+                <button
+                    class="filter-btn"
+                    onclick="filterProducts('beauty', this)"
+                >
+                    Beauty
+                </button>
+
+                <button
+                    class="filter-btn"
+                    onclick="filterProducts('electronics', this)"
+                >
+                    Electronics
+                </button>
+
+                <button
+                    class="filter-btn"
+                    onclick="filterProducts('home', this)"
+                >
+                    Home
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- PRODUCTS -->
+
+        <div class="products-grid" id="productsGrid">
+
+
+            <!-- PRODUCT 1 -->
+
+            <div class="product-card" data-category="electronics">
+
+                <div class="product-image">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=80"
+                        alt="Premium Smart Watch"
+                    >
+
+                    <span class="discount-badge">
+                        50% OFF
+                    </span>
+
+                    <button
+                        class="wishlist-btn"
+                        onclick="toggleWishlist(this)"
+                    >
+                        <ion-icon name="heart-outline"></ion-icon>
+                    </button>
+
+                </div>
+
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Electronics
+                    </span>
+
+                    <h3>
+                        Premium Smart Watch
+                    </h3>
+
+                    <div class="price-row">
+
+                        <span class="sale-price">
+                            Rs. 4,999
+                        </span>
+
+                        <span class="old-price">
+                            Rs. 9,999
+                        </span>
+
+                    </div>
+
+
+                    <div class="stock-area">
+
+                        <div class="stock-text">
+
+                            <span>Sold: 72</span>
+
+                            <strong>Only 28 left</strong>
+
+                        </div>
+
+                        <div class="stock-bar">
+
+                            <div
+                                class="stock-progress"
+                                style="width:72%"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="product-actions">
+
+                        <button
+                            class="add-cart"
+                            onclick="addToCart('Premium Smart Watch')"
+                        >
+                            Add to Cart
+                        </button>
+
+                        <button
+                            class="view-btn"
+                            onclick="showToast('Premium Smart Watch details opened')"
+                        >
+                            <ion-icon name="eye-outline"></ion-icon>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PRODUCT 2 -->
+
+            <div class="product-card" data-category="fashion">
+
+                <div class="product-image">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=700&q=80"
+                        alt="Classic Casual Shirt"
+                    >
+
+                    <span class="discount-badge">
+                        40% OFF
+                    </span>
+
+                    <button
+                        class="wishlist-btn"
+                        onclick="toggleWishlist(this)"
+                    >
+                        <ion-icon name="heart-outline"></ion-icon>
+                    </button>
+
+                </div>
+
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Fashion
+                    </span>
+
+                    <h3>
+                        Classic Casual Shirt
+                    </h3>
+
+                    <div class="price-row">
+
+                        <span class="sale-price">
+                            Rs. 1,799
+                        </span>
+
+                        <span class="old-price">
+                            Rs. 2,999
+                        </span>
+
+                    </div>
+
+
+                    <div class="stock-area">
+
+                        <div class="stock-text">
+
+                            <span>Sold: 63</span>
+
+                            <strong>Only 37 left</strong>
+
+                        </div>
+
+                        <div class="stock-bar">
+                            <div class="stock-progress" style="width:63%"></div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="product-actions">
+
+                        <button
+                            class="add-cart"
+                            onclick="addToCart('Classic Casual Shirt')"
+                        >
+                            Add to Cart
+                        </button>
+
+                        <button class="view-btn">
+                            <ion-icon name="eye-outline"></ion-icon>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PRODUCT 3 -->
+
+            <div class="product-card" data-category="beauty">
+
+                <div class="product-image">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=700&q=80"
+                        alt="Luxury Skincare Set"
+                    >
+
+                    <span class="discount-badge">
+                        35% OFF
+                    </span>
+
+                    <button
+                        class="wishlist-btn"
+                        onclick="toggleWishlist(this)"
+                    >
+                        <ion-icon name="heart-outline"></ion-icon>
+                    </button>
+
+                </div>
+
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Beauty
+                    </span>
+
+                    <h3>
+                        Luxury Skincare Set
+                    </h3>
+
+                    <div class="price-row">
+
+                        <span class="sale-price">
+                            Rs. 2,599
+                        </span>
+
+                        <span class="old-price">
+                            Rs. 3,999
+                        </span>
+
+                    </div>
+
+                    <div class="stock-area">
+
+                        <div class="stock-text">
+
+                            <span>Sold: 81</span>
+
+                            <strong>Only 19 left</strong>
+
+                        </div>
+
+                        <div class="stock-bar">
+                            <div class="stock-progress" style="width:81%"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="product-actions">
+
+                        <button
+                            class="add-cart"
+                            onclick="addToCart('Luxury Skincare Set')"
+                        >
+                            Add to Cart
+                        </button>
+
+                        <button class="view-btn">
+                            <ion-icon name="eye-outline"></ion-icon>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PRODUCT 4 -->
+
+            <div class="product-card" data-category="home">
+
+                <div class="product-image">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=700&q=80"
+                        alt="Modern Table Lamp"
+                    >
+
+                    <span class="discount-badge">
+                        45% OFF
+                    </span>
+
+                    <button
+                        class="wishlist-btn"
+                        onclick="toggleWishlist(this)"
+                    >
+                        <ion-icon name="heart-outline"></ion-icon>
+                    </button>
+
+                </div>
+
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Home
+                    </span>
+
+                    <h3>
+                        Modern Table Lamp
+                    </h3>
+
+                    <div class="price-row">
+
+                        <span class="sale-price">
+                            Rs. 1,999
+                        </span>
+
+                        <span class="old-price">
+                            Rs. 3,499
+                        </span>
+
+                    </div>
+
+                    <div class="stock-area">
+
+                        <div class="stock-text">
+
+                            <span>Sold: 58</span>
+
+                            <strong>Only 42 left</strong>
+
+                        </div>
+
+                        <div class="stock-bar">
+                            <div class="stock-progress" style="width:58%"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="product-actions">
+
+                        <button
+                            class="add-cart"
+                            onclick="addToCart('Modern Table Lamp')"
+                        >
+                            Add to Cart
+                        </button>
+
+                        <button class="view-btn">
+                            <ion-icon name="eye-outline"></ion-icon>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PRODUCT 5 -->
+
+            <div class="product-card" data-category="fashion">
+
+                <div class="product-image">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80"
+                        alt="Running Shoes"
+                    >
+
+                    <span class="discount-badge">
+                        30% OFF
+                    </span>
+
+                    <button
+                        class="wishlist-btn"
+                        onclick="toggleWishlist(this)"
+                    >
+                        <ion-icon name="heart-outline"></ion-icon>
+                    </button>
+
+                </div>
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Fashion
+                    </span>
+
+                    <h3>
+                        Running Shoes
+                    </h3>
+
+                    <div class="price-row">
+
+                        <span class="sale-price">
+                            Rs. 3,499
+                        </span>
+
+                        <span class="old-price">
+                            Rs. 4,999
+                        </span>
+
+                    </div>
+
+                    <div class="stock-area">
+
+                        <div class="stock-text">
+
+                            <span>Sold: 69</span>
+
+                            <strong>Only 31 left</strong>
+
+                        </div>
+
+                        <div class="stock-bar">
+                            <div class="stock-progress" style="width:69%"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="product-actions">
+
+                        <button
+                            class="add-cart"
+                            onclick="addToCart('Running Shoes')"
+                        >
+                            Add to Cart
+                        </button>
+
+                        <button class="view-btn">
+                            <ion-icon name="eye-outline"></ion-icon>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PRODUCT 6 -->
+
+            <div class="product-card" data-category="electronics">
+
+                <div class="product-image">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=80"
+                        alt="Wireless Headphones"
+                    >
+
+                    <span class="discount-badge">
+                        55% OFF
+                    </span>
+
+                    <button
+                        class="wishlist-btn"
+                        onclick="toggleWishlist(this)"
+                    >
+                        <ion-icon name="heart-outline"></ion-icon>
+                    </button>
+
+                </div>
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Electronics
+                    </span>
+
+                    <h3>
+                        Wireless Headphones
+                    </h3>
+
+                    <div class="price-row">
+
+                        <span class="sale-price">
+                            Rs. 2,299
+                        </span>
+
+                        <span class="old-price">
+                            Rs. 4,999
+                        </span>
+
+                    </div>
+
+                    <div class="stock-area">
+
+                        <div class="stock-text">
+
+                            <span>Sold: 86</span>
+
+                            <strong>Only 14 left</strong>
+
+                        </div>
+
+                        <div class="stock-bar">
+                            <div class="stock-progress" style="width:86%"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="product-actions">
+
+                        <button
+                            class="add-cart"
+                            onclick="addToCart('Wireless Headphones')"
+                        >
+                            Add to Cart
+                        </button>
+
+                        <button class="view-btn">
+                            <ion-icon name="eye-outline"></ion-icon>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PRODUCT 7 -->
+
+            <div class="product-card" data-category="beauty">
+
+                <div class="product-image">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=700&q=80"
+                        alt="Premium Makeup Kit"
+                    >
+
+                    <span class="discount-badge">
+                        25% OFF
+                    </span>
+
+                    <button
+                        class="wishlist-btn"
+                        onclick="toggleWishlist(this)"
+                    >
+                        <ion-icon name="heart-outline"></ion-icon>
+                    </button>
+
+                </div>
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Beauty
+                    </span>
+
+                    <h3>
+                        Premium Makeup Kit
+                    </h3>
+
+                    <div class="price-row">
+
+                        <span class="sale-price">
+                            Rs. 3,999
+                        </span>
+
+                        <span class="old-price">
+                            Rs. 5,299
+                        </span>
+
+                    </div>
+
+                    <div class="stock-area">
+
+                        <div class="stock-text">
+
+                            <span>Sold: 54</span>
+
+                            <strong>Only 46 left</strong>
+
+                        </div>
+
+                        <div class="stock-bar">
+                            <div class="stock-progress" style="width:54%"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="product-actions">
+
+                        <button
+                            class="add-cart"
+                            onclick="addToCart('Premium Makeup Kit')"
+                        >
+                            Add to Cart
+                        </button>
+
+                        <button class="view-btn">
+                            <ion-icon name="eye-outline"></ion-icon>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PRODUCT 8 -->
+
+            <div class="product-card" data-category="home">
+
+                <div class="product-image">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=700&q=80"
+                        alt="Comfort Home Chair"
+                    >
+
+                    <span class="discount-badge">
+                        40% OFF
+                    </span>
+
+                    <button
+                        class="wishlist-btn"
+                        onclick="toggleWishlist(this)"
+                    >
+                        <ion-icon name="heart-outline"></ion-icon>
+                    </button>
+
+                </div>
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Home
+                    </span>
+
+                    <h3>
+                        Comfort Home Chair
+                    </h3>
+
+                    <div class="price-row">
+
+                        <span class="sale-price">
+                            Rs. 7,499
+                        </span>
+
+                        <span class="old-price">
+                            Rs. 12,499
+                        </span>
+
+                    </div>
+
+                    <div class="stock-area">
+
+                        <div class="stock-text">
+
+                            <span>Sold: 76</span>
+
+                            <strong>Only 24 left</strong>
+
+                        </div>
+
+                        <div class="stock-bar">
+                            <div class="stock-progress" style="width:76%"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="product-actions">
+
+                        <button
+                            class="add-cart"
+                            onclick="addToCart('Comfort Home Chair')"
+                        >
+                            Add to Cart
+                        </button>
+
+                        <button class="view-btn">
+                            <ion-icon name="eye-outline"></ion-icon>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="load-area">
+
+            <button
+                class="load-btn"
+                onclick="showToast('More flash sale products will be available soon!')"
+            >
+                Load More Deals
+            </button>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     NEWSLETTER
+===================================================== -->
+
+<section class="newsletter">
+
+    <ion-icon name="mail-outline"></ion-icon>
+
+    <h2>
+        Never Miss a Deal
+    </h2>
+
+    <p>
+        Subscribe to receive exclusive Subeesha offers and flash sale updates.
+    </p>
+
+
+    <form class="news-form" onsubmit="subscribe(event)">
+
+        <input
+            type="email"
+            placeholder="Enter your email address"
+            required
+        >
+
+        <button type="submit">
+            Subscribe
+        </button>
+
+    </form>
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer id="footer">
+
+    <div class="footer">
+
+
+        <div class="footer-brand">
+
+            <span class="footer-logo-circle">
+
+                <img
+                    src="../assets/images/logo.jpg"
+                    alt="Subeesha"
+                >
+
+            </span>
+
+            <p>
+                E-commerce • E-business • Everyday Essentials.
+                Shop more, live better with Subeesha.
+            </p>
+
+
+            <div class="socials">
+
+                <a href="#">
+                    <ion-icon name="logo-facebook"></ion-icon>
+                </a>
+
+                <a href="#">
+                    <ion-icon name="logo-instagram"></ion-icon>
+                </a>
+
+                <a href="#">
+                    <ion-icon name="logo-tiktok"></ion-icon>
+                </a>
+
+                <a href="#">
+                    <ion-icon name="logo-youtube"></ion-icon>
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div>
+
+            <h3>Shop</h3>
+
+            <a href="../page/shop.html">All Products</a>
+            <a href="../page/new-arrivals.html">New Arrivals</a>
+            <a href="../page/flashsale.html">Flash Sale</a>
+            <a href="../page/Categories.html">Categories</a>
+
+        </div>
+
+
+        <div>
+
+            <h3>Customer Care</h3>
+
+            <a href="#">Contact Us</a>
+            <a href="#">FAQs</a>
+            <a href="#">Shipping Policy</a>
+            <a href="#">Return Policy</a>
+
+        </div>
+
+
+        <div>
+
+            <h3>Subeesha</h3>
+
+            <a href="#">About Us</a>
+            <a href="../panel/reseller/index.html">Become a Reseller</a>
+            <a href="../page/loyalty.html">Loyalty Rewards</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        © 2026 Subeesha. All Rights Reserved.
+
+    </div>
+
+</footer>
+
+
+<!-- =====================================================
+     TOAST
+===================================================== -->
+
+<div class="toast" id="toast">
+
+    <ion-icon name="checkmark-circle-outline"></ion-icon>
+
+    <span id="toastText">
+        Success
+    </span>
+
+</div>
+
+
+<!-- =====================================================
+     IONICONS
+===================================================== -->
+
+<script
+type="module"
+src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.esm.js">
+</script>
+
+<script
+nomodule
+src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.js">
+</script>
+
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="../assets/js/firebase-config.js"></script>
+<script src="../assets/js/sub-core.js"></script>
+<script src="../assets/js/flashsale.js"></script>
+
+<script src="../assets/js/store.js" defer></script>
+</body>
+</html>

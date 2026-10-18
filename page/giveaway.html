@@ -1,0 +1,2163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Subeesha Giveaway | Participate & Win</title>
+
+<!-- Main Website CSS -->
+<link rel="stylesheet" href="../assets/css/style.css">
+
+<!-- Font Awesome -->
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<style>
+
+/* =========================================================
+   GIVEAWAY PAGE
+========================================================= */
+
+:root{
+    --primary:#0e3d34;
+    --dark:#072620;
+    --gold:#d6a85f;
+    --light:#f7f5f0;
+    --white:#ffffff;
+    --text:#25332f;
+    --muted:#73817d;
+    --border:#e5e8e6;
+    --success:#1f8a5b;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body.giveaway-page{
+    margin:0;
+    background:#f8faf9;
+    color:var(--text);
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.giveaway-hero{
+    min-height:580px;
+    display:flex;
+    align-items:center;
+    position:relative;
+    overflow:hidden;
+
+    background-image:
+    linear-gradient(
+        90deg,
+        rgba(7,38,32,.96) 0%,
+        rgba(14,61,52,.88) 42%,
+        rgba(14,61,52,.45) 68%,
+        rgba(7,38,32,.20) 100%
+    ),
+    url('assets/images/giveaway-chess.jpg');
+
+    background-size:cover;
+    background-position:center;
+}
+
+.giveaway-hero-content{
+    width:min(1200px,90%);
+    margin:auto;
+    padding:100px 0;
+    color:white;
+}
+
+.giveaway-label{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+
+    padding:10px 18px;
+
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.25);
+
+    border-radius:50px;
+
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:1px;
+}
+
+.giveaway-label i{
+    color:var(--gold);
+}
+
+.giveaway-hero h1{
+    max-width:800px;
+    margin:22px 0 18px;
+
+    font-size:clamp(44px,7vw,82px);
+    line-height:1;
+}
+
+.giveaway-hero h1 span{
+    color:var(--gold);
+}
+
+.giveaway-hero p{
+    max-width:650px;
+
+    font-size:17px;
+    line-height:1.8;
+
+    color:rgba(255,255,255,.82);
+}
+
+.giveaway-buttons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:15px;
+
+    margin-top:32px;
+}
+
+.giveaway-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+
+    padding:15px 25px;
+
+    border-radius:8px;
+
+    text-decoration:none;
+    font-weight:700;
+
+    transition:.3s;
+}
+
+.giveaway-btn.primary{
+    background:var(--gold);
+    color:var(--dark);
+}
+
+.giveaway-btn.primary:hover{
+    transform:translateY(-3px);
+    box-shadow:0 12px 30px rgba(0,0,0,.2);
+}
+
+.giveaway-btn.light{
+    border:1px solid rgba(255,255,255,.35);
+    color:white;
+    background:rgba(255,255,255,.08);
+}
+
+.giveaway-btn.light:hover{
+    background:white;
+    color:var(--dark);
+}
+
+
+/* =========================================================
+   COUNTDOWN
+========================================================= */
+
+.giveaway-countdown-wrap{
+    width:min(1100px,90%);
+    margin:-65px auto 0;
+    position:relative;
+    z-index:5;
+}
+
+.giveaway-countdown{
+    background:white;
+
+    padding:30px;
+
+    border-radius:18px;
+
+    box-shadow:0 18px 50px rgba(0,0,0,.12);
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:30px;
+}
+
+.countdown-title h3{
+    margin:0;
+    color:var(--dark);
+    font-size:25px;
+}
+
+.countdown-title p{
+    margin:7px 0 0;
+    color:var(--muted);
+}
+
+.giveaway-timer{
+    display:flex;
+    gap:12px;
+}
+
+.timer-box{
+    min-width:76px;
+
+    text-align:center;
+
+    padding:13px 10px;
+
+    background:var(--light);
+
+    border-radius:12px;
+}
+
+.timer-box strong{
+    display:block;
+
+    font-size:27px;
+
+    color:var(--primary);
+}
+
+.timer-box small{
+    font-size:10px;
+
+    color:var(--muted);
+
+    text-transform:uppercase;
+}
+
+
+/* =========================================================
+   COMMON SECTION
+========================================================= */
+
+.giveaway-section{
+    width:min(1200px,90%);
+    margin:95px auto;
+}
+
+.giveaway-heading{
+    max-width:720px;
+
+    margin:0 auto 45px;
+
+    text-align:center;
+}
+
+.giveaway-heading .small-title{
+    color:var(--gold);
+
+    text-transform:uppercase;
+
+    font-size:12px;
+    font-weight:800;
+
+    letter-spacing:2px;
+}
+
+.giveaway-heading h2{
+    margin:12px 0;
+
+    color:var(--dark);
+
+    font-size:clamp(32px,5vw,45px);
+}
+
+.giveaway-heading p{
+    margin:0;
+
+    color:var(--muted);
+
+    line-height:1.8;
+}
+
+
+/* =========================================================
+   PRIZES
+========================================================= */
+
+.prizes-grid{
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:25px;
+}
+
+.prize-card{
+    background:white;
+
+    border:1px solid var(--border);
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    transition:.35s;
+}
+
+.prize-card:hover{
+    transform:translateY(-8px);
+
+    box-shadow:0 20px 45px rgba(0,0,0,.09);
+}
+
+.prize-image{
+    height:250px;
+
+    overflow:hidden;
+}
+
+.prize-image img{
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    transition:.4s;
+}
+
+.prize-card:hover img{
+    transform:scale(1.08);
+}
+
+.prize-info{
+    padding:25px;
+}
+
+.prize-position{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+
+    padding:7px 12px;
+
+    border-radius:30px;
+
+    background:rgba(214,168,95,.15);
+
+    color:#9b6c28;
+
+    font-size:11px;
+    font-weight:800;
+}
+
+.prize-info h3{
+    margin:15px 0 8px;
+
+    font-size:21px;
+}
+
+.prize-info p{
+    margin:0;
+
+    color:var(--muted);
+
+    line-height:1.7;
+}
+
+
+/* =========================================================
+   PARTICIPATE SECTION
+========================================================= */
+
+.participate-section{
+    background:var(--dark);
+
+    padding:100px 0;
+}
+
+.participate-container{
+    width:min(1150px,90%);
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:60px;
+
+    align-items:center;
+}
+
+.participate-info{
+    color:white;
+}
+
+.participate-info .small-title{
+    color:var(--gold);
+
+    text-transform:uppercase;
+
+    letter-spacing:2px;
+
+    font-size:12px;
+    font-weight:800;
+}
+
+.participate-info h2{
+    margin:15px 0;
+
+    font-size:clamp(38px,5vw,55px);
+
+    line-height:1.1;
+}
+
+.participate-info > p{
+    color:rgba(255,255,255,.72);
+
+    line-height:1.9;
+}
+
+.steps{
+    margin-top:35px;
+}
+
+.step{
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+    margin-bottom:18px;
+}
+
+.step-number{
+    width:44px;
+    height:44px;
+
+    min-width:44px;
+
+    border-radius:50%;
+
+    display:grid;
+    place-items:center;
+
+    background:var(--gold);
+
+    color:var(--dark);
+
+    font-weight:800;
+}
+
+.step-content strong{
+    display:block;
+
+    margin-bottom:3px;
+}
+
+.step-content span{
+    color:rgba(255,255,255,.65);
+
+    font-size:14px;
+}
+
+
+/* =========================================================
+   INSTAGRAM REQUIREMENT BOX
+========================================================= */
+
+.instagram-task{
+    margin-top:30px;
+
+    padding:22px;
+
+    border:1px solid rgba(255,255,255,.15);
+
+    background:rgba(255,255,255,.07);
+
+    border-radius:16px;
+}
+
+.instagram-task h3{
+    margin:0 0 15px;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    color:white;
+}
+
+.instagram-task h3 i{
+    color:#ff7a8b;
+}
+
+.instagram-task ul{
+    list-style:none;
+
+    margin:0;
+    padding:0;
+}
+
+.instagram-task li{
+    display:flex;
+
+    gap:10px;
+
+    margin:12px 0;
+
+    color:rgba(255,255,255,.78);
+
+    font-size:14px;
+}
+
+.instagram-task li i{
+    color:var(--gold);
+
+    margin-top:3px;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.giveaway-form{
+    background:white;
+
+    padding:38px;
+
+    border-radius:20px;
+
+    box-shadow:0 20px 60px rgba(0,0,0,.2);
+}
+
+.giveaway-form h3{
+    margin:0 0 8px;
+
+    color:var(--dark);
+
+    font-size:29px;
+}
+
+.form-description{
+    margin:0 0 25px;
+
+    color:var(--muted);
+
+    font-size:14px;
+}
+
+.form-group{
+    margin-bottom:17px;
+}
+
+.form-group label{
+    display:block;
+
+    margin-bottom:8px;
+
+    font-size:13px;
+
+    font-weight:700;
+}
+
+.form-group label span{
+    color:#d65a5a;
+}
+
+.input-wrapper{
+    position:relative;
+}
+
+.input-wrapper i{
+    position:absolute;
+
+    left:15px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:var(--muted);
+}
+
+.form-group input,
+.form-group select{
+    width:100%;
+
+    padding:14px 15px;
+
+    border:1px solid var(--border);
+
+    border-radius:9px;
+
+    outline:none;
+
+    font-size:14px;
+
+    transition:.25s;
+}
+
+.input-wrapper input{
+    padding-left:43px;
+}
+
+.form-group input:focus,
+.form-group select:focus{
+    border-color:var(--gold);
+
+    box-shadow:0 0 0 3px rgba(214,168,95,.12);
+}
+
+.instagram-field{
+    background:#faf7f8;
+
+    border:1px solid #f0dfe3;
+
+    padding:18px;
+
+    border-radius:12px;
+
+    margin-bottom:18px;
+}
+
+.instagram-field h4{
+    margin:0 0 15px;
+
+    color:#a33c5a;
+
+    font-size:15px;
+
+    display:flex;
+    gap:8px;
+    align-items:center;
+}
+
+.checkbox-group{
+    display:flex;
+
+    gap:10px;
+
+    align-items:flex-start;
+
+    margin:20px 0;
+}
+
+.checkbox-group input{
+    width:17px;
+    height:17px;
+
+    margin-top:2px;
+
+    accent-color:var(--primary);
+}
+
+.checkbox-group label{
+    font-size:12px;
+
+    line-height:1.7;
+
+    color:var(--muted);
+}
+
+.participate-btn{
+    width:100%;
+
+    border:none;
+
+    background:var(--primary);
+
+    color:white;
+
+    padding:16px;
+
+    border-radius:10px;
+
+    font-size:15px;
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.participate-btn:hover{
+    background:var(--dark);
+
+    transform:translateY(-2px);
+}
+
+
+/* =========================================================
+   RULES
+========================================================= */
+
+.rules-grid{
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:22px;
+}
+
+.rule-card{
+    background:white;
+
+    border:1px solid var(--border);
+
+    padding:25px;
+
+    border-radius:16px;
+
+    display:flex;
+
+    gap:18px;
+}
+
+.rule-icon{
+    width:52px;
+    height:52px;
+
+    min-width:52px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:13px;
+
+    background:rgba(14,61,52,.08);
+
+    color:var(--primary);
+
+    font-size:22px;
+}
+
+.rule-card h3{
+    margin:2px 0 8px;
+
+    font-size:18px;
+}
+
+.rule-card p{
+    margin:0;
+
+    color:var(--muted);
+
+    font-size:14px;
+
+    line-height:1.7;
+}
+
+
+/* =========================================================
+   WINNERS
+========================================================= */
+
+.winners-section{
+    background:#eef4f1;
+
+    padding:95px 0;
+}
+
+.winners-container{
+    width:min(1100px,90%);
+
+    margin:auto;
+}
+
+.winners{
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:22px;
+}
+
+.winner-card{
+    background:white;
+
+    padding:30px;
+
+    border-radius:17px;
+
+    text-align:center;
+}
+
+.winner-avatar{
+    width:76px;
+    height:76px;
+
+    margin:0 auto 15px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:50%;
+
+    background:var(--primary);
+
+    color:var(--gold);
+
+    font-size:24px;
+
+    font-weight:800;
+}
+
+.winner-card h3{
+    margin:0 0 7px;
+}
+
+.winner-card p{
+    margin:0;
+
+    color:var(--muted);
+}
+
+.winner-prize{
+    display:inline-block;
+
+    margin-top:15px;
+
+    padding:7px 13px;
+
+    border-radius:30px;
+
+    background:var(--light);
+
+    color:var(--primary);
+
+    font-size:11px;
+
+    font-weight:800;
+}
+
+
+/* =========================================================
+   SUCCESS MODAL
+========================================================= */
+
+.success-overlay{
+    position:fixed;
+
+    inset:0;
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+
+    background:rgba(0,0,0,.65);
+
+    z-index:99999;
+}
+
+.success-overlay.show{
+    display:flex;
+}
+
+.success-modal{
+    width:min(480px,100%);
+
+    background:white;
+
+    border-radius:22px;
+
+    padding:40px 30px;
+
+    text-align:center;
+
+    animation:pop .35s ease;
+}
+
+@keyframes pop{
+    from{
+        opacity:0;
+        transform:scale(.85);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+.success-icon{
+    width:75px;
+    height:75px;
+
+    margin:0 auto 20px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:50%;
+
+    background:rgba(31,138,91,.12);
+
+    color:var(--success);
+
+    font-size:35px;
+}
+
+.success-modal h2{
+    margin:0 0 12px;
+
+    color:var(--dark);
+}
+
+.success-modal p{
+    color:var(--muted);
+
+    line-height:1.8;
+}
+
+.success-modal button{
+    border:none;
+
+    background:var(--primary);
+
+    color:white;
+
+    padding:13px 28px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-weight:700;
+
+    margin-top:12px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:950px){
+
+    .giveaway-countdown{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .participate-container{
+        grid-template-columns:1fr;
+    }
+
+    .prizes-grid{
+        grid-template-columns:1fr;
+    }
+
+    .winners{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:700px){
+
+    .rules-grid{
+        grid-template-columns:1fr;
+    }
+
+    .giveaway-hero{
+        min-height:650px;
+
+        background-position:center;
+    }
+
+    .giveaway-timer{
+        width:100%;
+
+        justify-content:center;
+    }
+
+    .timer-box{
+        min-width:60px;
+    }
+}
+
+@media(max-width:500px){
+
+    .giveaway-hero-content{
+        padding:75px 0 120px;
+    }
+
+    .giveaway-form{
+        padding:25px 18px;
+    }
+
+    .timer-box strong{
+        font-size:20px;
+    }
+
+    .timer-box{
+        min-width:52px;
+        padding:10px 5px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body class="giveaway-page" data-page="giveaway">
+
+
+<!-- =========================================================
+     TOP BAR
+========================================================= -->
+
+<div class="topbar">
+
+    <span>
+        <i class="fa-solid fa-shield-halved"></i>
+        Quality Products
+    </span>
+
+    <span>
+        <i class="fa-solid fa-truck-fast"></i>
+        Fast Delivery Across Pakistan
+    </span>
+
+    <span>
+        <i class="fa-solid fa-gift"></i>
+        Earn Rewards With Every Order
+    </span>
+
+</div>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header>
+
+<nav class="navbar">
+
+    <a href="../index.html#home"
+       class="brand"
+       aria-label="Subeesha Home">
+
+        <span class="brand-logo-circle">
+
+            <img src="../assets/images/logo.jpg"
+                 alt="Subeesha">
+
+        </span>
+
+    </a>
+
+
+    <ul class="nav-links" id="navLinks">
+
+        <li><a href="../index.html#home">Home</a></li>
+
+        <li><a href="../index.html#categories">Categories</a></li>
+
+        <li><a href="shop.html">Shop</a></li>
+
+        <li><a href="../index.html#new">New Arrivals</a></li>
+
+        <li><a href="flashsale.html">Flash Sale</a></li>
+
+        <li><a href="loyalty.html">Rewards</a></li>
+
+        <li><a href="#footer">Contact</a></li>
+
+    </ul>
+
+
+    <div class="nav-tools">
+
+        <form class="header-search"
+              onsubmit="handleHeaderSearch(event)">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input id="headerSearchInput"
+                   type="search"
+                   placeholder="Search products, categories..."
+                   autocomplete="off">
+
+            <button type="submit">
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </button>
+
+        </form>
+
+
+        <div class="nav-actions">
+
+            <button class="icon-btn"
+                    onclick="showToast('Your wishlist is ready.','warning','Wishlist')">
+
+                <i class="fa-regular fa-heart"></i>
+
+            </button>
+
+
+            <a class="icon-btn"
+               href="../account.html">
+
+                <i class="fa-regular fa-user"></i>
+
+            </a>
+
+
+            <button class="icon-btn"
+                    onclick="showCart()">
+
+                <i class="fa-solid fa-bag-shopping"></i>
+
+                <span class="cart-count"
+                      id="cartCount">0</span>
+
+            </button>
+
+
+            <button class="icon-btn menu-btn"
+                    onclick="toggleMenu()">
+
+                <i class="fa-solid fa-bars"></i>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</nav>
+
+</header>
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section class="giveaway-hero">
+
+    <div class="giveaway-hero-content">
+
+        <div class="giveaway-label">
+
+            <i class="fa-solid fa-gift"></i>
+
+            SUBEESHA OFFICIAL GIVEAWAY
+
+        </div>
+
+
+        <h1>
+
+            Participate Today.<br>
+
+            <span>Win Amazing Prizes.</span>
+
+        </h1>
+
+
+        <p>
+
+            Join the official Subeesha Giveaway, complete the
+            Instagram participation requirements and get a chance
+            to become one of our lucky winners.
+
+        </p>
+
+
+        <div class="giveaway-buttons">
+
+            <a href="#participate"
+               class="giveaway-btn primary">
+
+                <i class="fa-solid fa-gift"></i>
+
+                Participate Now
+
+            </a>
+
+
+            <a href="#prizes"
+               class="giveaway-btn light">
+
+                <i class="fa-solid fa-trophy"></i>
+
+                View Prizes
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     COUNTDOWN
+========================================================= -->
+
+<div class="giveaway-countdown-wrap">
+
+    <div class="giveaway-countdown">
+
+        <div class="countdown-title">
+
+            <h3>Giveaway Ends In</h3>
+
+            <p>Don't miss your chance to participate.</p>
+
+        </div>
+
+
+        <div class="giveaway-timer">
+
+            <div class="timer-box">
+
+                <strong id="days">00</strong>
+
+                <small>Days</small>
+
+            </div>
+
+
+            <div class="timer-box">
+
+                <strong id="hours">00</strong>
+
+                <small>Hours</small>
+
+            </div>
+
+
+            <div class="timer-box">
+
+                <strong id="minutes">00</strong>
+
+                <small>Minutes</small>
+
+            </div>
+
+
+            <div class="timer-box">
+
+                <strong id="seconds">00</strong>
+
+                <small>Seconds</small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     PRIZES
+========================================================= -->
+
+<section class="giveaway-section" id="prizes">
+
+    <div class="giveaway-heading">
+
+        <div class="small-title">
+            Amazing Rewards
+        </div>
+
+        <h2>What Can You Win?</h2>
+
+        <p>
+            Participate in the Subeesha Giveaway and get
+            a chance to win exciting prizes.
+        </p>
+
+    </div>
+
+
+    <div class="prizes-grid">
+
+
+        <article class="prize-card">
+
+            <div class="prize-image">
+
+                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=80"
+                     alt="Grand Prize">
+
+            </div>
+
+            <div class="prize-info">
+
+                <span class="prize-position">
+
+                    <i class="fa-solid fa-trophy"></i>
+
+                    GRAND PRIZE
+
+                </span>
+
+                <h3>Premium Shopping Package</h3>
+
+                <p>
+                    Win an exciting premium package
+                    from the Subeesha collection.
+                </p>
+
+            </div>
+
+        </article>
+
+
+        <article class="prize-card">
+
+            <div class="prize-image">
+
+                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=80"
+                     alt="Second Prize">
+
+            </div>
+
+            <div class="prize-info">
+
+                <span class="prize-position">
+
+                    <i class="fa-solid fa-medal"></i>
+
+                    SECOND PRIZE
+
+                </span>
+
+                <h3>Exclusive Product Bundle</h3>
+
+                <p>
+                    Enjoy a special product bundle
+                    selected exclusively for you.
+                </p>
+
+            </div>
+
+        </article>
+
+
+        <article class="prize-card">
+
+            <div class="prize-image">
+
+                <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=900&q=80"
+                     alt="Third Prize">
+
+            </div>
+
+            <div class="prize-info">
+
+                <span class="prize-position">
+
+                    <i class="fa-solid fa-gift"></i>
+
+                    THIRD PRIZE
+
+                </span>
+
+                <h3>Subeesha Gift Voucher</h3>
+
+                <p>
+                    Shop your favourite products with
+                    a special Subeesha gift voucher.
+                </p>
+
+            </div>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     PARTICIPATE
+========================================================= -->
+
+<section class="participate-section"
+         id="participate">
+
+    <div class="participate-container">
+
+
+        <!-- LEFT SIDE -->
+
+        <div class="participate-info">
+
+            <div class="small-title">
+
+                Join The Giveaway
+
+            </div>
+
+
+            <h2>
+                Your Chance To Win Starts Here.
+            </h2>
+
+
+            <p>
+
+                Follow the participation steps below and submit
+                your correct information. Make sure your Instagram
+                details are correct so your participation can be verified.
+
+            </p>
+
+
+            <div class="steps">
+
+
+                <div class="step">
+
+                    <div class="step-number">1</div>
+
+                    <div class="step-content">
+
+                        <strong>Follow Our Instagram</strong>
+
+                        <span>
+                            Follow the official Subeesha Instagram page.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="step">
+
+                    <div class="step-number">2</div>
+
+                    <div class="step-content">
+
+                        <strong>Mention Subeesha</strong>
+
+                        <span>
+                            Mention our Instagram page in your story or post.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="step">
+
+                    <div class="step-number">3</div>
+
+                    <div class="step-content">
+
+                        <strong>Submit Your Details</strong>
+
+                        <span>
+                            Enter your Instagram username and profile link.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="step">
+
+                    <div class="step-number">4</div>
+
+                    <div class="step-content">
+
+                        <strong>Wait For Results</strong>
+
+                        <span>
+                            Lucky winners will be announced officially.
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="instagram-task">
+
+                <h3>
+
+                    <i class="fa-brands fa-instagram"></i>
+
+                    Instagram Requirements
+
+                </h3>
+
+
+                <ul>
+
+                    <li>
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                        Follow our official Instagram page.
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                        Mention <strong>@subeesha</strong> in your Instagram story or post.
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                        Enter your correct Instagram username.
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                        Provide your public Instagram profile link for verification.
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+
+        <!-- FORM -->
+
+        <form class="giveaway-form"
+              id="giveawayForm">
+
+            <h3>
+
+                <i class="fa-solid fa-party-horn"></i>
+
+                Participate Now
+
+            </h3>
+
+            <p class="form-description">
+
+                Complete the form below to enter the giveaway.
+
+            </p>
+
+
+            <div class="form-group">
+
+                <label>
+
+                    Full Name <span>*</span>
+
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fa-regular fa-user"></i>
+
+                    <input type="text"
+                           id="fullName"
+                           placeholder="Enter your full name"
+                           required>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+
+                    Email Address <span>*</span>
+
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fa-regular fa-envelope"></i>
+
+                    <input type="email"
+                           id="email"
+                           placeholder="Enter your email"
+                           required>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+
+                    Phone Number <span>*</span>
+
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fa-solid fa-phone"></i>
+
+                    <input type="tel"
+                           id="phone"
+                           placeholder="03XX XXXXXXX"
+                           required>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+
+                    City <span>*</span>
+
+                </label>
+
+                <select id="city"
+                        required>
+
+                    <option value="">
+                        Select Your City
+                    </option>
+
+                    <option>Karachi</option>
+                    <option>Hyderabad</option>
+                    <option>Lahore</option>
+                    <option>Islamabad</option>
+                    <option>Rawalpindi</option>
+                    <option>Multan</option>
+                    <option>Faisalabad</option>
+                    <option>Quetta</option>
+                    <option>Peshawar</option>
+                    <option>Other</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- INSTAGRAM DETAILS -->
+
+            <div class="instagram-field">
+
+                <h4>
+
+                    <i class="fa-brands fa-instagram"></i>
+
+                    Instagram Participation Details
+
+                </h4>
+
+
+                <div class="form-group">
+
+                    <label>
+
+                        Instagram Username <span>*</span>
+
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="fa-brands fa-instagram"></i>
+
+                        <input type="text"
+                               id="instagramUsername"
+                               placeholder="@yourusername"
+                               required>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+
+                        Instagram Profile Link <span>*</span>
+
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="fa-solid fa-link"></i>
+
+                        <input type="url"
+                               id="instagramLink"
+                               placeholder="https://instagram.com/yourusername"
+                               required>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="checkbox-group">
+
+                <input type="checkbox"
+                       id="instagramConfirm"
+                       required>
+
+                <label for="instagramConfirm">
+
+                    I confirm that I have followed the official
+                    Subeesha Instagram page and mentioned the
+                    Subeesha page according to the giveaway requirements.
+
+                </label>
+
+            </div>
+
+
+            <div class="checkbox-group">
+
+                <input type="checkbox"
+                       id="terms"
+                       required>
+
+                <label for="terms">
+
+                    I confirm that all my information is correct
+                    and I agree to the Giveaway Rules and
+                    Terms & Conditions.
+
+                </label>
+
+            </div>
+
+
+            <button type="submit"
+                    class="participate-btn">
+
+                <i class="fa-solid fa-gift"></i>
+
+                Participate in Giveaway
+
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     RULES
+========================================================= -->
+
+<section class="giveaway-section">
+
+    <div class="giveaway-heading">
+
+        <div class="small-title">
+            Important Information
+        </div>
+
+        <h2>Giveaway Rules</h2>
+
+        <p>
+            Please complete all requirements before submitting
+            your giveaway entry.
+        </p>
+
+    </div>
+
+
+    <div class="rules-grid">
+
+
+        <div class="rule-card">
+
+            <div class="rule-icon">
+
+                <i class="fa-solid fa-user"></i>
+
+            </div>
+
+            <div>
+
+                <h3>One Entry Per Person</h3>
+
+                <p>
+                    Each participant can submit only one valid giveaway entry.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="rule-card">
+
+            <div class="rule-icon">
+
+                <i class="fa-brands fa-instagram"></i>
+
+            </div>
+
+            <div>
+
+                <h3>Instagram Verification</h3>
+
+                <p>
+                    Your Instagram username and profile may be verified before winner selection.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="rule-card">
+
+            <div class="rule-icon">
+
+                <i class="fa-solid fa-check"></i>
+
+            </div>
+
+            <div>
+
+                <h3>Complete All Requirements</h3>
+
+                <p>
+                    Following and mentioning the official Instagram page is required.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="rule-card">
+
+            <div class="rule-icon">
+
+                <i class="fa-solid fa-trophy"></i>
+
+            </div>
+
+            <div>
+
+                <h3>Winner Selection</h3>
+
+                <p>
+                    Lucky winners will be selected after verification of valid entries.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     PREVIOUS WINNERS
+========================================================= -->
+
+<section class="winners-section">
+
+    <div class="winners-container">
+
+        <div class="giveaway-heading">
+
+            <div class="small-title">
+
+                Lucky Winners
+
+            </div>
+
+            <h2>Previous Giveaway Winners</h2>
+
+            <p>
+                Congratulations to our previous lucky participants.
+            </p>
+
+        </div>
+
+
+        <div class="winners">
+
+
+            <div class="winner-card">
+
+                <div class="winner-avatar">
+                    AK
+                </div>
+
+                <h3>Ayesha K.</h3>
+
+                <p>Karachi</p>
+
+                <span class="winner-prize">
+                    Gift Voucher Winner
+                </span>
+
+            </div>
+
+
+            <div class="winner-card">
+
+                <div class="winner-avatar">
+                    HR
+                </div>
+
+                <h3>Hamza R.</h3>
+
+                <p>Lahore</p>
+
+                <span class="winner-prize">
+                    Premium Product Winner
+                </span>
+
+            </div>
+
+
+            <div class="winner-card">
+
+                <div class="winner-avatar">
+                    SM
+                </div>
+
+                <h3>Sana M.</h3>
+
+                <p>Hyderabad</p>
+
+                <span class="winner-prize">
+                    Shopping Bundle Winner
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer id="footer">
+
+    <div class="footer">
+
+
+        <div class="footer-brand">
+
+            <span class="footer-logo-circle">
+
+                <img src="../assets/images/logo.jpg"
+                     alt="Subeesha">
+
+            </span>
+
+
+            <p>
+                E-commerce • E-business • Everyday Essentials.
+                Shop more, live better with Subeesha.
+            </p>
+
+
+            <div class="socials">
+
+                <a class="social"
+                   href="#"
+                   aria-label="Facebook">
+
+                    <i class="fa-brands fa-facebook-f"></i>
+
+                </a>
+
+
+                <a class="social"
+                   href="#"
+                   aria-label="Instagram">
+
+                    <i class="fa-brands fa-instagram"></i>
+
+                </a>
+
+
+                <a class="social"
+                   href="#"
+                   aria-label="TikTok">
+
+                    <i class="fa-brands fa-tiktok"></i>
+
+                </a>
+
+
+                <a class="social"
+                   href="#"
+                   aria-label="YouTube">
+
+                    <i class="fa-brands fa-youtube"></i>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div>
+
+            <h3>Shop</h3>
+
+            <a href="shop.html">All Products</a>
+
+            <a href="../index.html#new">New Arrivals</a>
+
+            <a href="flashsale.html">Flash Sale</a>
+
+            <a href="../index.html#categories">Categories</a>
+
+        </div>
+
+
+        <div>
+
+            <h3>Customer Care</h3>
+
+            <a href="customer-love.html">Customer Reviews</a>
+
+            <a href="#">Contact Us</a>
+
+            <a href="#">Ring Measurement</a>
+
+            <a href="#">FAQs</a>
+
+            <a href="#">Shipping Policy</a>
+
+            <a href="#">Return Policy</a>
+
+            <a href="#">Track Order</a>
+
+        </div>
+
+
+        <div>
+
+            <h3>Company</h3>
+
+            <a href="becomeseller.html">Become Reseller</a>
+
+            <a href="#">About Us</a>
+
+            <a href="#">Careers</a>
+
+            <a href="#">Blog</a>
+
+            <a href="#">Privacy Policy</a>
+
+            <a href="#">Terms & Conditions</a>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        <span>
+            © 2026 Subeesha. All Rights Reserved.
+        </span>
+
+        <span>
+            Shop More, Live Better. ·
+            <a href="../panel/admin/index.html">
+                Admin Login
+            </a>
+        </span>
+
+    </div>
+
+</footer>
+
+
+<!-- =========================================================
+     SUCCESS POPUP
+========================================================= -->
+
+<div class="success-overlay"
+     id="successOverlay">
+
+    <div class="success-modal">
+
+        <div class="success-icon">
+
+            <i class="fa-solid fa-check"></i>
+
+        </div>
+
+        <h2>Congratulations! 🎉</h2>
+
+        <p id="successMessage">
+
+            Your giveaway participation has been submitted successfully.
+
+        </p>
+
+        <button onclick="closeSuccessModal()">
+
+            Continue
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- Main Website JS -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="../assets/js/firebase-config.js"></script>
+<script src="../assets/js/sub-core.js"></script>
+<script src="../assets/js/main.js" defer></script>
+
+
+<script src="../assets/js/giveaway.js"></script>
+
+<script src="../assets/js/store.js" defer></script>
+</body>
+</html>

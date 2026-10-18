@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Withdraw | Subeesha Reseller Dashboard</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <script type="module"
+        src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.esm.js">
+    </script>
+
+    <script nomodule
+        src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.js">
+    </script>
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-top">
+
+            <a href="dashboard.html" class="brand">
+
+                <div class="brand-logo">
+                    <img src="assets/images/logo.jpg" alt="Subeesha">
+                </div>
+
+                <div>
+                    <h2>Subeesha</h2>
+                    <span>Reseller Panel</span>
+                </div>
+
+            </a>
+
+        </div>
+
+        <div class="menu">
+
+            <p class="menu-title">MAIN MENU</p>
+
+            <a href="dashboard.html" class="menu-item">
+                <ion-icon name="grid-outline"></ion-icon>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="products.html" class="menu-item">
+                <ion-icon name="bag-handle-outline"></ion-icon>
+                <span>Products</span>
+            </a>
+
+            <a href="orders.html" class="menu-item">
+                <ion-icon name="receipt-outline"></ion-icon>
+                <span>My Sales</span>
+            </a>
+
+            <a href="commission.html" class="menu-item">
+                <ion-icon name="cash-outline"></ion-icon>
+                <span>Commission</span>
+            </a>
+
+            <a href="withdraw.html" class="menu-item">
+                <ion-icon name="wallet-outline"></ion-icon>
+                <span>Withdraw</span>
+            </a>
+
+            <a href="profile.html" class="menu-item">
+                <ion-icon name="person-outline"></ion-icon>
+                <span>My Profile</span>
+            </a>
+
+        </div>
+
+        <div class="sidebar-bottom">
+
+            <div class="help-box">
+
+                <div class="help-icon">
+                    <ion-icon name="headset-outline"></ion-icon>
+                </div>
+
+                <div>
+                    <h4>Need Help?</h4>
+                    <p>Contact Support</p>
+                </div>
+
+            </div>
+
+            <button class="logout-btn"
+                onclick="showToast('Logout functionality will be connected with backend.')">
+
+                <ion-icon name="log-out-outline"></ion-icon>
+                Logout
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main-content">
+
+        <!-- HEADER -->
+
+        <header class="topbar">
+
+            <div class="top-left">
+
+                <button class="menu-toggle" id="menuToggle">
+                    <ion-icon name="menu-outline"></ion-icon>
+                </button>
+
+                <div>
+                    <h1>Withdraw Earnings</h1>
+                    <p>Request a withdrawal of your available commission.</p>
+                </div>
+
+            </div>
+
+            <div class="top-right">
+
+                <button class="notification-btn"
+                    onclick="showToast('You have 3 new notifications!')">
+
+                    <ion-icon name="notifications-outline"></ion-icon>
+                    <span></span>
+
+                </button>
+
+                <div class="profile-mini">
+
+                    <div class="avatar">A</div>
+
+                    <div class="profile-info">
+                        <strong>Aisha Inamullah</strong>
+                        <span>Reseller</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- WITHDRAW -->
+
+        <section id="withdraw" class="page-section">
+
+            <div class="withdraw-container">
+
+                <div class="withdraw-info">
+
+                    <span>AVAILABLE TO WITHDRAW</span>
+
+                    <h2>Rs. 5,425</h2>
+
+                    <p>
+                        Your completed commissions are ready for withdrawal.
+                    </p>
+
+                    <div class="withdraw-note">
+
+                        <ion-icon name="information-circle-outline"></ion-icon>
+
+                        <p>
+                            Minimum withdrawal amount is Rs. 1,000.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="withdraw-form card">
+
+                    <h2>Request Withdrawal</h2>
+
+                    <p>Choose your preferred payment method.</p>
+
+                    <form id="withdrawForm">
+
+                        <label>Withdrawal Amount</label>
+
+                        <input
+                            type="number"
+                            id="withdrawAmount"
+                            placeholder="Enter amount"
+                            required
+                        >
+
+                        <label>Payment Method</label>
+
+                        <select>
+
+                            <option>JazzCash</option>
+                            <option>EasyPaisa</option>
+                            <option>Bank Transfer</option>
+
+                        </select>
+
+                        <label>Account Number</label>
+
+                        <input
+                            type="text"
+                            id="accountNumber"
+                            placeholder="Enter account number"
+                            required
+                        >
+
+                        <button type="submit">
+                            Request Withdrawal
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div class="toast" id="toast">
+
+    <ion-icon name="checkmark-circle-outline"></ion-icon>
+
+    <span id="toastMessage"></span>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="../../assets/js/firebase-config.js"></script>
+<script src="../../assets/js/sub-core.js"></script>
+<script src="assets/js/script.js"></script>
+<script src="assets/js/reseller-core.js"></script>
+<script src="assets/js/withdraw.js"></script>
+
+</body>
+</html>

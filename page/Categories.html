@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Categories | Subeesha</title>
+
+<link rel="stylesheet" href="../assets/css/categories.css">
+</head>
+
+<body data-page="categories">
+
+<!-- ================= HEADER ================= -->
+
+<header>
+<nav>
+
+    <a href="../index.html" class="brand" aria-label="Subeesha Home">
+        <span class="brand-logo-circle">
+            <img src="../assets/images/logo.jpg" alt="Subeesha - Shop More, Live Better">
+        </span>
+    </a>
+
+    <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../page/Categories.html" class="active">Categories</a></li>
+        <li><a href="../page/shop.html">Shop</a></li>
+        <li><a href="../page/new-arrivals.html">New Arrivals</a></li>
+        <li><a href="../page/flashsale.html">Flash Sale</a></li>
+        <li><a href="../page/loyalty.html">Rewards</a></li>
+        <li><a href="#footer">Contact</a></li>
+    </ul>
+
+    <div class="header-search">
+        <ion-icon name="search-outline"></ion-icon>
+
+        <input
+            id="searchInput"
+            type="search"
+            placeholder="Search products..."
+            aria-label="Search products"
+        >
+
+        <button type="button" onclick="searchProduct()">
+            <ion-icon name="arrow-forward-outline"></ion-icon>
+        </button>
+    </div>
+
+    <div class="nav-actions">
+
+        <button class="icon-btn" onclick="showToast('Wishlist opened')" aria-label="Wishlist">
+            <ion-icon name="heart-outline"></ion-icon>
+        </button>
+
+        <button class="icon-btn" onclick="showToast('Account page opened')" aria-label="Account">
+            <ion-icon name="person-outline"></ion-icon>
+        </button>
+
+        <button class="icon-btn" onclick="showToast('Your cart is empty')" aria-label="Cart">
+            <ion-icon name="bag-handle-outline"></ion-icon>
+            <span class="cart-count">0</span>
+        </button>
+
+        <button class="icon-btn menu-btn" onclick="toggleMenu()" aria-label="Menu">
+            <ion-icon name="menu-outline"></ion-icon>
+        </button>
+
+    </div>
+
+</nav>
+</header>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="page-hero">
+
+    <div class="hero-inner">
+
+        <div class="breadcrumb">
+            <a href="../index.html">Home</a>
+            <span>/</span>
+            <span>Categories</span>
+        </div>
+
+        <h1>Shop by Category</h1>
+
+        <p>
+            Explore everything Subeesha has to offer. Find fashion,
+            beauty, electronics, home essentials and much more.
+        </p>
+
+    </div>
+
+</section>
+
+
+<main>
+
+<!-- ================= FEATURED ================= -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="featured-category">
+
+        <div class="featured-content">
+
+            <span class="small-tag">
+                FEATURED CATEGORY
+            </span>
+
+            <h2>Fashion for Every Style</h2>
+
+            <p>
+                Discover clothing, footwear and accessories selected
+                to help you express your style every day.
+            </p>
+
+            <a href="../page/shop.html?category=fashion" class="shop-btn">
+                Explore Fashion
+                <ion-icon name="arrow-forward-outline"></ion-icon>
+            </a>
+
+        </div>
+
+        <div class="featured-image"></div>
+
+    </div>
+
+
+    <!-- ================= ALL CATEGORIES ================= -->
+
+    <div class="section-head">
+
+        <span class="kicker">
+            EXPLORE SUBEESHA
+        </span>
+
+        <h2>All Categories</h2>
+
+        <p>
+            Browse our collection and find the products you love.
+        </p>
+
+    </div>
+
+
+    <div class="category-tools">
+
+        <button class="filter-btn active" onclick="filterCategories('all',this)">
+            All
+        </button>
+
+        <button class="filter-btn" onclick="filterCategories('fashion',this)">
+            Fashion
+        </button>
+
+        <button class="filter-btn" onclick="filterCategories('beauty',this)">
+            Beauty
+        </button>
+
+        <button class="filter-btn" onclick="filterCategories('home',this)">
+            Home
+        </button>
+
+        <button class="filter-btn" onclick="filterCategories('tech',this)">
+            Electronics
+        </button>
+
+    </div>
+
+
+    <div class="categories-grid" id="categoriesGrid">
+
+
+        <a href="../page/shop.html?category=women-fashion" class="category-card" data-category="fashion">
+
+            <div class="category-image">
+                <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=700&q=80" alt="Women's Fashion">
+
+                <div class="category-icon">
+                    <ion-icon name="shirt-outline"></ion-icon>
+                </div>
+            </div>
+
+            <div class="category-info">
+                <h3>Women's Fashion</h3>
+                <p>Clothing, dresses, bags and more</p>
+
+                <div class="category-link">
+                    <span>Explore Category</span>
+                    <ion-icon name="arrow-forward-outline"></ion-icon>
+                </div>
+            </div>
+
+        </a>
+
+
+        <a href="../page/shop.html?category=men-fashion" class="category-card" data-category="fashion">
+
+            <div class="category-image">
+                <img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=700&q=80" alt="Men's Fashion">
+
+                <div class="category-icon">
+                    <ion-icon name="man-outline"></ion-icon>
+                </div>
+            </div>
+
+            <div class="category-info">
+                <h3>Men's Fashion</h3>
+                <p>Modern style and everyday essentials</p>
+
+                <div class="category-link">
+                    <span>Explore Category</span>
+                    <ion-icon name="arrow-forward-outline"></ion-icon>
+                </div>
+            </div>
+
+        </a>
+
+
+        <a href="../page/shop.html?category=beauty" class="category-card" data-category="beauty">
+
+            <div class="category-image">
+                <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=700&q=80" alt="Beauty">
+
+                <div class="category-icon">
+                    <ion-icon name="sparkles-outline"></ion-icon>
+                </div>
+            </div>
+
+            <div class="category-info">
+                <h3>Beauty & Care</h3>
+                <p>Beauty products and self-care essentials</p>
+
+                <div class="category-link">
+                    <span>Explore Category</span>
+                    <ion-icon name="arrow-forward-outline"></ion-icon>
+                </div>
+            </div>
+
+        </a>
+
+
+        <a href="../page/shop.html?category=electronics" class="category-card" data-category="tech">
+
+            <div class="category-image">
+                <img src="https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&w=700&q=80" alt="Electronics">
+
+                <div class="category-icon">
+                    <ion-icon name="phone-portrait-outline"></ion-icon>
+                </div>
+            </div>
+
+            <div class="category-info">
+                <h3>Electronics</h3>
+                <p>Smart devices and useful accessories</p>
+
+                <div class="category-link">
+                    <span>Explore Category</span>
+                    <ion-icon name="arrow-forward-outline"></ion-icon>
+                </div>
+            </div>
+
+        </a>
+
+
+        <a href="../page/shop.html?category=home-living" class="category-card" data-category="home">
+
+            <div class="category-image">
+                <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=700&q=80" alt="Home and Living">
+
+                <div class="category-icon">
+                    <ion-icon name="home-outline"></ion-icon>
+                </div>
+            </div>
+
+            <div class="category-info">
+                <h3>Home & Living</h3>
+                <p>Everything to make your space better</p>
+
+                <div class="category-link">
+                    <span>Explore Category</span>
+                    <ion-icon name="arrow-forward-outline"></ion-icon>
+                </div>
+            </div>
+
+        </a>
+
+
+        <a href="../page/shop.html?category=accessories" class="category-card" data-category="fashion">
+
+            <div class="category-image">
+                <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=700&q=80" alt="Accessories">
+
+                <div class="category-icon">
+                    <ion-icon name="watch-outline"></ion-icon>
+                </div>
+            </div>
+
+            <div class="category-info">
+                <h3>Accessories</h3>
+                <p>Jewellery, watches and fashion accessories</p>
+
+                <div class="category-link">
+                    <span>Explore Category</span>
+                    <ion-icon name="arrow-forward-outline"></ion-icon>
+                </div>
+            </div>
+
+        </a>
+
+
+        <a href="../page/shop.html?category=kids" class="category-card" data-category="fashion">
+
+            <div class="category-image">
+                <img src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=700&q=80" alt="Kids">
+
+                <div class="category-icon">
+                    <ion-icon name="happy-outline"></ion-icon>
+                </div>
+            </div>
+
+            <div class="category-info">
+                <h3>Kids & Baby</h3>
+                <p>Products for your little ones</p>
+
+                <div class="category-link">
+                    <span>Explore Category</span>
+                    <ion-icon name="arrow-forward-outline"></ion-icon>
+                </div>
+            </div>
+
+        </a>
+
+
+        <a href="../page/shop.html?category=groceries" class="category-card" data-category="home">
+
+            <div class="category-image">
+                <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=700&q=80" alt="Groceries">
+
+                <div class="category-icon">
+                    <ion-icon name="basket-outline"></ion-icon>
+                </div>
+            </div>
+
+            <div class="category-info">
+                <h3>Groceries</h3>
+                <p>Daily essentials for your home</p>
+
+                <div class="category-link">
+                    <span>Explore Category</span>
+                    <ion-icon name="arrow-forward-outline"></ion-icon>
+                </div>
+            </div>
+
+        </a>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- ================= POPULAR ================= -->
+
+<section class="section popular-section">
+
+<div class="container">
+
+    <div class="section-head">
+
+        <span class="kicker">
+            TRENDING NOW
+        </span>
+
+        <h2>Popular Categories</h2>
+
+        <p>
+            Explore the categories our customers are loving right now.
+        </p>
+
+    </div>
+
+
+    <div class="popular-grid">
+
+        <a href="../page/shop.html?category=fashion" class="popular-item one">
+            <div>
+                <h3>Fashion Collection</h3>
+                <span>Discover your next favourite look</span>
+            </div>
+        </a>
+
+        <a href="../page/shop.html?category=beauty" class="popular-item two">
+            <div>
+                <h3>Beauty Essentials</h3>
+                <span>Glow, care and confidence</span>
+            </div>
+        </a>
+
+        <a href="../page/shop.html?category=home" class="popular-item three">
+            <div>
+                <h3>Home Collection</h3>
+                <span>Make every space feel better</span>
+            </div>
+        </a>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- ================= NEWSLETTER ================= -->
+
+<section class="newsletter">
+
+    <ion-icon name="mail-outline"></ion-icon>
+
+    <h2>Stay in the Subeesha Circle</h2>
+
+    <p>
+        Get new arrivals, exclusive offers and reward updates.
+    </p>
+
+    <form class="news-form" onsubmit="subscribe(event)">
+
+        <input
+            type="email"
+            placeholder="Enter your email address"
+            required
+        >
+
+        <button type="submit">
+            Subscribe
+        </button>
+
+    </form>
+
+</section>
+
+</main>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer id="footer">
+
+    <div class="footer">
+
+        <div class="footer-brand">
+
+            <span class="footer-logo-circle">
+                <img src="../assets/images/logo.jpg" alt="Subeesha">
+            </span>
+
+            <p>
+                E-commerce • E-business • Everyday Essentials.
+                Shop more, live better with Subeesha.
+            </p>
+
+            <div class="socials">
+
+                <a href="#" aria-label="Facebook">
+                    <ion-icon name="logo-facebook"></ion-icon>
+                </a>
+
+                <a href="#" aria-label="Instagram">
+                    <ion-icon name="logo-instagram"></ion-icon>
+                </a>
+
+                <a href="#" aria-label="TikTok">
+                    <ion-icon name="logo-tiktok"></ion-icon>
+                </a>
+
+                <a href="#" aria-label="YouTube">
+                    <ion-icon name="logo-youtube"></ion-icon>
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div>
+
+            <h3>Shop</h3>
+
+            <a href="../page/shop.html">All Products</a>
+            <a href="../page/new-arrivals.html">New Arrivals</a>
+            <a href="../page/flashsale.html">Flash Sale</a>
+            <a href="../page/Categories.html">Categories</a>
+
+        </div>
+
+
+        <div>
+
+            <h3>Customer Care</h3>
+
+            <a href="#">Contact Us</a>
+            <a href="#">Ring Measurement</a>
+            <a href="#">FAQs</a>
+            <a href="#">Shipping Policy</a>
+            <a href="#">Return Policy</a>
+
+        </div>
+
+
+        <div>
+
+            <h3>Subeesha</h3>
+
+            <a href="#">About Us</a>
+            <a href="../panel/reseller/index.html">Become a Reseller</a>
+            <a href="../page/loyalty.html">Loyalty Rewards</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+        © 2026 Subeesha. All Rights Reserved.
+    </div>
+
+</footer>
+
+
+<!-- TOAST -->
+
+<div class="toast" id="toast">
+    <ion-icon name="checkmark-circle-outline"></ion-icon>
+    <span id="toastText">Success</span>
+</div>
+
+
+<!-- IONICONS -->
+
+<script
+type="module"
+src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.esm.js">
+</script>
+
+<script
+nomodule
+src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.js">
+</script>
+
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="../assets/js/firebase-config.js"></script>
+<script src="../assets/js/sub-core.js"></script>
+<script src="../assets/js/categories.js"></script>
+
+<script src="../assets/js/store.js" defer></script>
+</body>
+</html>

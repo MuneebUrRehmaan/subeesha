@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subeesha | Shop More, Live Better</title>
+    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
+    <!--
+        IMAGE UPLOAD NOTE FOR FUTURE ADMIN PANEL
+        All current CDN images are temporary design placeholders.
+        Later, the Admin Panel will replace them with uploaded image paths/URLs.
+        Supported upload formats: PNG, JPG, JPEG, WEBP, GIF, AVIF, SVG, BMP, TIFF.
+    -->
+
+
+
+    <!-- External main stylesheet: all homepage styles are in assets/css/style.css. -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body data-page="index">
+
+    <!-- ===== TOP BAR / STORE PROMISES ===== -->
+    <div class="topbar">
+        <span><ion-icon name="shield-checkmark-outline"></ion-icon> Quality Products</span>
+        <span><ion-icon name="car-outline"></ion-icon> Fast Delivery Across Pakistan</span>
+        <span><ion-icon name="gift-outline"></ion-icon> Earn Rewards With Every Order</span>
+    </div>
+
+    <!-- ===== HEADER / NAVIGATION ===== -->
+    <header>
+        <nav class="navbar">
+            <a href="#home" class="brand" aria-label="Subeesha Home">
+                <!-- Brand logo: keep the uploaded logo file in the project folder. -->
+                <span class="brand-logo-circle">
+                    <img src="assets/images/logo.jpg" alt="Subeesha - Shop More, Live Better">
+                </span>
+            </a>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#categories">Categories</a></li>
+                <li><a href="#shop">Shop</a></li>
+                <li><a href="#new">New Arrivals</a></li>
+                <li><a href="#sale">Flash Sale</a></li>
+                <li><a href="#rewards">Rewards</a></li>
+                <li><a href="#footer">Contact</a></li>
+            </ul>
+
+            <div class="nav-tools">
+                <!-- Header search: connect this input to the Admin Panel product search/API later. -->
+                <form class="header-search" onsubmit="handleHeaderSearch(event)">
+                    <ion-icon name="search-outline" aria-hidden="true"></ion-icon>
+                    <input id="headerSearchInput" type="search" placeholder="Search products, categories..."
+                        autocomplete="off" aria-label="Search products">
+                    <button type="submit" aria-label="Submit search"><ion-icon
+                            name="arrow-forward-outline"></ion-icon></button>
+                </form>
+
+                <div class="nav-actions">
+                    <button class="icon-btn" onclick="showToast('Your wishlist is ready.', 'warning', 'Warning')"
+                        aria-label="Wishlist"><ion-icon name="heart-outline"></ion-icon></button>
+                    <!-- Existing profile page: the project owner already has this page. This frontend only links to it. -->
+                    <a class="icon-btn" href="account.html" aria-label="Account"><ion-icon
+                            name="person-outline"></ion-icon></a>
+                    <button class="icon-btn" onclick="showCart()" aria-label="Cart">
+                        <ion-icon name="bag-handle-outline"></ion-icon>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </button>
+                    <button class="icon-btn menu-btn" onclick="toggleMenu()" aria-label="Menu"><ion-icon
+                            name="menu-outline"></ion-icon></button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+
+    <!-- ===== HOME / HERO SLIDER ===== -->
+    <section class="hero-slider" id="home">
+        <div class="slides">
+
+            <!-- Temporary design image: CDN image is used only for the current frontend design.
+     Later, the Admin Panel will upload/replace this image.
+     Supported formats: PNG, JPG, JPEG, WEBP, GIF, AVIF, SVG, BMP, TIFF. -->
+            <div class="hero-slide active"
+                style="background-image:linear-gradient(90deg,rgba(7,38,32,.94) 0%,rgba(14,61,52,.72) 43%,rgba(14,61,52,.12) 100%),url('https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=2000&q=88');">
+                <div class="hero-content">
+                    <span class="hero-tag"><ion-icon name="sparkles-outline"></ion-icon> NEW SEASON COLLECTION</span>
+                    <h1>Style That<br><em>Speaks For You.</em></h1>
+                    <p>Discover premium fashion, beauty, accessories and everyday essentials — carefully selected for
+                        the Subeesha lifestyle.</p>
+                    <div class="hero-buttons">
+                        <a href="#shop" class="btn btn-gold">Shop Collection <ion-icon
+                                name="arrow-forward-outline"></ion-icon></a>
+                        <a href="#categories" class="btn btn-light">Explore Categories</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Temporary design image: CDN image is used only for the current frontend design.
+     Later, the Admin Panel will upload/replace this image.
+     Supported formats: PNG, JPG, JPEG, WEBP, GIF, AVIF, SVG, BMP, TIFF. -->
+            <div class="hero-slide"
+                style="background-image:linear-gradient(90deg,rgba(7,38,32,.95) 0%,rgba(14,61,52,.70) 45%,rgba(14,61,52,.10) 100%),url('https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=2000&q=88');">
+                <div class="hero-content">
+                    <span class="hero-tag"><ion-icon name="pricetag-outline"></ion-icon> SPECIAL OFFER</span>
+                    <h1>Luxury Looks.<br><em>Better Prices.</em></h1>
+                    <p>Upgrade your wardrobe with handpicked styles and limited-time offers from Subeesha.</p>
+                    <div class="hero-buttons">
+                        <a href="#sale" class="btn btn-gold">View Offers <ion-icon name="flash-outline"></ion-icon></a>
+                        <a href="#new" class="btn btn-light">New Arrivals</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Temporary design image: CDN image is used only for the current frontend design.
+     Later, the Admin Panel will upload/replace this image.
+     Supported formats: PNG, JPG, JPEG, WEBP, GIF, AVIF, SVG, BMP, TIFF. -->
+            <div class="hero-slide"
+                style="background-image:linear-gradient(90deg,rgba(7,38,32,.96) 0%,rgba(14,61,52,.68) 45%,rgba(14,61,52,.08) 100%),url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=2000&q=88');">
+                <div class="hero-content">
+                    <span class="hero-tag"><ion-icon name="gift-outline"></ion-icon> SUBEESHA REWARDS</span>
+                    <h1>Shop More.<br><em>Earn More.</em></h1>
+                    <p>Earn points with your shopping and activities, then turn your rewards into wallet balance.</p>
+                    <div class="hero-buttons">
+                        <a href="#rewards" class="btn btn-gold">Explore Rewards <ion-icon
+                                name="gift-outline"></ion-icon></a>
+                        <a href="#shop" class="btn btn-light">Start Shopping</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <button class="slider-arrow prev" onclick="changeSlide(-1)" aria-label="Previous slide">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+        </button>
+        <button class="slider-arrow next" onclick="changeSlide(1)" aria-label="Next slide">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+        </button>
+
+        <div class="slider-dots">
+            <button class="dot active" onclick="goToSlide(0)"></button>
+            <button class="dot" onclick="goToSlide(1)"></button>
+            <button class="dot" onclick="goToSlide(2)"></button>
+        </div>
+
+        <div class="hero-scroll"><ion-icon name="chevron-down-outline"></ion-icon> Scroll to discover</div>
+    </section>
+
+    <!-- ===== TRUST / SERVICE BENEFITS ===== -->
+    <section class="trust-strip">
+        <div class="trust-inner">
+            <div class="trust-item">
+                <ion-icon name="ribbon-outline"></ion-icon>
+                <div><strong>QUALITY PRODUCTS</strong><small>Carefully selected</small></div>
+            </div>
+            <div class="trust-item">
+                <ion-icon name="car-outline"></ion-icon>
+                <div><strong>FAST DELIVERY</strong><small>Across Pakistan</small></div>
+            </div>
+            <div class="trust-item">
+                <ion-icon name="lock-closed-outline"></ion-icon>
+                <div><strong>SECURE PAYMENT</strong><small>Safe checkout</small></div>
+            </div>
+            <div class="trust-item">
+                <ion-icon name="heart-outline"></ion-icon>
+                <div><strong>CUSTOMER SATISFACTION</strong><small>We're here for you</small></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- This is the Shop Categories section. Manage categories from the Admin Panel later. -->
+    <!-- ===== CATEGORIES SECTION ===== -->
+    <section class="section" id="categories">
+        <div class="section-head">
+            <span class="kicker">Explore</span>
+            <h2>Shop Categories</h2>
+            <p>Everything you need, all in one place.</p>
+            <a class="section-more" href="page/Categories.html">See More <ion-icon
+                    name="arrow-forward-outline"></ion-icon></a>
+        </div>
+
+        <div class="categories">
+            <a href="#shop" class="category">
+                <ion-icon name="shirt-outline"></ion-icon>
+                <h3>Fashion</h3>
+                <p>Style & trends</p>
+            </a>
+            <a href="#shop" class="category">
+                <ion-icon name="sparkles-outline"></ion-icon>
+                <h3>Beauty</h3>
+                <p>Care & beauty</p>
+            </a>
+            <a href="#shop" class="category">
+                <ion-icon name="home-outline"></ion-icon>
+                <h3>Home</h3>
+                <p>Everyday living</p>
+            </a>
+            <a href="#shop" class="category">
+                <ion-icon name="phone-portrait-outline"></ion-icon>
+                <h3>Electronics</h3>
+                <p>Smart essentials</p>
+            </a>
+            <a href="#shop" class="category">
+                <ion-icon name="diamond-outline"></ion-icon>
+                <h3>Accessories</h3>
+                <p>Complete your look</p>
+            </a>
+            <a href="#shop" class="category">
+                <ion-icon name="people-outline"></ion-icon>
+                <h3>Kids</h3>
+                <p>For little ones</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- This is the Flash Sale section. Manage sale products and countdown from the Admin Panel later. -->
+    <!-- ===== FLASH SALE SECTION ===== -->
+    <section class="sale-wrap" id="sale">
+        <div class="sale">
+            <div class="sale-copy">
+                <div class="eyebrow">Limited Time Offer</div>
+                <h2>Flash Sale</h2>
+                <p>Save up to 50% on selected products.</p>
+            </div>
+
+            <div class="countdown">
+                <div class="time"><strong id="hours">12</strong><small>Hours</small></div>
+                <div class="time"><strong id="minutes">30</strong><small>Minutes</small></div>
+                <div class="time"><strong id="seconds">45</strong><small>Seconds</small></div>
+            </div>
+
+            <a href="page/flashsale.html" class="btn btn-gold">Shop Deals <ion-icon
+                    name="arrow-forward-outline"></ion-icon></a>
+        </div>
+        <a class="section-more" href="page/flashsale.html">See More <ion-icon
+                name="arrow-forward-outline"></ion-icon></a>
+    </section>
+
+    <!-- This is the Featured Products section. Manage featured products from the Admin Panel later. -->
+    <!-- ===== FEATURED PRODUCTS SECTION ===== -->
+    <section class="section" id="shop">
+        <div class="section-head">
+            <span class="kicker">Curated For You</span>
+            <h2>Featured Products</h2>
+            <p>Popular picks selected for the Subeesha community.</p>
+            <a class="section-more" href="page/shop.html">See More <ion-icon
+                    name="arrow-forward-outline"></ion-icon></a>
+        </div>
+
+        <div class="products">
+            <article class="card">
+                <div class="card-img">
+                    <!-- Temporary design image: CDN image is used only for the current frontend design.
+     Later, the Admin Panel will upload/replace this image.
+     Supported formats: PNG, JPG, JPEG, WEBP, GIF, AVIF, SVG, BMP, TIFF. -->
+                    <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=800&q=80"
+                        alt="Premium leather handbag">
+                    <span class="badge">20% OFF</span>
+                    <button class="wish" onclick="toggleWish(this)" aria-label="Add to wishlist"><ion-icon
+                            name="heart-outline"></ion-icon></button>
+                    <button class="quick-view" onclick="viewProduct(this)" aria-label="View product"><ion-icon
+                            name="eye-outline"></ion-icon></button>
+                </div>
+                <div class="card-body">
+                    <span class="product-cat">Bags</span>
+                    <h3>Premium Leather Handbag</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price-row"><span class="price">Rs. 3,999</span><span class="old">Rs. 4,999</span></div>
+                    <button class="add-cart" onclick="addToCart('Premium Leather Handbag',3999)"><ion-icon
+                            name="bag-add-outline"></ion-icon> Add to Cart</button>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-img">
+                    <!-- Temporary design image: CDN image is used only for the current frontend design.
+     Later, the Admin Panel will upload/replace this image.
+     Supported formats: PNG, JPG, JPEG, WEBP, GIF, AVIF, SVG, BMP, TIFF. -->
+                    <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=800&q=80"
+                        alt="Elegant summer dress">
+                    <span class="badge">NEW</span>
+                    <button class="wish" onclick="toggleWish(this)" aria-label="Add to wishlist"><ion-icon
+                            name="heart-outline"></ion-icon></button>
+                    <button class="quick-view" onclick="viewProduct(this)" aria-label="View product"><ion-icon
+                            name="eye-outline"></ion-icon></button>
+                </div>
+                <div class="card-body">
+                    <span class="product-cat">Fashion</span>
+                    <h3>Elegant Summer Dress</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price-row"><span class="price">Rs. 4,499</span></div>
+                    <button class="add-cart" onclick="addToCart('Elegant Summer Dress',4499)"><ion-icon
+                            name="bag-add-outline"></ion-icon> Add to Cart</button>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-img">
+                    <!-- Temporary design image: CDN image is used only for the current frontend design.
+     Later, the Admin Panel will upload/replace this image.
+     Supported formats: PNG, JPG, JPEG, WEBP, GIF, AVIF, SVG, BMP, TIFF. -->
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80"
+                        alt="Premium casual sneakers">
+                    <span class="badge">BEST SELLER</span>
+                    <button class="wish" onclick="toggleWish(this)" aria-label="Add to wishlist"><ion-icon
+                            name="heart-outline"></ion-icon></button>
+                    <button class="quick-view" onclick="viewProduct(this)" aria-label="View product"><ion-icon
+                            name="eye-outline"></ion-icon></button>
+                </div>
+                <div class="card-body">
+                    <span class="product-cat">Footwear</span>
+                    <h3>Premium Casual Sneakers</h3>
+                    <div class="rating">★★★★☆</div>
+                    <div class="price-row"><span class="price">Rs. 5,999</span></div>
+                    <button class="add-cart" onclick="addToCart('Premium Casual Sneakers',5999)"><ion-icon
+                            name="bag-add-outline"></ion-icon> Add to Cart</button>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-img">
+                    <!-- Temporary design image: CDN image is used only for the current frontend design.
+     Later, the Admin Panel will upload/replace this image.
+     Supported formats: PNG, JPG, JPEG, WEBP, GIF, AVIF, SVG, BMP, TIFF. -->
+                    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80"
+                        alt="Classic premium watch">
+                    <span class="badge">HOT</span>
+                    <button class="wish" onclick="toggleWish(this)" aria-label="Add to wishlist"><ion-icon
+                            name="heart-outline"></ion-icon></button>
+                    <button class="quick-view" onclick="viewProduct(this)" aria-label="View product"><ion-icon
+                            name="eye-outline"></ion-icon></button>
+                </div>
+                <div class="card-body">
+                    <span class="product-cat">Watches</span>
+                    <h3>Classic Premium Watch</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price-row"><span class="price">Rs. 6,499</span></div>
+                    <button class="add-cart" onclick="addToCart('Classic Premium Watch',6499)"><ion-icon
+                            name="bag-add-outline"></ion-icon> Add to Cart</button>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- This is the Subeesha Rewards section. Manage reward rules from the Admin Panel later. -->
+    <!-- ===== SUBEESHA REWARDS SECTION ===== -->
+    <section class="rewards" id="rewards">
+        <div class="reward-inner">
+            <div class="reward-copy">
+                <div class="eyebrow">Subeesha Rewards</div>
+                <h2>Shop More.<br>Earn More.</h2>
+                <p>
+                    Your shopping should give something back. Earn points from
+                    purchases and activities, convert them into wallet balance,
+                    and use your rewards on future orders.
+                </p>
+                <div class="reward-points">
+                    <div class="point-chip">Daily Login <strong>+10</strong></div>
+                    <div class="point-chip">Review <strong>+50</strong></div>
+                    <div class="point-chip">First Order <strong>+100</strong></div>
+                    <div class="point-chip">Referral <strong>+200</strong></div>
+                </div>
+                <a class="section-more" href="page/loyalty.html">View My Rewards <ion-icon
+                        name="arrow-forward-outline"></ion-icon></a>
+            </div>
+
+            <div class="reward-box">
+                <h3>Earn & Save</h3>
+                <div class="reward-row"><span>Daily Login</span><strong>+10 Points</strong></div>
+                <div class="reward-row"><span>First Order</span><strong>+100 Points</strong></div>
+                <div class="reward-row"><span>Write a Review</span><strong>+50 Points</strong></div>
+                <div class="reward-row"><span>Refer a Friend</span><strong>+200 Points</strong></div>
+                <div class="reward-total">
+                    <b>100 Points = Rs. 1</b>
+                    <small>Convert points into your Subeesha wallet.</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- This is the New Arrivals section. Manage new-arrival products from the Admin Panel later. -->
+    <!-- ===== NEW ARRIVALS SECTION ===== -->
+    <section class="section" id="new">
+        <div class="section-head">
+            <span class="kicker">Just Arrived</span>
+            <h2>New Arrivals</h2>
+            <p>Fresh products added to Subeesha.</p>
+            <a class="section-more" href="page/new-arrivals.html">See More <ion-icon
+                    name="arrow-forward-outline"></ion-icon></a>
+        </div>
+
+        <div class="products">
+            <article class="card">
+                <div class="card-img">
+                    <!-- Temporary design image: CDN image is used only for the current frontend design.
+     Later, the Admin Panel will upload/replace this image.
+     Supported formats: PNG, JPG, JPEG, WEBP, GIF, AVIF, SVG, BMP, TIFF. -->
+                    <img src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=800&q=80"
+                        alt="Modern casual outfit">
+                    <span class="badge">NEW</span>
+                    <button class="wish" onclick="toggleWish(this)" aria-label="Add to wishlist"><ion-icon
+                            name="heart-outline"></ion-icon></button>
+                    <button class="quick-view" onclick="viewProduct(this)" aria-label="View product"><ion-icon
+                            name="eye-outline"></ion-icon></button>
+                </div>
+                <div class="card-body">
+                    <span class="product-cat">Fashion</span>
+                    <h3>Modern Casual Outfit</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price-row"><span class="price">Rs. 3,499</span></div>
+                    <button class="add-cart" onclick="addToCart('Modern Casual Outfit',3499)"><ion-icon
+                            name="bag-add-outline"></ion-icon> Add to Cart</button>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-img">
+                    <!-- Temporary design image: CDN image is used only for the current frontend design.
+     Later, the Admin Panel will upload/replace this image.
+     Supported formats: PNG, JPG, JPEG, WEBP, GIF, AVIF, SVG, BMP, TIFF. -->
+                    <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80"
+                        alt="Everyday shoulder bag">
+                    <span class="badge">NEW</span>
+                    <button class="wish" onclick="toggleWish(this)" aria-label="Add to wishlist"><ion-icon
+                            name="heart-outline"></ion-icon></button>
+                    <button class="quick-view" onclick="viewProduct(this)" aria-label="View product"><ion-icon
+                            name="eye-outline"></ion-icon></button>
+                </div>
+                <div class="card-body">
+                    <span class="product-cat">Bags</span>
+                    <h3>Everyday Shoulder Bag</h3>
+                    <div class="rating">★★★★☆</div>
+                    <div class="price-row"><span class="price">Rs. 2,999</span></div>
+                    <button class="add-cart" onclick="addToCart('Everyday Shoulder Bag',2999)"><ion-icon
+                            name="bag-add-outline"></ion-icon> Add to Cart</button>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-img">
+                    <!-- Temporary design image: CDN image is used only for the current frontend design.
+     Later, the Admin Panel will upload/replace this image.
+     Supported formats: PNG, JPG, JPEG, WEBP, GIF, AVIF, SVG, BMP, TIFF. -->
+                    <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=800&q=80"
+                        alt="Premium streetwear">
+                    <span class="badge">HOT</span>
+                    <button class="wish" onclick="toggleWish(this)" aria-label="Add to wishlist"><ion-icon
+                            name="heart-outline"></ion-icon></button>
+                    <button class="quick-view" onclick="viewProduct(this)" aria-label="View product"><ion-icon
+                            name="eye-outline"></ion-icon></button>
+                </div>
+                <div class="card-body">
+                    <span class="product-cat">Fashion</span>
+                    <h3>Premium Streetwear</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price-row"><span class="price">Rs. 4,999</span></div>
+                    <button class="add-cart" onclick="addToCart('Premium Streetwear',4999)"><ion-icon
+                            name="bag-add-outline"></ion-icon> Add to Cart</button>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-img">
+                    <!-- Temporary design image: CDN image is used only for the current frontend design.
+     Later, the Admin Panel will upload/replace this image.
+     Supported formats: PNG, JPG, JPEG, WEBP, GIF, AVIF, SVG, BMP, TIFF. -->
+                    <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=800&q=80"
+                        alt="Classic lifestyle shoes">
+                    <span class="badge">SALE</span>
+                    <button class="wish" onclick="toggleWish(this)" aria-label="Add to wishlist"><ion-icon
+                            name="heart-outline"></ion-icon></button>
+                    <button class="quick-view" onclick="viewProduct(this)" aria-label="View product"><ion-icon
+                            name="eye-outline"></ion-icon></button>
+                </div>
+                <div class="card-body">
+                    <span class="product-cat">Shoes</span>
+                    <h3>Classic Lifestyle Shoes</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price-row"><span class="price">Rs. 4,499</span></div>
+                    <button class="add-cart" onclick="addToCart('Classic Lifestyle Shoes',4499)"><ion-icon
+                            name="bag-add-outline"></ion-icon> Add to Cart</button>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- ===== WHY CHOOSE SUBEESHA SECTION ===== -->
+    <section class="section">
+        <div class="section-head">
+            <span class="kicker">Our Promise</span>
+            <h2>Why Choose Subeesha?</h2>
+            <p>Simple, reliable and rewarding shopping.</p>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <ion-icon name="ribbon-outline"></ion-icon>
+                <h3>Quality Products</h3>
+                <p>Products selected with quality and value in mind.</p>
+            </div>
+            <div class="feature">
+                <ion-icon name="car-outline"></ion-icon>
+                <h3>Fast Delivery</h3>
+                <p>Reliable delivery service across Pakistan.</p>
+            </div>
+            <div class="feature">
+                <ion-icon name="lock-closed-outline"></ion-icon>
+                <h3>Secure Payment</h3>
+                <p>A safer and smoother checkout experience.</p>
+            </div>
+            <div class="feature">
+                <ion-icon name="headset-outline"></ion-icon>
+                <h3>Customer Support</h3>
+                <p>Friendly support whenever you need assistance.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== WHAT CUSTOMERS SAY / REVIEWS ===== -->
+    <section class="reviews-wrap">
+        <div class="section">
+            <div class="section-head">
+                <span class="kicker">Customer Love</span>
+                <h2>What Customers Say</h2>
+                <p>Build trust with real customer experiences.</p>
+            </div>
+
+            <div class="reviews-carousel">
+                <button class="review-arrow review-prev" onclick="changeReview(-1)"
+                    aria-label="Previous customer review">
+                    <ion-icon name="chevron-back-outline"></ion-icon>
+                </button>
+
+                <div class="review-track" id="reviewTrack">
+                    <article class="review active">
+                        <div class="review-top">
+                            <div class="stars">★★★★★</div>
+                            <span class="review-badge"><ion-icon name="checkmark-circle"></ion-icon> Verified</span>
+                        </div>
+                        <p>"Beautiful packaging, great quality and a very smooth shopping experience. Everything felt
+                            premium from ordering to delivery."</p>
+                        <div class="customer">
+                            <span class="customer-avatar">AK</span>
+                            <span><strong>Ayesha K.</strong><small>Verified Buyer</small></span>
+                        </div>
+                    </article>
+
+                    <article class="review">
+                        <div class="review-top">
+                            <div class="stars">★★★★★</div>
+                            <span class="review-badge"><ion-icon name="checkmark-circle"></ion-icon> Verified</span>
+                        </div>
+                        <p>"The rewards concept is excellent. I can earn points while shopping, and the overall website
+                            experience is very easy."</p>
+                        <div class="customer">
+                            <span class="customer-avatar">HR</span>
+                            <span><strong>Hamza R.</strong><small>Verified Buyer</small></span>
+                        </div>
+                    </article>
+
+                    <article class="review">
+                        <div class="review-top">
+                            <div class="stars">★★★★★</div>
+                            <span class="review-badge"><ion-icon name="checkmark-circle"></ion-icon> Verified</span>
+                        </div>
+                        <p>"Fast delivery and premium presentation. I loved the product quality and will definitely shop
+                            from Subeesha again."</p>
+                        <div class="customer">
+                            <span class="customer-avatar">SM</span>
+                            <span><strong>Sana M.</strong><small>Verified Buyer</small></span>
+                        </div>
+                    </article>
+
+                    <article class="review">
+                        <div class="review-top">
+                            <div class="stars">★★★★★</div>
+                            <span class="review-badge"><ion-icon name="checkmark-circle"></ion-icon> Verified</span>
+                        </div>
+                        <p>"A beautiful shopping experience with helpful product information and a very clean, elegant
+                            design."</p>
+                        <div class="customer">
+                            <span class="customer-avatar">MA</span>
+                            <span><strong>Maham A.</strong><small>Verified Buyer</small></span>
+                        </div>
+                    </article>
+                </div>
+
+                <button class="review-arrow review-next" onclick="changeReview(1)" aria-label="Next customer review">
+                    <ion-icon name="chevron-forward-outline"></ion-icon>
+                </button>
+
+                <div class="review-dots" id="reviewDots">
+                    <button class="review-dot active" onclick="goToReview(0)" aria-label="Review 1"></button>
+                    <button class="review-dot" onclick="goToReview(1)" aria-label="Review 2"></button>
+                    <button class="review-dot" onclick="goToReview(2)" aria-label="Review 3"></button>
+                    <button class="review-dot" onclick="goToReview(3)" aria-label="Review 4"></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== NEWSLETTER SECTION ===== -->
+    <section class="newsletter">
+        <ion-icon name="mail-outline"></ion-icon>
+        <h2>Stay in the Subeesha Circle</h2>
+        <p>Get new arrivals, exclusive offers and reward updates.</p>
+        <form class="news-form" onsubmit="subscribe(event)">
+            <input type="email" placeholder="Enter your email address" required>
+            <button type="submit">Subscribe</button>
+        </form>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer id="footer">
+        <div class="footer">
+            <div class="footer-brand">
+                <!-- Brand logo: keep the uploaded logo file in the project folder. -->
+                <span class="footer-logo-circle"><img src="assets/images/logo.jpg" alt="Subeesha"></span>
+                <p>E-commerce • E-business • Everyday Essentials. Shop more, live better with Subeesha.</p>
+                <div class="socials">
+                    <a class="social" href="#" aria-label="Facebook"><ion-icon name="logo-facebook"></ion-icon></a>
+                    <a class="social" href="#" aria-label="Instagram"><ion-icon name="logo-instagram"></ion-icon></a>
+                    <a class="social" href="#" aria-label="TikTok"><ion-icon name="logo-tiktok"></ion-icon></a>
+                    <a class="social" href="#" aria-label="YouTube"><ion-icon name="logo-youtube"></ion-icon></a>
+                </div>
+            </div>
+
+            <div>
+                <h3>Shop</h3>
+                <a href="#shop">All Products</a>
+                <a href="#new">New Arrivals</a>
+                <a href="#sale">Flash Sale</a>
+                <a href="#categories">Categories</a>
+            </div>
+
+            <div>
+                <h3>Customer Care</h3>
+                <a href="page/customer-love.html">Customer Reviews</a>
+                <a href="#">Contact Us</a>
+                <a href="#">Ring Mesurement</a>
+                <a href="#">FAQs</a>
+                <a href="#">Shipping Policy</a>
+                <a href="#">Return Policy</a>
+                <a href="#">Track Order</a>
+            </div>
+
+            <div>
+                <h3>Company</h3>
+                <a href="page/becomeseller.html">Become Reseller</a>
+                <a href="#">About Us</a>
+                <a href="#">Careers</a>
+                <a href="#">Blog</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms & Conditions</a>
+            </div>
+        </div>
+
+
+        <div class="footer-bottom">
+            <span>© 2026 Subeesha. All Rights Reserved.</span>
+            <span>Shop More, Live Better. · <a href="panel/admin/index.html">Admin Login</a></span>
+        </div>
+    </footer>
+
+
+    <!-- ===== ADVERTISEMENT POPUP ===== -->
+    <div class="ad-overlay" id="adOverlay">
+        <div class="ad-popup">
+            <button class="ad-close" onclick="closeAd()" aria-label="Close advertisement">
+                <ion-icon name="close-outline"></ion-icon>
+            </button>
+            <!-- Temporary design image: CDN image is used only for the current frontend design.
+     Later, the Admin Panel will upload/replace this image.
+     Supported formats: PNG, JPG, JPEG, WEBP, GIF, AVIF, SVG, BMP, TIFF. -->
+            <div class="ad-image"
+                style="background-image:linear-gradient(90deg,rgba(14,61,52,.93),rgba(14,61,52,.20)),url('https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1000&q=88');">
+                <span class="ad-small"><ion-icon name="flash-outline"></ion-icon> LIMITED TIME</span>
+                <h2>UP TO <strong>50% OFF</strong></h2>
+                <p>Flash Sale on selected products</p>
+                <a href="#sale" class="btn btn-gold" onclick="closeAd()">Shop Sale <ion-icon
+                        name="arrow-forward-outline"></ion-icon></a>
+            </div>
+            <div class="ad-bottom">
+                <div>
+                    <span>SUBEESHA EXCLUSIVE</span>
+                    <h3>Shop More, Live Better.</h3>
+                </div>
+                <ion-icon name="sparkles-outline"></ion-icon>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite">
+        <div class="toast-icon"><ion-icon name="checkmark-outline"></ion-icon></div>
+        <div class="toast-content">
+            <strong class="toast-title">Success</strong>
+            <span class="toast-message">Done</span>
+        </div>
+        <button class="toast-close" onclick="hideToast()" aria-label="Close notification">
+            <ion-icon name="close-outline"></ion-icon>
+        </button>
+        <div class="toast-progress"></div>
+    </div>
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+
+
+    <!-- External main JavaScript: all homepage interactions are in assets/js/main.js. -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+    <script src="assets/js/firebase-config.js"></script>
+    <script src="assets/js/sub-core.js"></script>
+    <script src="assets/js/main.js" defer></script>
+    <script src="assets/js/store.js" defer></script>
+</body>
+
+</html>

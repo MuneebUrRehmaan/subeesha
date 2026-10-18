@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Customer Love | Subeesha</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link rel="stylesheet" href="../assets/css/customer-love.css">
+</head>
+
+<body data-page="customer-love">
+
+<!-- HEADER -->
+
+<header>
+<nav>
+
+<a href="../index.html" class="brand-logo">
+    <img src="../assets/images/logo.jpg" alt="Subeesha">
+</a>
+
+<ul class="nav-links" id="navLinks">
+
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../page/Categories.html">Categories</a></li>
+    <li><a href="../page/shop.html">Shop</a></li>
+    <li><a href="../page/new-arrivals.html">New Arrivals</a></li>
+    <li><a href="../page/flashsale.html">Flash Sale</a></li>
+    <li><a href="../page/loyalty.html">Rewards</a></li>
+    <li><a href="../page/customer-love.html" class="active">Customer Love</a></li>
+    <li><a href="#footer">Contact</a></li>
+
+</ul>
+
+<div class="header-search">
+
+    <input
+        type="search"
+        id="headerSearch"
+        placeholder="Search reviews...">
+
+    <button onclick="searchReviews()">
+        <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+
+</div>
+
+<div class="nav-actions">
+
+    <button class="icon-btn">
+        <i class="fa-regular fa-heart"></i>
+    </button>
+
+    <a href="../account.html" class="icon-btn">
+        <i class="fa-regular fa-user"></i>
+    </a>
+
+    <button class="icon-btn">
+
+        <i class="fa-solid fa-bag-shopping"></i>
+
+        <span class="cart-count">0</span>
+
+    </button>
+
+    <button class="icon-btn menu-btn" onclick="toggleMenu()">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+</div>
+
+</nav>
+</header>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+<div class="container">
+
+    <div class="hero-badge">
+        <i class="fa-solid fa-heart"></i>
+        CUSTOMER LOVE
+    </div>
+
+    <h1>What Customers <span>Say</span></h1>
+
+    <p>
+        Real experiences from our verified Subeesha customers.
+        Share your experience and help other customers shop with confidence.
+    </p>
+
+</div>
+
+</section>
+
+
+<!-- MAIN CONTENT -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="section-title">
+
+        <span class="eyebrow">
+            Verified Experiences
+        </span>
+
+        <h2>Loved by Our Customers</h2>
+
+        <p>
+            Honest reviews and real shopping experiences from Subeesha customers.
+        </p>
+
+    </div>
+
+
+    <!-- RATING SUMMARY -->
+
+    <div class="rating-summary">
+
+        <div class="rating-card">
+
+            <div class="rating-number" id="averageRating">
+                0.0
+            </div>
+
+            <div class="rating-stars" id="averageStars">
+                ☆☆☆☆☆
+            </div>
+
+            <p id="reviewCount">
+                Based on verified customer reviews
+            </p>
+
+        </div>
+
+
+        <div class="rating-bars">
+
+            <div class="rating-row">
+
+                <span>5 Star</span>
+
+                <div class="progress">
+                    <span id="bar5"></span>
+                </div>
+
+                <strong id="percent5">0%</strong>
+
+            </div>
+
+            <div class="rating-row">
+
+                <span>4 Star</span>
+
+                <div class="progress">
+                    <span id="bar4"></span>
+                </div>
+
+                <strong id="percent4">0%</strong>
+
+            </div>
+
+            <div class="rating-row">
+
+                <span>3 Star</span>
+
+                <div class="progress">
+                    <span id="bar3"></span>
+                </div>
+
+                <strong id="percent3">0%</strong>
+
+            </div>
+
+            <div class="rating-row">
+
+                <span>2 Star</span>
+
+                <div class="progress">
+                    <span id="bar2"></span>
+                </div>
+
+                <strong id="percent2">0%</strong>
+
+            </div>
+
+            <div class="rating-row">
+
+                <span>1 Star</span>
+
+                <div class="progress">
+                    <span id="bar1"></span>
+                </div>
+
+                <strong id="percent1">0%</strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TOOLBAR -->
+
+    <div class="review-toolbar">
+
+        <div class="search-box">
+
+            <input
+                type="search"
+                id="reviewSearch"
+                placeholder="Search by name, SUB ID, product or review..."
+                onkeyup="renderReviews()">
+
+            <button onclick="renderReviews()">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+
+        </div>
+
+
+        <div class="toolbar-actions">
+
+            <select id="ratingFilter" onchange="renderReviews()">
+
+                <option value="all">
+                    All Ratings
+                </option>
+
+                <option value="5">
+                    5 Star Reviews
+                </option>
+
+                <option value="4">
+                    4 Star Reviews
+                </option>
+
+                <option value="3">
+                    3 Star Reviews
+                </option>
+
+                <option value="2">
+                    2 Star Reviews
+                </option>
+
+                <option value="1">
+                    1 Star Reviews
+                </option>
+
+            </select>
+
+
+            <button
+                class="primary-btn"
+                onclick="openReviewModal()">
+
+                <i class="fa-solid fa-pen"></i>
+
+                Write a Review
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- REVIEWS -->
+
+    <div
+        class="reviews-grid"
+        id="reviewsGrid">
+
+    </div>
+
+
+    <!-- CTA -->
+
+    <div class="review-cta">
+
+        <i class="fa-solid fa-comment-dots"></i>
+
+        <h2>Share Your Experience</h2>
+
+        <p>
+            Purchased something from Subeesha?
+            Tell us about your shopping experience.
+            You can also add a product photo if you want.
+        </p>
+
+        <button
+            class="primary-btn"
+            onclick="openReviewModal()">
+
+            <i class="fa-solid fa-star"></i>
+
+            Write Your Review
+
+        </button>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer id="footer">
+
+<div class="footer">
+
+    <div class="footer-brand">
+
+        <div class="footer-logo">
+
+            <img
+                src="../assets/images/logo.jpg"
+                alt="Subeesha">
+
+        </div>
+
+        <p>
+            E-commerce • E-business • Everyday Essentials.
+            Shop more, live better with Subeesha.
+        </p>
+
+        <div class="socials">
+
+            <a href="#">
+                <i class="fa-brands fa-facebook-f"></i>
+            </a>
+
+            <a href="#">
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+
+            <a href="#">
+                <i class="fa-brands fa-tiktok"></i>
+            </a>
+
+            <a href="#">
+                <i class="fa-brands fa-youtube"></i>
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div>
+
+        <h3>Shop</h3>
+
+        <a href="../page/shop.html">All Products</a>
+        <a href="../page/new-arrivals.html">New Arrivals</a>
+        <a href="../page/flashsale.html">Flash Sale</a>
+        <a href="../page/Categories.html">Categories</a>
+
+    </div>
+
+
+    <div>
+
+        <h3>Customer Care</h3>
+
+        <a href="#">Contact Us</a>
+        <a href="#">FAQs</a>
+        <a href="#">Shipping Policy</a>
+        <a href="#">Return Policy</a>
+
+    </div>
+
+
+    <div>
+
+        <h3>Subeesha</h3>
+
+        <a href="#">About Us</a>
+        <a href="../panel/reseller/index.html">Become a Reseller</a>
+        <a href="../page/loyalty.html">Loyalty Rewards</a>
+        <a href="../page/customer-love.html">Customer Love</a>
+        <a href="#">Privacy Policy</a>
+
+    </div>
+
+</div>
+
+<div class="footer-bottom">
+    © 2026 Subeesha. All Rights Reserved.
+</div>
+
+</footer>
+
+
+<!-- REVIEW MODAL -->
+
+<div class="modal" id="reviewModal">
+
+<div class="modal-box">
+
+    <button
+        class="close-modal"
+        onclick="closeReviewModal()">
+
+        <i class="fa-solid fa-xmark"></i>
+
+    </button>
+
+
+    <h2>Write a Review</h2>
+
+    <p>
+        Please provide your details and share your experience with us.
+        Your review will be verified before being published.
+    </p>
+
+
+    <form onsubmit="submitReview(event)">
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>Your Name *</label>
+
+                <input
+                    type="text"
+                    id="customerName"
+                    placeholder="Enter your full name"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Email Address *</label>
+
+                <input
+                    type="email"
+                    id="customerEmail"
+                    placeholder="Enter your email"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Phone Number *</label>
+
+                <input
+                    type="tel"
+                    id="customerPhone"
+                    placeholder="Enter your phone number"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Order ID *</label>
+
+                <input
+                    type="text"
+                    id="customerOrder"
+                    placeholder="Example: ORD-10025"
+                    required>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Product Purchased *</label>
+
+            <input
+                type="text"
+                id="customerProduct"
+                placeholder="What product did you purchase?"
+                required>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Your Rating *</label>
+
+            <select
+                id="customerRating"
+                required>
+
+                <option value="">
+                    Select your rating
+                </option>
+
+                <option value="5">
+                    ★★★★★ - Excellent
+                </option>
+
+                <option value="4">
+                    ★★★★☆ - Very Good
+                </option>
+
+                <option value="3">
+                    ★★★☆☆ - Good
+                </option>
+
+                <option value="2">
+                    ★★☆☆☆ - Fair
+                </option>
+
+                <option value="1">
+                    ★☆☆☆☆ - Poor
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Your Review *</label>
+
+            <textarea
+                id="customerReview"
+                placeholder="Tell us about your experience..."
+                required></textarea>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Upload a Photo
+                <span class="optional">
+                    (Optional)
+                </span>
+            </label>
+
+
+            <div class="image-upload-box">
+
+                <input
+                    type="file"
+                    id="reviewImage"
+                    accept="image/*"
+                    onchange="previewReviewImage(event)">
+
+
+                <div
+                    class="upload-placeholder"
+                    id="uploadPlaceholder">
+
+                    <i class="fa-solid fa-camera"></i>
+
+                    <strong>
+                        Add a product photo
+                    </strong>
+
+                    <span>
+                        Optional • JPG, PNG or WEBP
+                    </span>
+
+                </div>
+
+
+                <img
+                    id="imagePreview"
+                    alt="Review image preview">
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="submit-review">
+
+            <i class="fa-solid fa-paper-plane"></i>
+
+            Submit for Verification
+
+        </button>
+
+
+        <div class="privacy-note">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+            <span>
+                Your review will be submitted for verification.
+                After approval, it may be displayed publicly on Subeesha.
+            </span>
+
+        </div>
+
+    </form>
+
+</div>
+
+</div>
+
+
+<!-- SUCCESS MESSAGE -->
+
+<div
+    class="success-modal"
+    id="successModal">
+
+<div class="success-box">
+
+    <div class="success-icon">
+
+        <i class="fa-solid fa-check"></i>
+
+    </div>
+
+    <h2>Review Submitted!</h2>
+
+    <p>
+        Your review has been submitted successfully!
+        After verification, it will be published within the next
+        <strong>5 working days.</strong>
+    </p>
+
+    <div
+        class="success-id"
+        id="successReviewId">
+
+        SUB-1007
+
+    </div>
+
+    <button onclick="closeSuccessModal()">
+        Done
+    </button>
+
+</div>
+
+</div>
+
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="../assets/js/firebase-config.js"></script>
+<script src="../assets/js/sub-core.js"></script>
+<script src="../assets/js/customer-love.js"></script>
+
+<script src="../assets/js/store.js" defer></script>
+</body>
+</html>

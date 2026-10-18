@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Shop | Subeesha</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link rel="stylesheet" href="../assets/css/shop.css">
+</head>
+
+<body data-page="shop">
+
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+    <nav>
+
+        <a href="../index.html" class="brand">
+
+            <span class="brand-logo-circle">
+                <img src="../assets/images/logo.jpg"
+                     alt="Subeesha - Shop More, Live Better">
+            </span>
+
+        </a>
+
+
+        <ul class="nav-links" id="navLinks">
+
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../page/Categories.html">Categories</a></li>
+            <li><a href="../page/shop.html" class="active">Shop</a></li>
+            <li><a href="../page/new-arrivals.html">New Arrivals</a></li>
+            <li><a href="../page/flashsale.html">Flash Sale</a></li>
+            <li><a href="../page/loyalty.html">Rewards</a></li>
+            <li><a href="#footer">Contact</a></li>
+
+        </ul>
+
+
+        <div class="header-search">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input type="search"
+                   id="searchInput"
+                   placeholder="Search products..."
+                   onkeyup="if(event.key === 'Enter') searchProducts()">
+
+            <button onclick="searchProducts()">
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+
+        </div>
+
+
+        <div class="nav-actions">
+
+            <button class="icon-btn"
+                    onclick="showToast('Wishlist opened')">
+                <i class="fa-regular fa-heart"></i>
+            </button>
+
+            <a href="../account.html"
+               class="icon-btn">
+                <i class="fa-regular fa-user"></i>
+            </a>
+
+            <button class="icon-btn"
+                    onclick="showCart()">
+
+                <i class="fa-solid fa-bag-shopping"></i>
+
+                <span class="cart-count"
+                      id="cartCount">
+                    0
+                </span>
+
+            </button>
+
+            <button class="icon-btn menu-btn"
+                    onclick="toggleMenu()">
+
+                <i class="fa-solid fa-bars"></i>
+
+            </button>
+
+        </div>
+
+    </nav>
+
+</header>
+
+
+<!-- ================= SHOP HERO ================= -->
+
+<section class="shop-hero">
+
+    <div class="container">
+
+        <span class="hero-label">
+            <i class="fa-solid fa-sparkles"></i>
+            DISCOVER SUBEESHA
+        </span>
+
+        <h1>
+            Curated <span>For You</span>
+        </h1>
+
+        <p>
+            Discover products carefully selected for the Subeesha community.
+            From everyday essentials to your next favourite find.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FEATURED PRODUCTS ================= -->
+
+<section class="section" id="featured-products">
+
+    <div class="container">
+
+        <div class="section-head">
+
+            <span class="eyebrow">
+                Subeesha Selection
+            </span>
+
+            <h2>
+                Featured Products
+            </h2>
+
+            <p>
+                Popular picks selected for the Subeesha community.
+            </p>
+
+        </div>
+
+
+        <div class="featured-intro">
+
+            <div class="featured-intro-left">
+
+                <div class="featured-icon">
+                    <i class="fa-solid fa-star"></i>
+                </div>
+
+                <div>
+
+                    <h3>
+                        Handpicked For You
+                    </h3>
+
+                    <p>
+                        Explore popular products loved by our growing community.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="filter-buttons">
+
+                <button class="filter-btn active"
+                        onclick="filterProducts('all',this)">
+                    All
+                </button>
+
+                <button class="filter-btn"
+                        onclick="filterProducts('fashion',this)">
+                    Fashion
+                </button>
+
+                <button class="filter-btn"
+                        onclick="filterProducts('beauty',this)">
+                    Beauty
+                </button>
+
+                <button class="filter-btn"
+                        onclick="filterProducts('electronics',this)">
+                    Electronics
+                </button>
+
+                <button class="filter-btn"
+                        onclick="filterProducts('home',this)">
+                    Home
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="products-grid" id="productsGrid">
+
+
+            <!-- PRODUCT 1 -->
+
+            <div class="product-card"
+                 data-category="fashion">
+
+                <div class="product-image">
+
+                    <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=700&q=80"
+                         alt="Classic Casual Shirt">
+
+                    <span class="product-badge">
+                        FEATURED
+                    </span>
+
+                    <button class="wishlist-btn"
+                            onclick="toggleWishlist(this)">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+
+                </div>
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Fashion
+                    </span>
+
+                    <h3>
+                        Classic Casual Shirt
+                    </h3>
+
+                    <div class="rating">
+
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+
+                        <span>(124)</span>
+
+                    </div>
+
+                    <div class="price-row">
+
+                        <div>
+                            <span class="price">Rs. 2,499</span>
+                            <span class="old-price">Rs. 2,999</span>
+                        </div>
+
+                    </div>
+
+                    <div class="product-actions">
+
+                        <button class="add-cart"
+                                onclick="addToCart('Classic Casual Shirt')">
+
+                            Add to Cart
+
+                        </button>
+
+                        <button class="quick-view"
+                                onclick="quickView(
+                                'Classic Casual Shirt',
+                                'Fashion',
+                                'Rs. 2,499',
+                                'A comfortable and stylish casual shirt selected for everyday wear.',
+                                'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=700&q=80'
+                                )">
+
+                            <i class="fa-regular fa-eye"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PRODUCT 2 -->
+
+            <div class="product-card"
+                 data-category="electronics">
+
+                <div class="product-image">
+
+                    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=80"
+                         alt="Premium Smart Watch">
+
+                    <span class="product-badge">
+                        POPULAR
+                    </span>
+
+                    <button class="wishlist-btn"
+                            onclick="toggleWishlist(this)">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+
+                </div>
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Electronics
+                    </span>
+
+                    <h3>Premium Smart Watch</h3>
+
+                    <div class="rating">
+
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star-half-stroke"></i>
+
+                        <span>(96)</span>
+
+                    </div>
+
+                    <div class="price-row">
+
+                        <div>
+                            <span class="price">Rs. 5,499</span>
+                        </div>
+
+                    </div>
+
+                    <div class="product-actions">
+
+                        <button class="add-cart"
+                                onclick="addToCart('Premium Smart Watch')">
+                            Add to Cart
+                        </button>
+
+                        <button class="quick-view"
+                                onclick="quickView(
+                                'Premium Smart Watch',
+                                'Electronics',
+                                'Rs. 5,499',
+                                'A modern smartwatch with style and everyday functionality.',
+                                'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=80'
+                                )">
+
+                            <i class="fa-regular fa-eye"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PRODUCT 3 -->
+
+            <div class="product-card"
+                 data-category="beauty">
+
+                <div class="product-image">
+
+                    <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=700&q=80"
+                         alt="Luxury Skincare Set">
+
+                    <span class="product-badge">
+                        TOP PICK
+                    </span>
+
+                    <button class="wishlist-btn"
+                            onclick="toggleWishlist(this)">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+
+                </div>
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Beauty
+                    </span>
+
+                    <h3>Luxury Skincare Set</h3>
+
+                    <div class="rating">
+
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+
+                        <span>(88)</span>
+
+                    </div>
+
+                    <div class="price-row">
+
+                        <span class="price">
+                            Rs. 3,299
+                        </span>
+
+                    </div>
+
+                    <div class="product-actions">
+
+                        <button class="add-cart"
+                                onclick="addToCart('Luxury Skincare Set')">
+                            Add to Cart
+                        </button>
+
+                        <button class="quick-view"
+                                onclick="quickView(
+                                'Luxury Skincare Set',
+                                'Beauty',
+                                'Rs. 3,299',
+                                'A premium skincare collection for your everyday beauty routine.',
+                                'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=700&q=80'
+                                )">
+
+                            <i class="fa-regular fa-eye"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PRODUCT 4 -->
+
+            <div class="product-card"
+                 data-category="home">
+
+                <div class="product-image">
+
+                    <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=700&q=80"
+                         alt="Modern Table Lamp">
+
+                    <span class="product-badge">
+                        NEW
+                    </span>
+
+                    <button class="wishlist-btn"
+                            onclick="toggleWishlist(this)">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+
+                </div>
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Home
+                    </span>
+
+                    <h3>Modern Table Lamp</h3>
+
+                    <div class="rating">
+
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-regular fa-star"></i>
+
+                        <span>(57)</span>
+
+                    </div>
+
+                    <div class="price-row">
+
+                        <span class="price">
+                            Rs. 2,199
+                        </span>
+
+                    </div>
+
+                    <div class="product-actions">
+
+                        <button class="add-cart"
+                                onclick="addToCart('Modern Table Lamp')">
+                            Add to Cart
+                        </button>
+
+                        <button class="quick-view"
+                                onclick="quickView(
+                                'Modern Table Lamp',
+                                'Home',
+                                'Rs. 2,199',
+                                'A clean and modern table lamp for your home and workspace.',
+                                'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=700&q=80'
+                                )">
+
+                            <i class="fa-regular fa-eye"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PRODUCT 5 -->
+
+            <div class="product-card"
+                 data-category="fashion">
+
+                <div class="product-image">
+
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80"
+                         alt="Urban Running Shoes">
+
+                    <button class="wishlist-btn"
+                            onclick="toggleWishlist(this)">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+
+                </div>
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Fashion
+                    </span>
+
+                    <h3>Urban Running Shoes</h3>
+
+                    <div class="rating">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <span>(143)</span>
+                    </div>
+
+                    <div class="price-row">
+                        <span class="price">Rs. 4,499</span>
+                    </div>
+
+                    <div class="product-actions">
+
+                        <button class="add-cart"
+                                onclick="addToCart('Urban Running Shoes')">
+                            Add to Cart
+                        </button>
+
+                        <button class="quick-view"
+                                onclick="showToast('Urban Running Shoes details opened')">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PRODUCT 6 -->
+
+            <div class="product-card"
+                 data-category="electronics">
+
+                <div class="product-image">
+
+                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=80"
+                         alt="Wireless Headphones">
+
+                    <span class="product-badge">
+                        TRENDING
+                    </span>
+
+                    <button class="wishlist-btn"
+                            onclick="toggleWishlist(this)">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+
+                </div>
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Electronics
+                    </span>
+
+                    <h3>Wireless Headphones</h3>
+
+                    <div class="rating">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <span>(112)</span>
+                    </div>
+
+                    <div class="price-row">
+                        <span class="price">Rs. 3,799</span>
+                    </div>
+
+                    <div class="product-actions">
+
+                        <button class="add-cart"
+                                onclick="addToCart('Wireless Headphones')">
+                            Add to Cart
+                        </button>
+
+                        <button class="quick-view"
+                                onclick="showToast('Wireless Headphones details opened')">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PRODUCT 7 -->
+
+            <div class="product-card"
+                 data-category="beauty">
+
+                <div class="product-image">
+
+                    <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=700&q=80"
+                         alt="Premium Makeup Kit">
+
+                    <button class="wishlist-btn"
+                            onclick="toggleWishlist(this)">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+
+                </div>
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Beauty
+                    </span>
+
+                    <h3>Premium Makeup Kit</h3>
+
+                    <div class="rating">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star-half-stroke"></i>
+                        <span>(72)</span>
+                    </div>
+
+                    <div class="price-row">
+                        <span class="price">Rs. 4,299</span>
+                    </div>
+
+                    <div class="product-actions">
+
+                        <button class="add-cart"
+                                onclick="addToCart('Premium Makeup Kit')">
+                            Add to Cart
+                        </button>
+
+                        <button class="quick-view"
+                                onclick="showToast('Premium Makeup Kit details opened')">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PRODUCT 8 -->
+
+            <div class="product-card"
+                 data-category="home">
+
+                <div class="product-image">
+
+                    <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=700&q=80"
+                         alt="Comfort Lounge Chair">
+
+                    <button class="wishlist-btn"
+                            onclick="toggleWishlist(this)">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+
+                </div>
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Home
+                    </span>
+
+                    <h3>Comfort Lounge Chair</h3>
+
+                    <div class="rating">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-regular fa-star"></i>
+                        <span>(49)</span>
+                    </div>
+
+                    <div class="price-row">
+                        <span class="price">Rs. 12,499</span>
+                    </div>
+
+                    <div class="product-actions">
+
+                        <button class="add-cart"
+                                onclick="addToCart('Comfort Lounge Chair')">
+                            Add to Cart
+                        </button>
+
+                        <button class="quick-view"
+                                onclick="showToast('Comfort Lounge Chair details opened')">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="load-area">
+
+            <button class="load-btn"
+                    onclick="showToast('More products coming soon!')">
+
+                <i class="fa-solid fa-plus"></i>
+                Load More Products
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= NEWSLETTER ================= -->
+
+<section class="newsletter">
+
+    <div class="newsletter-icon">
+        <i class="fa-regular fa-envelope"></i>
+    </div>
+
+    <h2>
+        Stay Updated With Subeesha
+    </h2>
+
+    <p>
+        Get updates about new products, exclusive offers and community favourites.
+    </p>
+
+    <form class="newsletter-form"
+          onsubmit="subscribe(event)">
+
+        <input type="email"
+               placeholder="Enter your email address"
+               required>
+
+        <button type="submit">
+            Subscribe
+        </button>
+
+    </form>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer id="footer">
+
+    <div class="footer">
+
+        <div class="footer-brand">
+
+            <span class="footer-logo-circle">
+
+                <img src="../assets/images/logo.jpg"
+                     alt="Subeesha">
+
+            </span>
+
+            <p>
+                E-commerce • E-business • Everyday Essentials.
+                Shop more, live better with Subeesha.
+            </p>
+
+            <div class="socials">
+
+                <a href="#">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+
+                <a href="#">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+
+                <a href="#">
+                    <i class="fa-brands fa-tiktok"></i>
+                </a>
+
+                <a href="#">
+                    <i class="fa-brands fa-youtube"></i>
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div>
+
+            <h3>Shop</h3>
+
+            <a href="../page/shop.html">All Products</a>
+            <a href="../page/new-arrivals.html">New Arrivals</a>
+            <a href="../page/flashsale.html">Flash Sale</a>
+            <a href="../page/Categories.html">Categories</a>
+
+        </div>
+
+
+        <div>
+
+            <h3>Customer Care</h3>
+
+            <a href="#">Contact Us</a>
+            <a href="#">FAQs</a>
+            <a href="#">Shipping Policy</a>
+            <a href="#">Return Policy</a>
+
+        </div>
+
+
+        <div>
+
+            <h3>Subeesha</h3>
+
+            <a href="#">About Us</a>
+            <a href="../panel/reseller/index.html">Become a Reseller</a>
+            <a href="../page/loyalty.html">Loyalty Rewards</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+        © 2026 Subeesha. All Rights Reserved.
+    </div>
+
+</footer>
+
+
+<!-- ================= QUICK VIEW MODAL ================= -->
+
+<div class="modal"
+     id="productModal">
+
+    <div class="modal-box">
+
+        <button class="close-modal"
+                onclick="closeModal()">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+
+        <div class="modal-image">
+
+            <img id="modalImage"
+                 src=""
+                 alt="Product">
+
+        </div>
+
+
+        <div class="modal-content">
+
+            <span class="category"
+                  id="modalCategory">
+            </span>
+
+            <h2 id="modalTitle"></h2>
+
+            <p id="modalDescription"></p>
+
+            <span class="modal-price"
+                  id="modalPrice">
+            </span>
+
+            <button class="modal-cart-btn"
+                    onclick="addModalProductToCart()">
+
+                <i class="fa-solid fa-bag-shopping"></i>
+                Add to Cart
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= TOAST ================= -->
+
+<div class="toast"
+     id="toast">
+
+    <i class="fa-solid fa-circle-check"
+       style="color:#2f8a64;">
+    </i>
+
+    <span id="toastText">
+        Success
+    </span>
+
+</div>
+
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="../assets/js/firebase-config.js"></script>
+<script src="../assets/js/sub-core.js"></script>
+<script src="../assets/js/shop.js"></script>
+
+<script src="../assets/js/store.js" defer></script>
+</body>
+</html>

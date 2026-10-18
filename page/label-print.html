@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Subeesha Order Shipping Label</title>
+
+<!-- QR Code Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<!-- Ionicons -->
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+<link rel="stylesheet" href="../assets/css/label-print.css">
+
+</head>
+
+<body data-page="label-print">
+
+
+<!-- =====================================================
+     PAGE HEADER
+===================================================== -->
+
+<div class="page-header">
+
+    <div>
+
+        <h1>Order Shipping Label</h1>
+
+        <p>
+            Compact half-page landscape shipping label.
+        </p>
+
+    </div>
+
+
+    <button class="print-btn" onclick="window.print()">
+
+        <ion-icon name="print-outline"></ion-icon>
+
+        Print Label
+
+    </button>
+
+</div>
+
+
+
+<!-- =====================================================
+     SHIPPING LABEL
+===================================================== -->
+
+<div class="shipping-label">
+
+
+    <!-- =================================================
+         HEADER
+    ================================================= -->
+
+    <div class="label-header">
+
+
+        <div class="brand">
+
+            <div class="brand-logo">
+
+                <img
+                    src="../assets/images/logo.jpg"
+                    alt="Subeesha Logo"
+                >
+
+            </div>
+
+
+            <div class="brand-info">
+
+                <h2>Subeesha</h2>
+
+                <span>Shop More, Live Better</span>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="website-info">
+
+            <strong>SUBEESHA ONLINE STORE</strong>
+
+            <p>www.subeesha.com</p>
+
+            <p>support@subeesha.com</p>
+
+            <p>+92 300 1234567</p>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =================================================
+         ORDER BAR
+    ================================================= -->
+
+    <div class="order-bar">
+
+
+        <div class="order-box">
+
+            <span>Order Number</span>
+
+            <strong>#SUB-10842</strong>
+
+        </div>
+
+
+        <div class="order-box">
+
+            <span>Order Date</span>
+
+            <strong>15 Aug 2026</strong>
+
+        </div>
+
+
+        <div class="order-box">
+
+            <span>Payment Method</span>
+
+            <strong>Cash on Delivery</strong>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =================================================
+         MAIN CONTENT
+    ================================================= -->
+
+    <div class="label-content">
+
+
+        <!-- =============================================
+             CUSTOMER + RETURN ADDRESS
+        ============================================== -->
+
+        <div class="address-section">
+
+
+            <span class="section-label">
+
+                Ship To
+
+            </span>
+
+
+            <div class="customer-name">
+
+                Ahmed Khan
+
+            </div>
+
+
+            <div class="customer-phone">
+
+                +92 300 1234567
+
+            </div>
+
+
+            <div class="customer-address">
+
+                House No. 25, Street No. 4,<br>
+
+                Near Latifabad Unit 7,<br>
+
+                Hyderabad, Sindh, Pakistan
+
+            </div>
+
+
+
+            <!-- RETURN ADDRESS -->
+
+            <div class="return-address">
+
+
+                <span class="section-label">
+
+                    Return Address / From
+
+                </span>
+
+
+                <div class="return-name">
+
+                    Subeesha Online Store
+
+                </div>
+
+
+                <div class="return-phone">
+
+                    +92 300 1234567
+
+                </div>
+
+
+                <div class="return-details">
+
+                    Office No. 12, Main Commercial Area,<br>
+
+                    Latifabad, Hyderabad,<br>
+
+                    Sindh, Pakistan
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =============================================
+             ORDER SUMMARY
+        ============================================== -->
+
+        <div class="summary-section">
+
+
+            <div class="summary-title">
+
+                Order Summary
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span>Subtotal</span>
+
+                <strong>Rs. 7,000</strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span>Shipping Cost</span>
+
+                <strong>Rs. 250</strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span>Voucher</span>
+
+                <strong>SUB500</strong>
+
+            </div>
+
+
+            <div class="summary-row discount">
+
+                <span>Voucher Discount</span>
+
+                <strong>- Rs. 500</strong>
+
+            </div>
+
+
+            <!--
+                REWARDS OPTIONAL
+
+                Agar customer ne rewards use nahi kiye
+                to "Not Used" show hoga.
+
+                Jis order me rewards use hon,
+                wahan amount show kar sakte hain:
+                - Rs. 250
+            -->
+
+            <div class="summary-row rewards">
+
+                <span>Rewards Used</span>
+
+                <strong>Not Used</strong>
+
+            </div>
+
+
+
+            <div class="total-row">
+
+                <span>Total Amount</span>
+
+                <strong>Rs. 6,750</strong>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =============================================
+             QR CODE
+        ============================================== -->
+
+        <div class="qr-section">
+
+
+            <h3>Scan Order QR</h3>
+
+
+            <div id="qrcode"></div>
+
+
+            <div class="qr-order">
+
+                #SUB-10842
+
+            </div>
+
+
+            <div class="qr-text">
+
+                Scan QR code to view order details
+                and loyalty reward information.
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =================================================
+         FOOTER
+    ================================================= -->
+
+    <div class="label-footer">
+
+
+        <div class="delivery-note">
+
+            <strong>Delivery Instructions:</strong>
+
+            Please verify the customer name, order number and amount before delivering the package.
+            If the order cannot be delivered, return the package to the Subeesha return address mentioned above.
+
+        </div>
+
+
+
+        <div class="cod-box">
+
+            <span>Amount To Collect</span>
+
+            <strong>Rs. 6,750</strong>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     QR CODE JAVASCRIPT
+===================================================== -->
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="../assets/js/firebase-config.js"></script>
+<script src="../assets/js/sub-core.js"></script>
+<script src="../assets/js/label-print.js"></script>
+
+<script src="../assets/js/store.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reseller Login · Subeesha</title>
+<link rel="icon" href="assets/images/logo.jpg">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+:root{--primary:#0e3d34;--border:#e3e9e6}
+*{box-sizing:border-box;font-family:'Poppins',Arial,sans-serif}
+body{margin:0}
+.a-login{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0e3d34,#072620);padding:20px}
+.box{background:#fff;border-radius:18px;padding:34px;width:100%;max-width:400px;box-shadow:0 30px 60px rgba(0,0,0,.25)}
+.box img{width:64px;height:64px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 12px}
+h2{text-align:center;margin-bottom:4px}
+.sub{text-align:center;color:#68736e;font-size:12px;margin-bottom:20px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;font-weight:600;margin-bottom:6px}
+.field input{width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px}
+.password-box{position:relative}
+.password-box button{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:0;color:#88938f}
+.btn{width:100%;justify-content:center;padding:12px;border-radius:8px;border:0;background:var(--primary);color:#fff;font-weight:700;font-size:14px;cursor:pointer}
+.a-note{padding:12px 14px;border-radius:10px;font-size:12px;margin-bottom:14px}
+.err{background:#fdecec;border:1px solid #f3c0c0;color:#8a2323}
+a{color:var(--primary)}
+</style>
+</head>
+<body>
+<div class="a-login">
+    <div class="box">
+        <img src="assets/images/logo.jpg" alt="Subeesha">
+        <h2>Reseller Login</h2>
+        <p class="sub">Sign in to your Subeesha reseller account</p>
+        <div class="a-note err" id="err" style="display:none"></div>
+        <form id="f">
+            <div class="field"><label>Email</label><input id="email" type="email" required></div>
+            <div class="field"><label>Password</label>
+                <div class="password-box"><input id="pw" type="password" required><button type="button" onclick="var i=document.getElementById('pw');i.type=i.type==='password'?'text':'password';"><i class="fa-solid fa-eye"></i></button></div>
+            </div>
+            <button class="btn" id="go" type="submit">Sign In</button>
+            <p style="text-align:center;margin-top:14px;font-size:12px"><a href="#" id="forgot">Forgot password?</a></p>
+        </form>
+        <p style="text-align:center;margin-top:10px;font-size:12px"><a href="../../account.html" style="color:#68736e">Become a reseller &rarr;</a></p>
+    </div>
+</div>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="../../assets/js/firebase-config.js"></script>
+<script src="../../assets/js/sub-core.js"></script>
+<script>
+(function(){
+    function showErr(m){ var e=document.getElementById("err"); e.textContent=m; e.style.display="block"; }
+    if(!SUB.configured){ showErr("Firebase is not configured yet. Edit assets/js/firebase-config.js"); }
+    else SUB.onAuth(function(u,p){ if(u && p && p.role==="reseller") location.replace("dashboard.html"); });
+    document.getElementById("f").addEventListener("submit",function(ev){
+        ev.preventDefault();
+        if(!SUB.configured) return showErr("Firebase is not configured yet.");
+        var b=document.getElementById("go"); b.disabled=true; b.textContent="Signing in...";
+        SUB.signIn(document.getElementById("email").value.trim(), document.getElementById("pw").value).then(function(p){
+            if(p.role!=="reseller"){ return SUB.signOut().then(function(){ throw new Error("This account is not a reseller account."); }); }
+            location.replace("dashboard.html");
+        }).catch(function(e){ showErr(SUB.authError(e)); b.disabled=false; b.textContent="Sign In"; });
+    });
+    document.getElementById("forgot").addEventListener("click",function(ev){
+        ev.preventDefault();
+        var em=document.getElementById("email").value.trim();
+        if(!em) return showErr("Enter your email first, then click Forgot password.");
+        SUB.resetPassword(em).then(function(){ showErr(""); alert("Password reset link sent to "+em); }).catch(function(e){ showErr(SUB.authError(e)); });
+    });
+})();
+</script>
+</body>
+</html>

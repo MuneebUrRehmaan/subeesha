@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Users Management · Subeesha Admin Panel</title>
+
+<!-- Font Awesome -->
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<!-- Main Admin CSS -->
+<link rel="stylesheet" href="assets/css/style.css">
+
+<style>
+
+/* =========================================
+   USERS FILTER BAR
+========================================= */
+
+.users-filter-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
+    padding:20px;
+    border-bottom:1px solid #edf0ee;
+}
+
+.user-tabs{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.user-filter-btn{
+    border:1px solid #e2e7e4;
+    background:#fff;
+    color:#66736e;
+    padding:10px 16px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:600;
+    transition:.25s;
+}
+
+.user-filter-btn:hover{
+    border-color:#0e3d34;
+    color:#0e3d34;
+}
+
+.user-filter-btn.active{
+    background:#0e3d34;
+    color:#fff;
+    border-color:#0e3d34;
+}
+
+.user-filter-actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.user-filter-select{
+    padding:10px 14px;
+    border:1px solid #e2e7e4;
+    border-radius:8px;
+    background:#fff;
+    outline:none;
+    color:#47534f;
+    cursor:pointer;
+}
+
+.user-search{
+    min-width:240px;
+    padding:10px 14px;
+    border:1px solid #e2e7e4;
+    border-radius:8px;
+    outline:none;
+}
+
+.user-search:focus,
+.user-filter-select:focus{
+    border-color:#0e3d34;
+}
+
+
+/* =========================================
+   USER TYPE BADGES
+========================================= */
+
+.user-type{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:6px 10px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:700;
+}
+
+.type-user{
+    background:#eef5ff;
+    color:#3475c6;
+}
+
+.type-reseller{
+    background:#fff6e8;
+    color:#b87516;
+}
+
+.type-admin{
+    background:#eaf7f1;
+    color:#16835a;
+}
+
+
+/* =========================================
+   USER INFO
+========================================= */
+
+.user-info{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.user-avatar{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#0e3d34;
+    color:#fff;
+    font-size:12px;
+    font-weight:700;
+}
+
+.user-details strong{
+    display:block;
+    font-size:13px;
+    color:#27342f;
+}
+
+.user-details small{
+    display:block;
+    color:#8b9691;
+    margin-top:3px;
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.status{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:6px 10px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:700;
+}
+
+.status.active{
+    background:#eaf7f1;
+    color:#16835a;
+}
+
+.status.blocked{
+    background:#fff0f0;
+    color:#c63b3b;
+}
+
+.status.pending{
+    background:#fff6e8;
+    color:#b87516;
+}
+
+
+/* =========================================
+   TABLE ACTIONS
+========================================= */
+
+.action-buttons{
+    display:flex;
+    gap:7px;
+}
+
+.action-btn{
+    width:34px;
+    height:34px;
+    border:none;
+    border-radius:7px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:.2s;
+}
+
+.action-view{
+    background:#eef5ff;
+    color:#3475c6;
+}
+
+.action-edit{
+    background:#fff6e8;
+    color:#b87516;
+}
+
+.action-block{
+    background:#fff0f0;
+    color:#c63b3b;
+}
+
+.action-unblock{
+    background:#eaf7f1;
+    color:#16835a;
+}
+
+.action-btn:hover{
+    transform:translateY(-2px);
+}
+
+
+/* =========================================
+   USER STATS
+========================================= */
+
+.user-stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+    margin-bottom:20px;
+}
+
+.user-stat-card{
+    background:#fff;
+    border:1px solid #edf0ee;
+    border-radius:12px;
+    padding:20px;
+}
+
+.user-stat-card small{
+    color:#88938f;
+    font-size:12px;
+}
+
+.user-stat-card h3{
+    margin:8px 0 0;
+    font-size:26px;
+    color:#1d2c27;
+}
+
+.user-stat-card i{
+    float:right;
+    font-size:22px;
+    color:#0e3d34;
+}
+
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.empty-users{
+    text-align:center;
+    padding:50px 20px;
+    color:#8b9691;
+}
+
+.empty-users i{
+    font-size:40px;
+    margin-bottom:15px;
+    display:block;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media(max-width:1000px){
+
+    .user-stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:700px){
+
+    .users-filter-bar{
+        align-items:stretch;
+    }
+
+    .user-filter-actions{
+        width:100%;
+        flex-direction:column;
+    }
+
+    .user-search,
+    .user-filter-select{
+        width:100%;
+    }
+
+    .user-stats{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="layout">
+
+
+<!-- =========================================
+     SIDEBAR
+========================================= -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="logo">
+
+        <img
+        src="assets/images/logo.jpg"
+        alt="Subeesha Logo"
+        class="logo-image">
+
+        <div class="logo-text">
+            <h2>Subeesha</h2>
+            <small>ADMINISTRATION</small>
+        </div>
+
+    </div>
+
+
+    <div class="menu">
+        <div class="menu-title">Main</div>
+        <a class="nav" data-page="dashboard" href="index.html">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <a class="nav" data-page="orders" href="orders.html">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span>Orders</span>
+            <b class="badge" style="display:none">0</b>
+        </a>
+
+        <a class="nav" data-page="products" href="products.html">
+            <i class="fa-solid fa-box"></i>
+            <span>Products</span>
+        </a>
+
+        <a class="nav" data-page="categories" href="categories.html">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>Categories</span>
+        </a>
+
+        <a class="nav" data-page="customers" href="customers.html">
+            <i class="fa-solid fa-users"></i>
+            <span>Customers</span>
+        </a>
+
+        <a class="nav" data-page="inventory" href="inventory.html">
+            <i class="fa-solid fa-warehouse"></i>
+            <span>Inventory</span>
+            <b class="badge" style="display:none">0</b>
+        </a>
+
+        <div class="menu-title">Reseller System</div>
+        <a class="nav" data-page="resellers" href="resellers.html">
+            <i class="fa-solid fa-handshake"></i>
+            <span>Resellers</span>
+            <b class="badge" style="display:none">0</b>
+        </a>
+
+        <a class="nav" data-page="reseller-requests" href="reseller-requests.html">
+            <i class="fa-solid fa-clipboard-list"></i>
+            <span>Applications</span>
+            <b class="badge" style="display:none">0</b>
+        </a>
+
+        <a class="nav" data-page="reseller-payments" href="reseller-payments.html">
+            <i class="fa-solid fa-money-bill-transfer"></i>
+            <span>Reseller Payments</span>
+        </a>
+
+        <div class="menu-title">Marketing</div>
+        <a class="nav" data-page="discounts" href="discounts.html">
+            <i class="fa-solid fa-tags"></i>
+            <span>Discounts</span>
+        </a>
+
+        <a class="nav" data-page="flash" href="flash.html">
+            <i class="fa-solid fa-bolt"></i>
+            <span>Flash Sale</span>
+        </a>
+
+        <a class="nav" data-page="giveaway" href="giveaway.html">
+            <i class="fa-solid fa-gift"></i>
+            <span>Giveaway</span>
+        </a>
+
+        <a class="nav" data-page="banners" href="banners.html">
+            <i class="fa-solid fa-image"></i>
+            <span>Banners</span>
+        </a>
+
+        <a class="nav" data-page="reviews" href="reviews.html">
+            <i class="fa-solid fa-comments"></i>
+            <span>Reviews</span>
+            <b class="badge" style="display:none">0</b>
+        </a>
+
+
+        <a class="nav" data-page="rewards" href="rewards.html">
+            <i class="fa-solid fa-star"></i>
+            <span>Rewards</span>
+        </a>
+
+        <a class="nav" data-page="wallet" href="wallet.html">
+            <i class="fa-solid fa-wallet"></i>
+            <span>Digital Wallet</span>
+        </a>
+
+        <a class="nav" data-page="conversion-requests" href="conversion-requests.html">
+            <i class="fa-solid fa-repeat"></i>
+            <span>Wallet Requests</span>
+            <b class="badge" style="display:none">0</b>
+        </a>
+
+        <div class="menu-title">Operations</div>
+        <a class="nav" data-page="shipping" href="shipping.html">
+            <i class="fa-solid fa-truck-fast"></i>
+            <span>Shipping</span>
+        </a>
+
+        <a class="nav" data-page="payments" href="payments.html">
+            <i class="fa-solid fa-credit-card"></i>
+            <span>Payments</span>
+        </a>
+
+        <a class="nav" data-page="reports" href="reports.html">
+            <i class="fa-solid fa-chart-pie"></i>
+            <span>Reports</span>
+        </a>
+
+        <div class="menu-title">System</div>
+        <a class="nav active" data-page="users" href="users.html">
+            <i class="fa-solid fa-user-shield"></i>
+            <span>Admin Users</span>
+        </a>
+
+        <a class="nav" data-page="settings" href="settings.html">
+            <i class="fa-solid fa-gear"></i>
+            <span>Settings</span>
+        </a>
+
+    </div>
+</aside>
+
+
+
+<!-- =========================================
+     MAIN CONTENT
+========================================= -->
+
+<main class="main">
+
+
+<!-- TOPBAR -->
+
+<header class="topbar">
+
+    <div class="page-title">
+
+        <button
+        class="icon-btn menu-toggle-btn"
+        onclick="toggleSidebar()">
+
+            <i class="fa-solid fa-bars"></i>
+
+        </button>
+
+
+        <div style="margin-left:8px">
+
+            <h1>
+                Users Management
+            </h1>
+
+            <p>
+                Manage customers, resellers and administrators.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="top-actions">
+
+        <input
+        class="search"
+        id="globalSearchInput"
+        placeholder="Search anything..."
+        oninput="filterUsers()">
+
+
+        <button
+        class="icon-btn"
+        onclick="showUserToast('No new notifications')">
+
+            <i class="fa-solid fa-bell"></i>
+
+            <span class="dot"></span>
+
+        </button>
+
+
+        <div class="admin">
+
+            <div class="avatar">
+                NH
+            </div>
+
+
+            <div class="admin-name">
+
+                <b style="font-size:12px">
+                    Nizakat
+                </b>
+
+                <small
+                style="display:block;color:#88938f;font-size:10px">
+
+                    Super Admin
+
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<div class="content">
+
+<section class="page active" id="users">
+
+
+<!-- PAGE HEADER -->
+
+<div class="section-toolbar">
+
+    <div>
+
+        <h2>
+            All Users
+        </h2>
+
+        <p class="label">
+
+            View and manage customers, resellers and system administrators.
+
+        </p>
+
+    </div>
+
+
+    <button
+    class="btn primary"
+    onclick="openUserModal()">
+
+        <i class="fa-solid fa-user-plus"></i>
+
+        Add New User
+
+    </button>
+
+</div>
+
+
+
+<!-- =========================================
+     USER STATISTICS
+========================================= -->
+
+<div class="user-stats">
+
+    <div class="user-stat-card">
+
+        <i class="fa-solid fa-users"></i>
+
+        <small>
+            Total Users
+        </small>
+
+        <h3 id="totalUsers">
+            0
+        </h3>
+
+    </div>
+
+
+    <div class="user-stat-card">
+
+        <i class="fa-solid fa-user"></i>
+
+        <small>
+            Customers
+        </small>
+
+        <h3 id="totalCustomers">
+            0
+        </h3>
+
+    </div>
+
+
+    <div class="user-stat-card">
+
+        <i class="fa-solid fa-handshake"></i>
+
+        <small>
+            Resellers
+        </small>
+
+        <h3 id="totalResellers">
+            0
+        </h3>
+
+    </div>
+
+
+    <div class="user-stat-card">
+
+        <i class="fa-solid fa-user-shield"></i>
+
+        <small>
+            Administrators
+        </small>
+
+        <h3 id="totalAdmins">
+            0
+        </h3>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================
+     USERS TABLE
+========================================= -->
+
+<div class="card">
+
+
+<!-- FILTER BAR -->
+
+<div class="users-filter-bar">
+
+
+    <div class="user-tabs">
+
+        <button
+        class="user-filter-btn active"
+        data-type="all"
+        onclick="setUserFilter('all', this)">
+
+            <i class="fa-solid fa-users"></i>
+
+            All Users
+
+        </button>
+
+
+        <button
+        class="user-filter-btn"
+        data-type="user"
+        onclick="setUserFilter('user', this)">
+
+            <i class="fa-solid fa-user"></i>
+
+            Customers
+
+        </button>
+
+
+        <button
+        class="user-filter-btn"
+        data-type="reseller"
+        onclick="setUserFilter('reseller', this)">
+
+            <i class="fa-solid fa-handshake"></i>
+
+            Resellers
+
+        </button>
+
+
+        <button
+        class="user-filter-btn"
+        data-type="admin"
+        onclick="setUserFilter('admin', this)">
+
+            <i class="fa-solid fa-user-shield"></i>
+
+            Admins
+
+        </button>
+
+    </div>
+
+
+
+    <div class="user-filter-actions">
+
+
+        <input
+        type="text"
+        id="userSearch"
+        class="user-search"
+        placeholder="Search name or email..."
+        oninput="filterUsers()">
+
+
+        <select
+        id="statusFilter"
+        class="user-filter-select"
+        onchange="filterUsers()">
+
+            <option value="all">
+                All Status
+            </option>
+
+            <option value="active">
+                Active
+            </option>
+
+            <option value="blocked">
+                Blocked
+            </option>
+
+            <option value="pending">
+                Pending
+            </option>
+
+        </select>
+
+    </div>
+
+</div>
+
+
+
+<!-- TABLE -->
+
+<div class="table-wrap">
+
+<table class="table">
+
+<thead>
+
+<tr>
+
+    <th>User</th>
+
+    <th>Email</th>
+
+    <th>User Type</th>
+
+    <th>Role</th>
+
+    <th>Account Status</th>
+
+    <th>Access</th>
+
+    <th>Action</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="usersTable">
+
+</tbody>
+
+</table>
+
+
+<!-- EMPTY STATE -->
+
+<div
+class="empty-users"
+id="emptyUsers"
+style="display:none">
+
+    <i class="fa-solid fa-users-slash"></i>
+
+    <h3>
+        No Users Found
+    </h3>
+
+    <p>
+        No users match your selected filter.
+    </p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+</main>
+
+</div>
+
+
+
+<!-- =========================================
+     MODAL
+========================================= -->
+
+<div class="modal-bg" id="modal">
+
+<div class="modal">
+
+    <div class="modal-head">
+
+        <h3 id="modalTitle">
+            Add New User
+        </h3>
+
+
+        <button onclick="closeModal()">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+
+
+    <div
+    class="modal-body"
+    id="modalBody">
+
+
+        <div class="form-group">
+
+            <label>
+                Full Name
+            </label>
+
+            <input
+            type="text"
+            placeholder="Enter full name">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Email Address
+            </label>
+
+            <input
+            type="email"
+            placeholder="Enter email">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                User Type
+            </label>
+
+            <select>
+
+                <option>
+                    Customer
+                </option>
+
+                <option>
+                    Reseller
+                </option>
+
+                <option>
+                    Admin
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Password
+            </label>
+
+            <input
+            type="password"
+            placeholder="Create password">
+
+        </div>
+
+    </div>
+
+
+    <div class="modal-foot">
+
+        <button
+        class="btn secondary"
+        onclick="closeModal()">
+
+            Cancel
+
+        </button>
+
+
+        <button
+        class="btn primary"
+        id="modalSaveBtn">
+
+            <i class="fa-solid fa-floppy-disk"></i>
+
+            Save User
+
+        </button>
+
+    </div>
+
+</div>
+
+</div>
+
+
+
+<!-- TOAST -->
+
+<div
+class="toast"
+id="toast">
+
+</div>
+
+
+
+<!-- =========================================
+     JAVASCRIPT
+========================================= -->
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="../../assets/js/firebase-config.js"></script>
+<script src="../../assets/js/sub-core.js"></script>
+<script src="assets/js/common.js"></script>
+<script src="assets/js/admin-core.js"></script>
+<script src="assets/js/users.js"></script>
+
+</body>
+</html>

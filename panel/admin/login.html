@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login · Subeesha</title>
+<link rel="icon" href="assets/images/logo.jpg">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<div class="a-login">
+    <div class="box">
+        <img src="assets/images/logo.jpg" alt="Subeesha">
+        <h2>Subeesha Admin</h2>
+        <p class="sub">Sign in to manage your store</p>
+        <div class="a-note err" id="err" style="display:none"></div>
+        <form id="f">
+            <div class="field"><label>Email</label><input id="email" type="email" placeholder="admin@example.com" autocomplete="email" required></div>
+            <div class="field"><label>Password</label>
+                <div class="password-box">
+                    <input id="pw" type="password" placeholder="Your password" autocomplete="current-password" required>
+                    <button type="button" onclick="togglePassword('pw', this)"><i class="fa-solid fa-eye"></i></button>
+                </div>
+            </div>
+            <button class="btn primary" id="go" type="submit">Sign In</button>
+            <p style="text-align:center;margin-top:14px;font-size:12px"><a href="#" id="forgot" style="color:#0e3d34">Forgot password?</a></p>
+        </form>
+        <p style="text-align:center;margin-top:10px;font-size:12px"><a href="../../index.html" style="color:#68736e">&larr; Back to store</a></p>
+    </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="../../assets/js/firebase-config.js"></script>
+<script src="../../assets/js/sub-core.js"></script>
+<script src="assets/js/common.js"></script>
+<script src="assets/js/admin-core.js"></script>
+<script>
+(function(){
+    function showErr(m){ var e=document.getElementById("err"); e.textContent=m; e.style.display="block"; }
+    function next(){ var n=SUB.qs("next")||"index.html"; return /^[\w./-]+\.html(\?[\w=&%.-]*)?$/.test(n) ? n : "index.html"; }
+    if(!SUB.configured){ showErr("Firebase is not configured yet. Edit assets/js/firebase-config.js"); }
+    else SUB.onAuth(function(u,p){ if(u && p && p.role==="admin") location.replace(next()); });
+    document.getElementById("f").addEventListener("submit",function(ev){
+        ev.preventDefault();
+        if(!SUB.configured) return showErr("Firebase is not configured yet.");
+        var b=document.getElementById("go"); b.disabled=true; b.textContent="Signing in...";
+        SUB.signIn(document.getElementById("email").value.trim(), document.getElementById("pw").value).then(function(p){
+            if(p.role!=="admin"){ return SUB.signOut().then(function(){ throw new Error("This account is not an administrator."); }); }
+            location.replace(next());
+        }).catch(function(e){ showErr(SUB.authError(e)); b.disabled=false; b.textContent="Sign In"; });
+    });
+    document.getElementById("forgot").addEventListener("click",function(ev){
+        ev.preventDefault();
+        var em=document.getElementById("email").value.trim();
+        if(!em) return showErr("Enter your email first, then click Forgot password.");
+        SUB.resetPassword(em).then(function(){ toast("Password reset link sent to "+em); }).catch(function(e){ showErr(SUB.authError(e)); });
+    });
+})();
+</script>
+</body>
+</html>

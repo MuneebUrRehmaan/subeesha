@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Buy Now | Subeesha</title>
+
+    <script type="module"
+        src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js">
+    </script>
+
+    <script nomodule
+        src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js">
+    </script>
+
+<link rel="stylesheet" href="../assets/css/billing.css">
+</head>
+
+<body data-page="billing">
+
+    <div class="toast-container" id="toastContainer"></div>
+
+
+    <!-- ================================
+         SAME INDEX.HTML HEADER
+    ================================= -->
+
+    <header>
+
+        <nav>
+
+            <a href="../index.html" class="brand">
+                <span class="brand-logo-circle">
+                    <img
+                        src="../assets/images/logo.jpg"
+                        alt="Subeesha - Shop More, Live Better"
+                    >
+                </span>
+            </a>
+
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html#home">Home</a></li>
+                <li><a href="../index.html#categories">Categories</a></li>
+                <li><a href="../index.html#shop">Shop</a></li>
+                <li><a href="../index.html#new">New Arrivals</a></li>
+                <li><a href="../index.html#sale">Flash Sale</a></li>
+                <li><a href="../index.html#rewards">Rewards</a></li>
+                <li><a href="../index.html#footer">Contact</a></li>
+            </ul>
+
+
+            <div class="nav-tools">
+
+                <form class="header-search" onsubmit="handleHeaderSearch(event)">
+
+                    <ion-icon name="search-outline"></ion-icon>
+
+                    <input
+                        id="headerSearchInput"
+                        type="search"
+                        placeholder="Search products, categories..."
+                    >
+
+                    <button type="submit">
+                        <ion-icon name="arrow-forward-outline"></ion-icon>
+                    </button>
+
+                </form>
+
+
+                <div class="nav-actions">
+
+                    <button
+                        class="icon-btn"
+                        onclick="showToast('Warning','Your wishlist is ready.','warning')"
+                        aria-label="Wishlist"
+                    >
+                        <ion-icon name="heart-outline"></ion-icon>
+                    </button>
+
+
+                    <a
+                        class="icon-btn"
+                        href="../account.html"
+                        aria-label="Account"
+                    >
+                        <ion-icon name="person-outline"></ion-icon>
+                    </a>
+
+
+                    <button
+                        class="icon-btn"
+                        onclick="showCart()"
+                        aria-label="Cart"
+                    >
+                        <ion-icon name="bag-handle-outline"></ion-icon>
+
+                        <span
+                            class="cart-count"
+                            id="cartCount"
+                        >
+                            0
+                        </span>
+                    </button>
+
+
+                    <button
+                        class="icon-btn menu-btn"
+                        onclick="toggleMenu()"
+                        aria-label="Menu"
+                    >
+                        <ion-icon name="menu-outline"></ion-icon>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+
+    <!-- CHECKOUT STEPS -->
+
+    <div class="steps">
+
+        <div class="step active">
+            <div class="step-circle">1</div>
+            <span>Product</span>
+        </div>
+
+        <div class="step-line"></div>
+
+        <div class="step active">
+            <div class="step-circle">2</div>
+            <span>Billing</span>
+        </div>
+
+        <div class="step-line"></div>
+
+        <div class="step">
+            <div class="step-circle">3</div>
+            <span>Complete</span>
+        </div>
+
+    </div>
+
+
+    <section class="page-title">
+
+        <h1>Complete Your Purchase</h1>
+
+        <p>
+            Review your product, choose your preferred options and complete your order.
+        </p>
+
+    </section>
+
+
+    <main class="container">
+
+        <div class="left">
+
+
+            <!-- PRODUCT SUMMARY -->
+
+            <section class="card">
+
+                <div class="card-heading">
+
+                    <ion-icon name="bag-handle-outline"></ion-icon>
+
+                    <div>
+                        <h2>Product Summary</h2>
+                        <p>Select your preferred product options</p>
+                    </div>
+
+                </div>
+
+
+                <div class="product-area">
+
+
+                    <div class="product-gallery">
+
+                        <img
+                            id="mainProductImage"
+                            class="main-image"
+                            src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85"
+                            alt="Product"
+                        >
+
+                        <div class="image-note">
+
+                            <ion-icon name="images-outline"></ion-icon>
+
+                            Product image preview
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="product-info">
+
+                        <h2 id="productName">
+                            Premium Cotton T-Shirt
+                        </h2>
+
+
+                        <div class="rating">
+
+                            <span class="stars">★★★★★</span>
+
+                            <span>4.8 (126 Reviews)</span>
+
+                        </div>
+
+
+                        <div class="price">
+
+                            <span class="current-price" id="productPrice">
+                                Rs. 1,499
+                            </span>
+
+                            <span class="old-price">
+                                Rs. 1,999
+                            </span>
+
+                            <span class="sale-badge">
+                                25% OFF
+                            </span>
+
+                        </div>
+
+
+                        <div class="stock">
+
+                            <ion-icon name="checkmark-circle"></ion-icon>
+
+                            In Stock
+
+                        </div>
+
+
+                        <div class="option-title">
+
+                            <span>Select Color</span>
+
+                            <span
+                                class="selected-value"
+                                id="selectedColor"
+                            >
+                                Black
+                            </span>
+
+                        </div>
+
+
+                        <div class="colors">
+
+                            <button
+                                class="color-option active"
+                                onclick="selectColor('Black','https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85',this)"
+                            >
+                                <span class="color-inner black"></span>
+                            </button>
+
+                            <button
+                                class="color-option"
+                                onclick="selectColor('White','https://images.unsplash.com/photo-1603252110481-7ba873bf42ab?auto=format&fit=crop&w=900&q=85',this)"
+                            >
+                                <span class="color-inner white"></span>
+                            </button>
+
+                            <button
+                                class="color-option"
+                                onclick="selectColor('Red','https://images.unsplash.com/photo-1562157873-818bc0726f68?auto=format&fit=crop&w=900&q=85',this)"
+                            >
+                                <span class="color-inner red"></span>
+                            </button>
+
+                            <button
+                                class="color-option"
+                                onclick="selectColor('Blue','https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=900&q=85',this)"
+                            >
+                                <span class="color-inner blue"></span>
+                            </button>
+
+                            <button
+                                class="color-option"
+                                onclick="selectColor('Green','https://images.unsplash.com/photo-1503341504253-dff4815485f1?auto=format&fit=crop&w=900&q=85',this)"
+                            >
+                                <span class="color-inner green"></span>
+                            </button>
+
+                            <button
+                                class="color-option"
+                                onclick="selectColor('Brown','https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=900&q=85',this)"
+                            >
+                                <span class="color-inner brown"></span>
+                            </button>
+
+                        </div>
+
+
+                        <div class="option-title">
+
+                            <span>Select Size</span>
+
+                            <span
+                                class="selected-value"
+                                id="selectedSize"
+                            >
+                                L
+                            </span>
+
+                        </div>
+
+
+                        <div class="sizes">
+
+                            <button class="size" onclick="selectSize('S',this)">S</button>
+
+                            <button class="size" onclick="selectSize('M',this)">M</button>
+
+                            <button class="size active" onclick="selectSize('L',this)">L</button>
+
+                            <button class="size" onclick="selectSize('XL',this)">XL</button>
+
+                            <button class="size" onclick="selectSize('XXL',this)">XXL</button>
+
+                        </div>
+
+
+                        <div class="option-title">
+                            <span>Quantity</span>
+                        </div>
+
+
+                        <div class="quantity-box">
+
+                            <button
+                                class="qty-btn"
+                                onclick="changeQuantity(-1)"
+                            >
+                                −
+                            </button>
+
+                            <span
+                                class="qty-number"
+                                id="quantity"
+                            >
+                                1
+                            </span>
+
+                            <button
+                                class="qty-btn"
+                                onclick="changeQuantity(1)"
+                            >
+                                +
+                            </button>
+
+                        </div>
+
+
+                        <div class="features">
+
+                            <div class="feature">
+                                <ion-icon name="shield-checkmark-outline"></ion-icon>
+                                Secure Payment
+                            </div>
+
+                            <div class="feature">
+                                <ion-icon name="car-outline"></ion-icon>
+                                Fast Delivery
+                            </div>
+
+                            <div class="feature">
+                                <ion-icon name="refresh-outline"></ion-icon>
+                                Easy Returns
+                            </div>
+
+                            <div class="feature">
+                                <ion-icon name="gift-outline"></ion-icon>
+                                Earn Rewards
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- CUSTOMER INFORMATION -->
+
+            <section class="card">
+
+                <div class="card-heading">
+
+                    <ion-icon name="person-outline"></ion-icon>
+
+                    <div>
+                        <h2>Customer Information</h2>
+                        <p>Enter your contact information</p>
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label>
+                            First Name <span class="required">*</span>
+                        </label>
+
+                        <div class="input-wrap">
+
+                            <ion-icon name="person-outline"></ion-icon>
+
+                            <input
+                                type="text"
+                                id="firstName"
+                                placeholder="First name"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Last Name <span class="required">*</span>
+                        </label>
+
+                        <div class="input-wrap">
+
+                            <ion-icon name="person-outline"></ion-icon>
+
+                            <input
+                                type="text"
+                                id="lastName"
+                                placeholder="Last name"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Email Address <span class="required">*</span>
+                        </label>
+
+                        <div class="input-wrap">
+
+                            <ion-icon name="mail-outline"></ion-icon>
+
+                            <input
+                                type="email"
+                                id="email"
+                                placeholder="example@email.com"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Mobile Number <span class="required">*</span>
+                        </label>
+
+                        <div class="input-wrap">
+
+                            <ion-icon name="call-outline"></ion-icon>
+
+                            <input
+                                type="tel"
+                                id="mobile"
+                                placeholder="03XX XXXXXXX"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- SHIPPING ADDRESS -->
+
+            <section class="card">
+
+                <div class="card-heading">
+
+                    <ion-icon name="location-outline"></ion-icon>
+
+                    <div>
+                        <h2>Shipping Address</h2>
+                        <p>Enter your delivery address</p>
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label>
+                            Province <span class="required">*</span>
+                        </label>
+
+                        <div class="input-wrap">
+
+                            <ion-icon name="map-outline"></ion-icon>
+
+                            <select id="province">
+
+                                <option value="">Select Province</option>
+                                <option>Sindh</option>
+                                <option>Punjab</option>
+                                <option>Balochistan</option>
+                                <option>Khyber Pakhtunkhwa</option>
+                                <option>Islamabad Capital Territory</option>
+                                <option>Gilgit-Baltistan</option>
+                                <option>Azad Kashmir</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            City <span class="required">*</span>
+                        </label>
+
+                        <div class="input-wrap">
+
+                            <ion-icon name="business-outline"></ion-icon>
+
+                            <select id="city">
+
+                                <option value="">Select City</option>
+                                <option>Hyderabad</option>
+                                <option>Karachi</option>
+                                <option>Lahore</option>
+                                <option>Islamabad</option>
+                                <option>Rawalpindi</option>
+                                <option>Multan</option>
+                                <option>Sukkur</option>
+                                <option>Quetta</option>
+                                <option>Peshawar</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Area / Zone</label>
+
+                        <div class="input-wrap">
+
+                            <ion-icon name="navigate-outline"></ion-icon>
+
+                            <input
+                                type="text"
+                                id="area"
+                                placeholder="Area / Zone"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Postal Code</label>
+
+                        <div class="input-wrap">
+
+                            <ion-icon name="mail-unread-outline"></ion-icon>
+
+                            <input
+                                type="text"
+                                id="postal"
+                                placeholder="Postal code"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group full">
+
+                        <label>
+                            Complete Address
+                            <span class="required">*</span>
+                        </label>
+
+                        <textarea
+                            id="address"
+                            placeholder="House / apartment number, street, road..."
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- PAYMENT METHOD -->
+
+            <section class="card">
+
+                <div class="card-heading">
+
+                    <ion-icon name="card-outline"></ion-icon>
+
+                    <div>
+                        <h2>Payment Method</h2>
+                        <p>Select your preferred payment method</p>
+                    </div>
+
+                </div>
+
+
+                <div class="payment selected" onclick="selectPayment(this)">
+
+                    <div class="payment-header">
+
+                        <input
+                            type="radio"
+                            name="payment"
+                            class="payment-radio"
+                            checked
+                        >
+
+                        <div class="payment-icon">
+                            <ion-icon name="cash-outline"></ion-icon>
+                        </div>
+
+                        <div class="payment-info">
+                            <strong>Cash on Delivery</strong>
+                            <span>Pay when your order arrives</span>
+                        </div>
+
+                    </div>
+
+                    <div class="payment-body">
+                        <small>Pay cash to the delivery rider.</small>
+                    </div>
+
+                </div>
+
+
+                <div class="payment" onclick="selectPayment(this)">
+
+                    <div class="payment-header">
+
+                        <input
+                            type="radio"
+                            name="payment"
+                            class="payment-radio"
+                        >
+
+                        <div class="payment-icon">
+                            <ion-icon name="phone-portrait-outline"></ion-icon>
+                        </div>
+
+                        <div class="payment-info">
+                            <strong>Easypaisa</strong>
+                            <span>Pay using Easypaisa</span>
+                        </div>
+
+                    </div>
+
+                    <div class="payment-body">
+                        <input type="tel" placeholder="Easypaisa mobile number">
+                    </div>
+
+                </div>
+
+
+                <div class="payment" onclick="selectPayment(this)">
+
+                    <div class="payment-header">
+
+                        <input
+                            type="radio"
+                            name="payment"
+                            class="payment-radio"
+                        >
+
+                        <div class="payment-icon">
+                            <ion-icon name="phone-portrait-outline"></ion-icon>
+                        </div>
+
+                        <div class="payment-info">
+                            <strong>JazzCash</strong>
+                            <span>Pay using JazzCash</span>
+                        </div>
+
+                    </div>
+
+                    <div class="payment-body">
+                        <input type="tel" placeholder="JazzCash mobile number">
+                    </div>
+
+                </div>
+
+
+                <div class="payment" onclick="selectPayment(this)">
+
+                    <div class="payment-header">
+
+                        <input
+                            type="radio"
+                            name="payment"
+                            class="payment-radio"
+                        >
+
+                        <div class="payment-icon">
+                            <ion-icon name="card-outline"></ion-icon>
+                        </div>
+
+                        <div class="payment-info">
+                            <strong>Debit / Credit Card</strong>
+                            <span>Visa / Mastercard</span>
+                        </div>
+
+                    </div>
+
+                    <div class="payment-body">
+                        <input type="text" placeholder="Card number">
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- WALLET -->
+
+            <section class="card">
+
+                <div class="card-heading">
+
+                    <ion-icon name="wallet-outline"></ion-icon>
+
+                    <div>
+                        <h2>Wallet & Rewards</h2>
+                        <p>Use your available wallet balance</p>
+                    </div>
+
+                </div>
+
+
+                <div class="wallet">
+
+                    <div class="wallet-top">
+
+                        <div>
+
+                            <div class="wallet-price">
+                                Rs. 850
+                            </div>
+
+                            <small>
+                                Available wallet balance
+                            </small>
+
+                        </div>
+
+                        <ion-icon
+                            name="wallet"
+                            style="color:var(--primary);font-size:35px;"
+                        ></ion-icon>
+
+                    </div>
+
+
+                    <label class="wallet-use">
+
+                        <input
+                            type="checkbox"
+                            id="useWallet"
+                            onchange="toggleWallet()"
+                        >
+
+                        Use wallet balance for this order
+
+                    </label>
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+
+        <aside class="right">
+
+            <section class="card">
+
+                <div class="card-heading">
+
+                    <ion-icon name="receipt-outline"></ion-icon>
+
+                    <div>
+                        <h2>Order Summary</h2>
+                        <p>Review your purchase</p>
+                    </div>
+
+                </div>
+
+
+                <div class="summary-product">
+
+                    <img
+                        id="summaryImage"
+                        src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=300&q=80"
+                        alt="Product"
+                    >
+
+                    <div class="summary-product-info">
+
+                        <strong id="summaryName">
+                            Premium Cotton T-Shirt
+                        </strong>
+
+                        <span>
+                            Color: <b id="summaryColor">Black</b>
+                        </span>
+
+                        <span>
+                            Size: <b id="summarySize">L</b>
+                        </span>
+
+                        <span>
+                            Qty: <b id="summaryQty">1</b>
+                        </span>
+
+                    </div>
+
+                    <div
+                        class="summary-price"
+                        id="summaryPrice"
+                    >
+                        Rs. 1,499
+                    </div>
+
+                </div>
+
+
+                <div class="coupon">
+
+                    <input
+                        type="text"
+                        id="coupon"
+                        placeholder="Promo code"
+                    >
+
+                    <button onclick="applyCoupon()">
+                        Apply
+                    </button>
+
+                </div>
+
+
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="subtotal">Rs. 1,499</span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span id="shipping">Rs. 150</span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Discount</span>
+                    <span class="discount" id="discount">- Rs. 0</span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Wallet</span>
+                    <span class="discount" id="walletDiscount">- Rs. 0</span>
+                </div>
+
+
+                <div class="total">
+                    <strong>Total</strong>
+                    <span id="total">Rs. 1,649</span>
+                </div>
+
+
+                <button
+                    class="place-order"
+                    onclick="placeOrder()"
+                >
+
+                    <ion-icon name="lock-closed-outline"></ion-icon>
+
+                    Place Order
+
+                </button>
+
+
+                <div class="secure-note">
+
+                    <ion-icon name="shield-checkmark-outline"></ion-icon>
+
+                    Secure and protected checkout
+
+                </div>
+
+            </section>
+
+
+            <section class="card">
+
+                <div class="card-heading">
+
+                    <ion-icon name="sparkles-outline"></ion-icon>
+
+                    <div>
+                        <h2>Why Shop With Subeesha?</h2>
+                    </div>
+
+                </div>
+
+
+                <div style="display:flex;flex-direction:column;gap:18px;">
+
+                    <div class="feature">
+
+                        <ion-icon name="shield-checkmark-outline"></ion-icon>
+
+                        Secure Shopping
+
+                    </div>
+
+                    <div class="feature">
+
+                        <ion-icon name="car-outline"></ion-icon>
+
+                        Fast Delivery
+
+                    </div>
+
+                    <div class="feature">
+
+                        <ion-icon name="gift-outline"></ion-icon>
+
+                        Earn Rewards
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </aside>
+
+    </main>
+
+
+    <!-- ================================
+         SAME INDEX.HTML FOOTER
+    ================================= -->
+
+    <footer id="footer">
+
+        <div class="footer">
+
+            <div class="footer-brand">
+
+                <span class="footer-logo-circle">
+
+                    <img
+                        src="../assets/images/logo.jpg"
+                        alt="Subeesha"
+                    >
+
+                </span>
+
+                <p>
+                    E-commerce • E-business • Everyday Essentials.
+                    Shop more, live better with Subeesha.
+                </p>
+
+
+                <div class="socials">
+
+                    <a class="social" href="#" aria-label="Facebook">
+                        <ion-icon name="logo-facebook"></ion-icon>
+                    </a>
+
+                    <a class="social" href="#" aria-label="Instagram">
+                        <ion-icon name="logo-instagram"></ion-icon>
+                    </a>
+
+                    <a class="social" href="#" aria-label="TikTok">
+                        <ion-icon name="logo-tiktok"></ion-icon>
+                    </a>
+
+                    <a class="social" href="#" aria-label="YouTube">
+                        <ion-icon name="logo-youtube"></ion-icon>
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <h3>Shop</h3>
+
+                <a href="../index.html#shop">All Products</a>
+
+                <a href="../index.html#new">New Arrivals</a>
+
+                <a href="../index.html#sale">Flash Sale</a>
+
+                <a href="../index.html#categories">Categories</a>
+
+            </div>
+
+
+            <div>
+
+                <h3>Customer Care</h3>
+
+                <a href="#">Contact Us</a>
+
+                <a href="#">Ring Measurement</a>
+
+                <a href="#">FAQs</a>
+
+                <a href="#">Shipping Policy</a>
+
+                <a href="#">Return Policy</a>
+
+            </div>
+
+
+            <div>
+
+                <h3>My Account</h3>
+
+                <a href="../account.html">My Account</a>
+
+                <a href="#">My Orders</a>
+
+                <a href="#">Wishlist</a>
+
+                <a href="../page/billing.html">Checkout</a>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            © 2026 Subeesha. All Rights Reserved.
+
+        </div>
+
+    </footer>
+
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="../assets/js/firebase-config.js"></script>
+<script src="../assets/js/sub-core.js"></script>
+<script src="../assets/js/billing.js"></script>
+
+<script src="../assets/js/store.js" defer></script>
+</body>
+</html>

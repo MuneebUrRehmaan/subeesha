@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | Subeesha Reseller Dashboard</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <script type="module"
+        src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.esm.js">
+    </script>
+
+    <script nomodule
+        src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.js">
+    </script>
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-top">
+
+            <a href="dashboard.html" class="brand">
+
+                <div class="brand-logo">
+                    <img src="assets/images/logo.jpg" alt="Subeesha">
+                </div>
+
+                <div>
+                    <h2>Subeesha</h2>
+                    <span>Reseller Panel</span>
+                </div>
+
+            </a>
+
+        </div>
+
+        <div class="menu">
+
+            <p class="menu-title">MAIN MENU</p>
+
+            <a href="dashboard.html" class="menu-item">
+                <ion-icon name="grid-outline"></ion-icon>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="products.html" class="menu-item">
+                <ion-icon name="bag-handle-outline"></ion-icon>
+                <span>Products</span>
+            </a>
+
+            <a href="orders.html" class="menu-item">
+                <ion-icon name="receipt-outline"></ion-icon>
+                <span>My Sales</span>
+            </a>
+
+            <a href="commission.html" class="menu-item">
+                <ion-icon name="cash-outline"></ion-icon>
+                <span>Commission</span>
+            </a>
+
+            <a href="withdraw.html" class="menu-item">
+                <ion-icon name="wallet-outline"></ion-icon>
+                <span>Withdraw</span>
+            </a>
+
+            <a href="profile.html" class="menu-item">
+                <ion-icon name="person-outline"></ion-icon>
+                <span>My Profile</span>
+            </a>
+
+        </div>
+
+        <div class="sidebar-bottom">
+
+            <div class="help-box">
+
+                <div class="help-icon">
+                    <ion-icon name="headset-outline"></ion-icon>
+                </div>
+
+                <div>
+                    <h4>Need Help?</h4>
+                    <p>Contact Support</p>
+                </div>
+
+            </div>
+
+            <button class="logout-btn"
+                onclick="showToast('Logout functionality will be connected with backend.')">
+
+                <ion-icon name="log-out-outline"></ion-icon>
+                Logout
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main-content">
+
+        <!-- HEADER -->
+
+        <header class="topbar">
+
+            <div class="top-left">
+
+                <button class="menu-toggle" id="menuToggle">
+                    <ion-icon name="menu-outline"></ion-icon>
+                </button>
+
+                <div>
+                    <h1>Good Morning, Aisha 👋</h1>
+                    <p>Here's what's happening with your sales today.</p>
+                </div>
+
+            </div>
+
+            <div class="top-right">
+
+                <button class="notification-btn"
+                    onclick="showToast('You have 3 new notifications!')">
+
+                    <ion-icon name="notifications-outline"></ion-icon>
+                    <span></span>
+
+                </button>
+
+                <div class="profile-mini">
+
+                    <div class="avatar">A</div>
+
+                    <div class="profile-info">
+                        <strong>Aisha Inamullah</strong>
+                        <span>Reseller</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- DASHBOARD -->
+
+        <section id="dashboard" class="page-section">
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon sales-icon">
+                        <ion-icon name="cart-outline"></ion-icon>
+                    </div>
+
+                    <div>
+                        <p>Total Sales</p>
+                        <h2>Rs. 48,500</h2>
+                        <span class="growth">+12.5% this month</span>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon commission-icon">
+                        <ion-icon name="cash-outline"></ion-icon>
+                    </div>
+
+                    <div>
+                        <p>Total Commission</p>
+                        <h2>Rs. 7,275</h2>
+                        <span class="growth">+18.2% this month</span>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon pending-icon">
+                        <ion-icon name="time-outline"></ion-icon>
+                    </div>
+
+                    <div>
+                        <p>Pending Commission</p>
+                        <h2>Rs. 1,850</h2>
+                        <span class="pending-text">3 orders pending</span>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon wallet-icon">
+                        <ion-icon name="wallet-outline"></ion-icon>
+                    </div>
+
+                    <div>
+                        <p>Available Balance</p>
+                        <h2>Rs. 5,425</h2>
+
+                        <button class="small-btn"
+                            onclick="goToPage('withdraw.html')">
+                            Withdraw
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="content-grid">
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h2>Earnings Overview</h2>
+                            <p>Your commission performance</p>
+                        </div>
+
+                        <select>
+                            <option>This Month</option>
+                            <option>Last Month</option>
+                        </select>
+
+                    </div>
+
+                    <div class="chart">
+
+                        <div class="chart-bars">
+
+                            <div class="bar-item">
+                                <div class="bar" style="height:40%"></div>
+                                <span>Mon</span>
+                            </div>
+
+                            <div class="bar-item">
+                                <div class="bar" style="height:65%"></div>
+                                <span>Tue</span>
+                            </div>
+
+                            <div class="bar-item">
+                                <div class="bar" style="height:48%"></div>
+                                <span>Wed</span>
+                            </div>
+
+                            <div class="bar-item">
+                                <div class="bar" style="height:85%"></div>
+                                <span>Thu</span>
+                            </div>
+
+                            <div class="bar-item">
+                                <div class="bar" style="height:60%"></div>
+                                <span>Fri</span>
+                            </div>
+
+                            <div class="bar-item">
+                                <div class="bar" style="height:90%"></div>
+                                <span>Sat</span>
+                            </div>
+
+                            <div class="bar-item">
+                                <div class="bar" style="height:70%"></div>
+                                <span>Sun</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card quick-card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h2>Quick Actions</h2>
+                            <p>Manage your reseller account</p>
+                        </div>
+
+                    </div>
+
+                    <button onclick="goToPage('products.html')">
+
+                        <ion-icon name="bag-add-outline"></ion-icon>
+
+                        <div>
+                            <strong>Browse Products</strong>
+                            <span>Find products to sell</span>
+                        </div>
+
+                    </button>
+
+
+                    <button onclick="goToPage('withdraw.html')">
+
+                        <ion-icon name="cash-outline"></ion-icon>
+
+                        <div>
+                            <strong>Withdraw Earnings</strong>
+                            <span>Request your commission</span>
+                        </div>
+
+                    </button>
+
+
+                    <button onclick="copyReferralLink()">
+
+                        <ion-icon name="share-social-outline"></ion-icon>
+
+                        <div>
+                            <strong>Share Referral Link</strong>
+                            <span>Invite customers</span>
+                        </div>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div class="toast" id="toast">
+
+    <ion-icon name="checkmark-circle-outline"></ion-icon>
+
+    <span id="toastMessage"></span>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="../../assets/js/firebase-config.js"></script>
+<script src="../../assets/js/sub-core.js"></script>
+<script src="assets/js/script.js"></script>
+<script src="assets/js/reseller-core.js"></script>
+<script src="assets/js/dashboard.js"></script>
+
+</body>
+</html>

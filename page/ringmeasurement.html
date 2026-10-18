@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ring Measurement | Subeesha</title>
+
+<!-- Ionicons -->
+<script type="module"
+src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule
+src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+<style>
+:root{
+    --primary:#0e3d34;
+    --dark:#072620;
+    --gold:#d6a85f;
+    --light:#f7f5f0;
+    --white:#ffffff;
+    --text:#263631;
+    --muted:#71807a;
+    --border:#e3e8e5;
+    --danger:#d9534f;
+    --shadow:0 15px 45px rgba(7,38,32,.08);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f8faf9;
+    color:var(--text);
+    line-height:1.6;
+}
+
+/* =====================================================
+   TOP BAR
+===================================================== */
+
+.topbar{
+    background:var(--dark);
+    color:#fff;
+    min-height:38px;
+    padding:8px 5%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:35px;
+    font-size:12px;
+}
+
+.topbar span{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    color:rgba(255,255,255,.85);
+}
+
+.topbar ion-icon{
+    color:var(--gold);
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+header{
+    background:#fff;
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.navbar{
+    width:min(1400px,94%);
+    margin:auto;
+    min-height:78px;
+    display:flex;
+    align-items:center;
+    gap:25px;
+}
+
+.brand{
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    flex-shrink:0;
+}
+
+.brand-logo-circle{
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    border:2px solid var(--gold);
+    background:#fff;
+    display:grid;
+    place-items:center;
+    overflow:hidden;
+}
+
+.brand-logo-circle img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.nav-links{
+    list-style:none;
+    display:flex;
+    align-items:center;
+    gap:22px;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:var(--text);
+    font-size:14px;
+    font-weight:600;
+    transition:.25s;
+}
+
+.nav-links a:hover,
+.nav-links a.active{
+    color:var(--gold);
+}
+
+.nav-tools{
+    margin-left:auto;
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.header-search{
+    width:260px;
+    height:43px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:0 10px 0 14px;
+    border:1px solid var(--border);
+    border-radius:30px;
+    background:#fafcfb;
+}
+
+.header-search ion-icon{
+    font-size:19px;
+    color:var(--muted);
+}
+
+.header-search input{
+    width:100%;
+    border:none;
+    outline:none;
+    background:transparent;
+    font-size:13px;
+}
+
+.header-search button{
+    width:32px;
+    height:32px;
+    border:none;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    background:var(--primary);
+    color:#fff;
+    cursor:pointer;
+}
+
+.nav-actions{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.icon-btn{
+    width:42px;
+    height:42px;
+    border:1px solid var(--border);
+    background:#fff;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    cursor:pointer;
+    position:relative;
+    color:var(--primary);
+    font-size:20px;
+}
+
+.icon-btn:hover{
+    background:var(--primary);
+    color:#fff;
+}
+
+.cart-count{
+    position:absolute;
+    right:-3px;
+    top:-3px;
+    width:18px;
+    height:18px;
+    background:var(--gold);
+    color:#fff;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    font-size:10px;
+    font-weight:bold;
+}
+
+.menu-btn{
+    display:none;
+}
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.ring-hero{
+    background:
+        radial-gradient(circle at 75% 30%, rgba(214,168,95,.16), transparent 28%),
+        linear-gradient(135deg,var(--dark),var(--primary));
+    color:#fff;
+    overflow:hidden;
+}
+
+.hero-container{
+    width:min(1200px,90%);
+    margin:auto;
+    min-height:420px;
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    align-items:center;
+    gap:50px;
+}
+
+.hero-label{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    border:1px solid rgba(255,255,255,.2);
+    background:rgba(255,255,255,.08);
+    border-radius:30px;
+    padding:8px 15px;
+    font-size:12px;
+    letter-spacing:1px;
+    margin-bottom:18px;
+}
+
+.hero-label ion-icon{
+    color:var(--gold);
+}
+
+.hero-content h1{
+    font-size:clamp(42px,6vw,68px);
+    line-height:1.05;
+    margin-bottom:18px;
+}
+
+.hero-content h1 span{
+    color:var(--gold);
+}
+
+.hero-content p{
+    max-width:600px;
+    color:rgba(255,255,255,.76);
+    font-size:16px;
+}
+
+.hero-buttons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-top:28px;
+}
+
+.btn{
+    min-height:48px;
+    padding:0 21px;
+    border-radius:9px;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    font-weight:bold;
+    font-size:14px;
+    border:none;
+    cursor:pointer;
+}
+
+.btn-gold{
+    background:var(--gold);
+    color:var(--dark);
+}
+
+.btn-light{
+    border:1px solid rgba(255,255,255,.3);
+    color:#fff;
+    background:rgba(255,255,255,.08);
+}
+
+.hero-visual{
+    min-height:330px;
+    display:grid;
+    place-items:center;
+    position:relative;
+}
+
+.ring-visual{
+    width:260px;
+    height:260px;
+    border:42px solid var(--gold);
+    border-radius:50%;
+    box-shadow:
+        0 0 0 16px rgba(255,255,255,.06),
+        0 25px 60px rgba(0,0,0,.3);
+    position:relative;
+}
+
+.ring-visual::before{
+    content:"";
+    position:absolute;
+    width:82px;
+    height:82px;
+    border-radius:50%;
+    background:rgba(255,255,255,.13);
+    left:50%;
+    top:-88px;
+    transform:translateX(-50%);
+    border:12px solid var(--gold);
+}
+
+/* =====================================================
+   COMMON
+===================================================== */
+
+.section{
+    width:min(1200px,90%);
+    margin:90px auto;
+}
+
+.section-heading{
+    text-align:center;
+    max-width:750px;
+    margin:0 auto 45px;
+}
+
+.section-heading span{
+    color:var(--gold);
+    text-transform:uppercase;
+    letter-spacing:2px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.section-heading h2{
+    font-size:clamp(30px,4vw,43px);
+    color:var(--dark);
+    margin:10px 0;
+}
+
+.section-heading p{
+    color:var(--muted);
+}
+
+/* =====================================================
+   METHOD CARDS
+===================================================== */
+
+.methods-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:24px;
+}
+
+.method-card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:28px;
+    transition:.3s;
+}
+
+.method-card:hover{
+    transform:translateY(-7px);
+    box-shadow:var(--shadow);
+}
+
+.method-icon{
+    width:58px;
+    height:58px;
+    border-radius:15px;
+    background:rgba(14,61,52,.08);
+    display:grid;
+    place-items:center;
+    color:var(--primary);
+    font-size:27px;
+    margin-bottom:20px;
+}
+
+.method-card h3{
+    color:var(--dark);
+    margin-bottom:8px;
+}
+
+.method-card p{
+    color:var(--muted);
+    font-size:14px;
+}
+
+/* =====================================================
+   MEASUREMENT DEMO
+===================================================== */
+
+.demo-section{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:25px;
+    padding:45px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:55px;
+    align-items:center;
+}
+
+.demo-visual{
+    min-height:420px;
+    background:var(--light);
+    border-radius:20px;
+    display:grid;
+    place-items:center;
+    padding:30px;
+}
+
+.ring-demo{
+    width:230px;
+    height:230px;
+    border:25px solid #d6a85f;
+    border-radius:50%;
+    position:relative;
+    box-shadow:0 12px 35px rgba(0,0,0,.12);
+}
+
+.measure-line{
+    position:absolute;
+    width:280px;
+    height:4px;
+    background:var(--primary);
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+}
+
+.measure-line::before,
+.measure-line::after{
+    content:"";
+    position:absolute;
+    width:3px;
+    height:28px;
+    background:var(--primary);
+    top:50%;
+    transform:translateY(-50%);
+}
+
+.measure-line::before{
+    left:0;
+}
+
+.measure-line::after{
+    right:0;
+}
+
+.diameter-text{
+    position:absolute;
+    top:calc(50% + 18px);
+    left:50%;
+    transform:translateX(-50%);
+    white-space:nowrap;
+    color:var(--primary);
+    font-size:13px;
+    font-weight:bold;
+}
+
+.demo-content h2{
+    font-size:35px;
+    color:var(--dark);
+    margin-bottom:15px;
+}
+
+.demo-content > p{
+    color:var(--muted);
+    margin-bottom:24px;
+}
+
+.demo-step{
+    display:flex;
+    gap:15px;
+    margin-bottom:18px;
+}
+
+.demo-step-number{
+    width:36px;
+    height:36px;
+    min-width:36px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    background:var(--gold);
+    color:var(--dark);
+    font-weight:bold;
+}
+
+.demo-step h4{
+    color:var(--dark);
+}
+
+.demo-step p{
+    color:var(--muted);
+    font-size:14px;
+}
+
+/* =====================================================
+   RULER
+===================================================== */
+
+.ruler-box{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:35px;
+    overflow:hidden;
+}
+
+.ruler-tabs{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:35px;
+}
+
+.ruler-tab{
+    padding:10px 18px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:#fff;
+    cursor:pointer;
+    color:var(--text);
+    font-weight:bold;
+}
+
+.ruler-tab.active{
+    background:var(--primary);
+    color:#fff;
+    border-color:var(--primary);
+}
+
+.ruler{
+    width:100%;
+    min-height:150px;
+    position:relative;
+    border-top:4px solid var(--dark);
+    margin-top:60px;
+    background:repeating-linear-gradient(
+        90deg,
+        transparent 0,
+        transparent calc(10% - 1px),
+        rgba(14,61,52,.18) calc(10% - 1px),
+        rgba(14,61,52,.18) 10%
+    );
+}
+
+.ruler-marks{
+    display:flex;
+    justify-content:space-between;
+    position:absolute;
+    top:-40px;
+    width:100%;
+}
+
+.ruler-marks span{
+    font-size:13px;
+    color:var(--primary);
+    font-weight:bold;
+}
+
+.ruler-tip{
+    text-align:center;
+    margin-top:25px;
+    color:var(--muted);
+    font-size:14px;
+}
+
+/* =====================================================
+   CALCULATOR
+===================================================== */
+
+.calculator-wrap{
+    display:grid;
+    grid-template-columns:.9fr 1.1fr;
+    gap:35px;
+    background:var(--dark);
+    padding:45px;
+    border-radius:25px;
+    color:#fff;
+}
+
+.calculator-info h2{
+    font-size:38px;
+    margin-bottom:12px;
+}
+
+.calculator-info h2 span{
+    color:var(--gold);
+}
+
+.calculator-info p{
+    color:rgba(255,255,255,.7);
+}
+
+.calculator{
+    background:#fff;
+    padding:30px;
+    border-radius:18px;
+    color:var(--text);
+}
+
+.calculator label{
+    display:block;
+    font-weight:bold;
+    font-size:14px;
+    margin-bottom:8px;
+}
+
+.calculator-input{
+    display:flex;
+    gap:10px;
+}
+
+.calculator-input input{
+    flex:1;
+    padding:15px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    outline:none;
+    font-size:15px;
+}
+
+.calculator-input select{
+    width:100px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:0 10px;
+}
+
+.result-box{
+    margin-top:22px;
+    padding:20px;
+    border-radius:12px;
+    background:var(--light);
+    display:none;
+}
+
+.result-box.show{
+    display:block;
+}
+
+.result-box small{
+    color:var(--muted);
+}
+
+.result-box strong{
+    display:block;
+    font-size:32px;
+    color:var(--primary);
+}
+
+/* =====================================================
+   SIZE CHART
+===================================================== */
+
+.table-wrap{
+    overflow-x:auto;
+    background:#fff;
+    border-radius:20px;
+    border:1px solid var(--border);
+}
+
+.size-table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:650px;
+}
+
+.size-table th{
+    background:var(--primary);
+    color:#fff;
+    padding:16px;
+    text-align:left;
+    font-size:13px;
+}
+
+.size-table td{
+    padding:16px;
+    border-bottom:1px solid var(--border);
+    color:var(--muted);
+    font-size:14px;
+}
+
+.size-table tr:last-child td{
+    border-bottom:none;
+}
+
+.size-table tr:hover td{
+    background:#fafcfb;
+}
+
+/* =====================================================
+   TIPS
+===================================================== */
+
+.tips{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:22px;
+}
+
+.tip{
+    background:#fff;
+    padding:26px;
+    border-radius:18px;
+    border:1px solid var(--border);
+}
+
+.tip ion-icon{
+    font-size:30px;
+    color:var(--gold);
+    margin-bottom:12px;
+}
+
+.tip h3{
+    color:var(--dark);
+    margin-bottom:7px;
+}
+
+.tip p{
+    color:var(--muted);
+    font-size:14px;
+}
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer{
+    background:var(--dark);
+    color:#fff;
+    margin-top:90px;
+}
+
+.footer{
+    width:min(1200px,90%);
+    margin:auto;
+    padding:65px 0 45px;
+    display:grid;
+    grid-template-columns:1.5fr repeat(3,1fr);
+    gap:45px;
+}
+
+.footer-brand img{
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid var(--gold);
+    margin-bottom:15px;
+}
+
+.footer p{
+    color:rgba(255,255,255,.65);
+    font-size:14px;
+}
+
+.footer h3{
+    color:#fff;
+    margin-bottom:18px;
+}
+
+.footer a{
+    display:block;
+    color:rgba(255,255,255,.65);
+    text-decoration:none;
+    font-size:14px;
+    margin-bottom:10px;
+}
+
+.footer a:hover{
+    color:var(--gold);
+}
+
+.socials{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+}
+
+.social{
+    width:38px;
+    height:38px;
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:50%;
+    display:grid !important;
+    place-items:center;
+}
+
+.footer-bottom{
+    border-top:1px solid rgba(255,255,255,.1);
+    padding:20px 5%;
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    color:rgba(255,255,255,.55);
+    font-size:13px;
+}
+
+/* =====================================================
+   SEARCH RESULT
+===================================================== */
+
+.search-result{
+    display:none;
+    position:fixed;
+    top:95px;
+    left:50%;
+    transform:translateX(-50%);
+    width:min(500px,90%);
+    background:#fff;
+    border-radius:14px;
+    padding:18px;
+    box-shadow:0 20px 60px rgba(0,0,0,.18);
+    z-index:3000;
+    border:1px solid var(--border);
+}
+
+.search-result.show{
+    display:block;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:1100px){
+
+    .nav-links{
+        gap:13px;
+    }
+
+    .header-search{
+        width:200px;
+    }
+
+    .methods-grid,
+    .tips{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .footer{
+        grid-template-columns:1.5fr 1fr 1fr;
+    }
+}
+
+@media(max-width:850px){
+
+    .navbar{
+        flex-wrap:wrap;
+        padding:12px 0;
+    }
+
+    .menu-btn{
+        display:grid;
+    }
+
+    .nav-links{
+        display:none;
+        width:100%;
+        flex-direction:column;
+        align-items:flex-start;
+        padding:15px 0;
+    }
+
+    .nav-links.show{
+        display:flex;
+    }
+
+    .nav-tools{
+        margin-left:auto;
+    }
+
+    .hero-container,
+    .demo-section,
+    .calculator-wrap{
+        grid-template-columns:1fr;
+    }
+
+    .hero-container{
+        padding:70px 0;
+        text-align:center;
+    }
+
+    .hero-content p{
+        margin:auto;
+    }
+
+    .hero-buttons{
+        justify-content:center;
+    }
+
+    .hero-visual{
+        min-height:260px;
+    }
+
+    .footer{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media(max-width:600px){
+
+    .topbar{
+        display:none;
+    }
+
+    .navbar{
+        min-height:70px;
+    }
+
+    .brand-logo-circle{
+        width:48px;
+        height:48px;
+    }
+
+    .header-search{
+        display:none;
+    }
+
+    .nav-actions .icon-btn:not(.menu-btn){
+        display:none;
+    }
+
+    .methods-grid,
+    .tips{
+        grid-template-columns:1fr;
+    }
+
+    .section{
+        margin:65px auto;
+    }
+
+    .demo-section,
+    .calculator-wrap{
+        padding:25px 18px;
+    }
+
+    .ring-demo{
+        width:180px;
+        height:180px;
+        border-width:20px;
+    }
+
+    .measure-line{
+        width:220px;
+    }
+
+    .ring-visual{
+        width:190px;
+        height:190px;
+        border-width:30px;
+    }
+
+    .footer{
+        grid-template-columns:1fr;
+    }
+
+    .footer-bottom{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .calculator-input{
+        flex-direction:column;
+    }
+
+    .calculator-input select{
+        width:100%;
+        height:48px;
+    }
+}
+</style>
+</head>
+
+<body data-page="ringmeasurement">
+
+<!-- TOP BAR -->
+<div class="topbar">
+    <span><ion-icon name="shield-checkmark-outline"></ion-icon> Quality Products</span>
+    <span><ion-icon name="car-outline"></ion-icon> Fast Delivery Across Pakistan</span>
+    <span><ion-icon name="gift-outline"></ion-icon> Earn Rewards With Every Order</span>
+</div>
+
+<!-- HEADER -->
+<header>
+    <nav class="navbar">
+
+        <a href="../index.html" class="brand">
+            <span class="brand-logo-circle">
+                <img src="../assets/images/logo.jpg" alt="Subeesha Logo">
+            </span>
+        </a>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="../index.html#home">Home</a></li>
+            <li><a href="../index.html#categories">Categories</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="../index.html#new">New Arrivals</a></li>
+            <li><a href="flashsale.html">Flash Sale</a></li>
+            <li><a href="loyalty.html">Rewards</a></li>
+            <li><a class="active" href="ringmeasurement.html">Ring Size</a></li>
+            <li><a href="#footer">Contact</a></li>
+        </ul>
+
+        <div class="nav-tools">
+
+            <form class="header-search" onsubmit="handleSearch(event)">
+                <ion-icon name="search-outline"></ion-icon>
+
+                <input
+                    type="search"
+                    id="headerSearch"
+                    placeholder="Search products, categories..."
+                    autocomplete="off">
+
+                <button type="submit">
+                    <ion-icon name="arrow-forward-outline"></ion-icon>
+                </button>
+            </form>
+
+            <div class="nav-actions">
+
+                <button class="icon-btn" onclick="alert('Wishlist is ready!')">
+                    <ion-icon name="heart-outline"></ion-icon>
+                </button>
+
+                <a href="../account.html" class="icon-btn">
+                    <ion-icon name="person-outline"></ion-icon>
+                </a>
+
+                <button class="icon-btn" onclick="alert('Your cart is empty.')">
+                    <ion-icon name="bag-handle-outline"></ion-icon>
+                    <span class="cart-count">0</span>
+                </button>
+
+                <button class="icon-btn menu-btn" onclick="toggleMenu()">
+                    <ion-icon name="menu-outline"></ion-icon>
+                </button>
+
+            </div>
+
+        </div>
+
+    </nav>
+</header>
+
+<!-- SEARCH RESULT -->
+<div class="search-result" id="searchResult"></div>
+
+<!-- HERO -->
+<section class="ring-hero">
+
+    <div class="hero-container">
+
+        <div class="hero-content">
+
+            <div class="hero-label">
+                <ion-icon name="diamond-outline"></ion-icon>
+                SUBEESHA RING SIZE GUIDE
+            </div>
+
+            <h1>
+                Find Your <span>Perfect Ring Size.</span>
+            </h1>
+
+            <p>
+                Not sure about your ring size? Don't worry. Use our simple
+                measurement guide, ruler and ring size calculator to find
+                the perfect fit before placing your order.
+            </p>
+
+            <div class="hero-buttons">
+                <a href="#measure" class="btn btn-gold">
+                    Measure My Ring
+                    <ion-icon name="arrow-down-outline"></ion-icon>
+                </a>
+
+                <a href="#calculator" class="btn btn-light">
+                    Ring Size Calculator
+                </a>
+            </div>
+
+        </div>
+
+        <div class="hero-visual">
+            <div class="ring-visual"></div>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- METHODS -->
+<section class="section">
+
+    <div class="section-heading">
+        <span>Simple Methods</span>
+        <h2>How Would You Like To Measure?</h2>
+        <p>
+            Choose the method that is easiest for you.
+        </p>
+    </div>
+
+    <div class="methods-grid">
+
+        <div class="method-card">
+            <div class="method-icon">
+                <ion-icon name="radio-button-on-outline"></ion-icon>
+            </div>
+
+            <h3>Use An Existing Ring</h3>
+
+            <p>
+                Measure the inside diameter of a ring that already fits
+                you perfectly.
+            </p>
+        </div>
+
+        <div class="method-card">
+            <div class="method-icon">
+                <ion-icon name="resize-outline"></ion-icon>
+            </div>
+
+            <h3>Use A Tape</h3>
+
+            <p>
+                Wrap a flexible measuring tape around your finger and
+                measure its circumference.
+            </p>
+        </div>
+
+        <div class="method-card">
+            <div class="method-icon">
+                <ion-icon name="scan-outline"></ion-icon>
+            </div>
+
+            <h3>Use Our Calculator</h3>
+
+            <p>
+                Enter your ring diameter in millimeters or inches and
+                get an estimated ring size.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- RING DEMO -->
+<section class="section" id="measure">
+
+    <div class="demo-section">
+
+        <div class="demo-visual">
+
+            <div class="ring-demo">
+                <div class="measure-line"></div>
+                <div class="diameter-text">Inside Diameter</div>
+            </div>
+
+        </div>
+
+        <div class="demo-content">
+
+            <span style="color:#d6a85f;font-weight:bold;font-size:12px;letter-spacing:2px">
+                METHOD 1
+            </span>
+
+            <h2>Measure An Existing Ring</h2>
+
+            <p>
+                If you already have a ring that fits perfectly, this is
+                the easiest and most accurate method.
+            </p>
+
+            <div class="demo-step">
+                <div class="demo-step-number">1</div>
+
+                <div>
+                    <h4>Place The Ring On A Flat Surface</h4>
+                    <p>Make sure the ring is lying completely flat.</p>
+                </div>
+            </div>
+
+            <div class="demo-step">
+                <div class="demo-step-number">2</div>
+
+                <div>
+                    <h4>Measure The Inside Diameter</h4>
+                    <p>Measure from one inside edge directly to the opposite inside edge.</p>
+                </div>
+            </div>
+
+            <div class="demo-step">
+                <div class="demo-step-number">3</div>
+
+                <div>
+                    <h4>Enter The Measurement</h4>
+                    <p>Use the calculator below to find your approximate ring size.</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- RULER -->
+<section class="section">
+
+    <div class="section-heading">
+        <span>Measurement Tool</span>
+        <h2>Use Inch Or Centimeter Scale</h2>
+        <p>
+            Measure the inside diameter of your ring carefully.
+        </p>
+    </div>
+
+    <div class="ruler-box">
+
+        <div class="ruler-tabs">
+            <button class="ruler-tab active" onclick="showRuler('cm', this)">
+                Centimeters
+            </button>
+
+            <button class="ruler-tab" onclick="showRuler('inch', this)">
+                Inches
+            </button>
+        </div>
+
+        <div class="ruler" id="ruler">
+
+            <div class="ruler-marks" id="rulerMarks">
+                <span>0</span>
+                <span>1</span>
+                <span>2</span>
+                <span>3</span>
+                <span>4</span>
+                <span>5</span>
+                <span>6</span>
+                <span>7</span>
+                <span>8</span>
+                <span>9</span>
+                <span>10 cm</span>
+            </div>
+
+        </div>
+
+        <p class="ruler-tip" id="rulerTip">
+            Tip: Place your ring on the scale and measure only the inside diameter.
+        </p>
+
+    </div>
+
+</section>
+
+<!-- CALCULATOR -->
+<section class="section" id="calculator">
+
+    <div class="calculator-wrap">
+
+        <div class="calculator-info">
+
+            <span style="color:#d6a85f;font-size:12px;letter-spacing:2px;font-weight:bold">
+                QUICK CALCULATOR
+            </span>
+
+            <h2>
+                Find Your <span>Ring Size</span>
+            </h2>
+
+            <p>
+                Enter the inside diameter of your ring. You can use
+                millimeters, centimeters or inches.
+            </p>
+
+        </div>
+
+        <div class="calculator">
+
+            <label for="measurement">
+                Enter Ring Inside Diameter
+            </label>
+
+            <div class="calculator-input">
+
+                <input
+                    type="number"
+                    id="measurement"
+                    step="0.01"
+                    min="0"
+                    placeholder="Example: 18.1">
+
+                <select id="unit">
+                    <option value="mm">MM</option>
+                    <option value="cm">CM</option>
+                    <option value="inch">INCH</option>
+                </select>
+
+            </div>
+
+            <button class="btn btn-gold"
+                    style="width:100%;margin-top:15px"
+                    onclick="calculateRingSize()">
+
+                <ion-icon name="calculator-outline"></ion-icon>
+                Calculate My Size
+
+            </button>
+
+            <div class="result-box" id="resultBox">
+
+                <small>Your Estimated Ring Size</small>
+
+                <strong id="ringResult">--</strong>
+
+                <p id="resultText"
+                   style="margin-top:5px;color:#71807a;font-size:13px">
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- SIZE CHART -->
+<section class="section">
+
+    <div class="section-heading">
+        <span>Reference Guide</span>
+        <h2>Ring Size Chart</h2>
+        <p>
+            Compare your inside diameter with the chart below.
+        </p>
+    </div>
+
+    <div class="table-wrap">
+
+        <table class="size-table">
+
+            <thead>
+                <tr>
+                    <th>US Size</th>
+                    <th>Inside Diameter (MM)</th>
+                    <th>Circumference (MM)</th>
+                    <th>Approx. Size</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr><td>5</td><td>15.7 mm</td><td>49.3 mm</td><td>Small</td></tr>
+                <tr><td>6</td><td>16.5 mm</td><td>51.9 mm</td><td>Medium Small</td></tr>
+                <tr><td>7</td><td>17.3 mm</td><td>54.4 mm</td><td>Medium</td></tr>
+                <tr><td>8</td><td>18.1 mm</td><td>56.9 mm</td><td>Medium Large</td></tr>
+                <tr><td>9</td><td>18.9 mm</td><td>59.5 mm</td><td>Large</td></tr>
+                <tr><td>10</td><td>19.8 mm</td><td>62.1 mm</td><td>Extra Large</td></tr>
+                <tr><td>11</td><td>20.6 mm</td><td>64.6 mm</td><td>Extra Large</td></tr>
+                <tr><td>12</td><td>21.4 mm</td><td>67.2 mm</td><td>XX Large</td></tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<!-- TIPS -->
+<section class="section">
+
+    <div class="section-heading">
+        <span>Helpful Tips</span>
+        <h2>Get The Most Accurate Measurement</h2>
+    </div>
+
+    <div class="tips">
+
+        <div class="tip">
+            <ion-icon name="time-outline"></ion-icon>
+            <h3>Measure At The Right Time</h3>
+            <p>
+                Fingers can change size throughout the day, so measure when
+                your hands are at a normal temperature.
+            </p>
+        </div>
+
+        <div class="tip">
+            <ion-icon name="repeat-outline"></ion-icon>
+            <h3>Measure More Than Once</h3>
+            <p>
+                Take multiple measurements to make sure your result is
+                consistent.
+            </p>
+        </div>
+
+        <div class="tip">
+            <ion-icon name="help-circle-outline"></ion-icon>
+            <h3>Still Not Sure?</h3>
+            <p>
+                Contact the Subeesha support team before placing your order.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- FOOTER -->
+<footer id="footer">
+
+    <div class="footer">
+
+        <div class="footer-brand">
+
+            <img src="../assets/images/logo.jpg" alt="Subeesha">
+
+            <p>
+                E-commerce • E-business • Everyday Essentials.
+                Shop more, live better with Subeesha.
+            </p>
+
+            <div class="socials">
+                <a href="#"><ion-icon name="logo-facebook"></ion-icon></a>
+                <a href="#"><ion-icon name="logo-instagram"></ion-icon></a>
+                <a href="#"><ion-icon name="logo-tiktok"></ion-icon></a>
+                <a href="#"><ion-icon name="logo-youtube"></ion-icon></a>
+            </div>
+
+        </div>
+
+        <div>
+            <h3>Shop</h3>
+
+            <a href="shop.html">All Products</a>
+            <a href="../index.html#new">New Arrivals</a>
+            <a href="flashsale.html">Flash Sale</a>
+            <a href="../index.html#categories">Categories</a>
+        </div>
+
+        <div>
+            <h3>Customer Care</h3>
+
+            <a href="customer-love.html">Customer Reviews</a>
+            <a href="#">Contact Us</a>
+            <a href="ringmeasurement.html">Ring Measurement</a>
+            <a href="#">FAQs</a>
+            <a href="#">Shipping Policy</a>
+            <a href="#">Return Policy</a>
+            <a href="#">Track Order</a>
+        </div>
+
+        <div>
+            <h3>Company</h3>
+
+            <a href="becomeseller.html">Become Reseller</a>
+            <a href="#">About Us</a>
+            <a href="#">Careers</a>
+            <a href="#">Blog</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <span>© 2026 Subeesha. All Rights Reserved.</span>
+        <span>Shop More, Live Better.</span>
+    </div>
+
+</footer>
+
+<script>
+
+/* MOBILE MENU */
+function toggleMenu(){
+    document.getElementById("navLinks").classList.toggle("show");
+}
+
+/* HEADER SEARCH */
+function handleSearch(event){
+
+    event.preventDefault();
+
+    const input =
+        document.getElementById("headerSearch");
+
+    const result =
+        document.getElementById("searchResult");
+
+    const query = input.value.trim();
+
+    if(!query){
+        input.focus();
+        return;
+    }
+
+    result.innerHTML = `
+        <strong>Search Result</strong>
+        <p style="margin-top:8px;color:#71807a;font-size:14px">
+            Searching for: <b>${escapeHtml(query)}</b>
+        </p>
+    `;
+
+    result.classList.add("show");
+
+    setTimeout(function(){
+        result.classList.remove("show");
+    },3000);
+
+}
+
+/* PREVENT HTML INJECTION IN DEMO SEARCH */
+function escapeHtml(text){
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+/* RULER SWITCH */
+function showRuler(type, button){
+
+    document.querySelectorAll(".ruler-tab").forEach(function(tab){
+        tab.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+    const marks =
+        document.getElementById("rulerMarks");
+
+    const tip =
+        document.getElementById("rulerTip");
+
+    if(type === "inch"){
+
+        marks.innerHTML = `
+            <span>0</span>
+            <span>1</span>
+            <span>2</span>
+            <span>3</span>
+            <span>4</span>
+            <span>5</span>
+            <span>6</span>
+            <span>7</span>
+            <span>8</span>
+            <span>9</span>
+            <span>10 in</span>
+        `;
+
+        tip.textContent =
+            "Tip: Use the inch scale only if your measuring tool uses inches.";
+
+    }else{
+
+        marks.innerHTML = `
+            <span>0</span>
+            <span>1</span>
+            <span>2</span>
+            <span>3</span>
+            <span>4</span>
+            <span>5</span>
+            <span>6</span>
+            <span>7</span>
+            <span>8</span>
+            <span>9</span>
+            <span>10 cm</span>
+        `;
+
+        tip.textContent =
+            "Tip: Place your ring on the scale and measure only the inside diameter.";
+
+    }
+
+}
+
+/* RING SIZE CALCULATOR */
+function calculateRingSize(){
+
+    const measurement =
+        parseFloat(
+            document.getElementById("measurement").value
+        );
+
+    const unit =
+        document.getElementById("unit").value;
+
+    const resultBox =
+        document.getElementById("resultBox");
+
+    const result =
+        document.getElementById("ringResult");
+
+    const resultText =
+        document.getElementById("resultText");
+
+    if(!measurement || measurement <= 0){
+
+        alert(
+            "Please enter a valid ring inside diameter."
+        );
+
+        return;
+    }
+
+    let diameterMM = measurement;
+
+    if(unit === "cm"){
+        diameterMM = measurement * 10;
+    }
+
+    if(unit === "inch"){
+        diameterMM = measurement * 25.4;
+    }
+
+    const sizes = [
+        {size:"5", diameter:15.7},
+        {size:"6", diameter:16.5},
+        {size:"7", diameter:17.3},
+        {size:"8", diameter:18.1},
+        {size:"9", diameter:18.9},
+        {size:"10", diameter:19.8},
+        {size:"11", diameter:20.6},
+        {size:"12", diameter:21.4}
+    ];
+
+    let closest = sizes[0];
+
+    sizes.forEach(function(item){
+
+        if(
+            Math.abs(item.diameter - diameterMM)
+            <
+            Math.abs(closest.diameter - diameterMM)
+        ){
+            closest = item;
+        }
+
+    });
+
+    result.textContent =
+        "US Size " + closest.size;
+
+    resultText.textContent =
+        "Your entered diameter is " +
+        diameterMM.toFixed(2) +
+        " mm. The closest size is approximately " +
+        closest.size +
+        ".";
+
+    resultBox.classList.add("show");
+
+}
+
+</script>
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="../assets/js/firebase-config.js"></script>
+<script src="../assets/js/sub-core.js"></script>
+<script src="../assets/js/store.js" defer></script>
+</body>
+</html>

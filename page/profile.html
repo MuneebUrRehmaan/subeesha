@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile - Subeesha</title>
+
+    <!-- Main Ionicons library used throughout the Subeesha website. -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <!-- External profile-page stylesheet. -->
+    <link rel="stylesheet" href="../assets/css/profile.css">
+    
+
+</head>
+
+<body data-page="profile">
+
+<!-- =========================================================
+     PROFILE PAGE HEADER
+     ========================================================= -->
+<header class="profile-header">
+    <div class="header-inner">
+
+        <!-- Brand logo: keep logo.jpg inside assets/images/. -->
+        <a href="../index.html" class="brand">
+            <span class="brand-logo">
+                <img src="../assets/images/logo.jpg" alt="Subeesha Logo">
+            </span>
+            <span class="brand-name">Subeesha</span>
+        </a>
+
+        <div class="header-actions">
+            <a href="../index.html" class="back-store">
+                <ion-icon name="bag-handle-outline"></ion-icon>
+                Back to Store
+            </a>
+            <button class="header-icon" onclick="showToast('Info', 'Notifications are coming soon.', 'info')" aria-label="Notifications">
+                <ion-icon name="notifications-outline"></ion-icon>
+            </button>
+            <button class="header-icon" onclick="showToast('Success', 'Your account menu is ready.', 'success')" aria-label="Account">
+                <ion-icon name="person-outline"></ion-icon>
+            </button>
+        </div>
+
+    </div>
+</header>
+
+
+<!-- =========================================================
+     PROFILE LAYOUT
+     ========================================================= -->
+<main class="profile-layout">
+
+    <!-- =====================================================
+         PROFILE SIDEBAR
+         ===================================================== -->
+    <aside class="profile-sidebar">
+
+        <!-- User summary -->
+        <div class="user-summary">
+            <div class="avatar">A</div>
+            <div>
+                <h2>Ahmed Khan</h2>
+                <p>ahmed@example.com</p>
+            </div>
+            <span class="verified-pill">
+                <ion-icon name="checkmark-circle"></ion-icon>
+            </span>
+        </div>
+
+        <!-- Profile navigation -->
+        <nav class="profile-nav">
+
+            <button class="profile-nav-item active" data-target="overview">
+                <ion-icon name="grid-outline"></ion-icon>
+                <span>Overview</span>
+            </button>
+
+            <button class="profile-nav-item" data-target="personal">
+                <ion-icon name="person-outline"></ion-icon>
+                <span>Personal Information</span>
+            </button>
+
+            <button class="profile-nav-item" data-target="addresses">
+                <ion-icon name="location-outline"></ion-icon>
+                <span>Address Book</span>
+            </button>
+
+            <button class="profile-nav-item" data-target="orders">
+                <ion-icon name="receipt-outline"></ion-icon>
+                <span>My Orders</span>
+            </button>
+
+            <button class="profile-nav-item" data-target="earnings">
+                <ion-icon name="sparkles-outline"></ion-icon>
+                <span>My Earnings</span>
+            </button>
+
+            <button class="profile-nav-item" data-target="wallet">
+                <ion-icon name="wallet-outline"></ion-icon>
+                <span>My Wallet</span>
+            </button>
+
+            <button class="profile-nav-item" data-target="wishlist">
+                <ion-icon name="heart-outline"></ion-icon>
+                <span>Wishlist</span>
+            </button>
+
+            <button class="profile-nav-item" data-target="reviews">
+                <ion-icon name="star-outline"></ion-icon>
+                <span>My Reviews</span>
+            </button>
+                <button class="profile-nav-item" data-target="loyalty">
+            <ion-icon name="ribbon-outline"></ion-icon>
+            <span>Loyalty Program</span>
+        </button>
+            <button class="profile-nav-item" data-target="vouchers">
+                <ion-icon name="pricetag-outline"></ion-icon>
+                <span>Vouchers & Promo Codes</span>
+            </button>
+
+            <button class="profile-nav-item" data-target="payments">
+                <ion-icon name="card-outline"></ion-icon>
+                <span>Payment Options</span>
+            </button>
+
+            <button class="profile-nav-item" data-target="security">
+                <ion-icon name="shield-checkmark-outline"></ion-icon>
+                <span>Account & Security</span>
+            </button>
+
+        </nav>
+
+        <button class="logout-btn" onclick="showToast('Success', 'Logout action is ready for backend integration.', 'success')">
+            <ion-icon name="log-out-outline"></ion-icon>
+            Logout
+        </button>
+
+    </aside>
+
+
+    <!-- =====================================================
+         PROFILE CONTENT
+         ===================================================== -->
+    <section class="profile-content">
+
+        <!-- Page heading -->
+        <div class="page-heading">
+            <div>
+                <span class="eyebrow">MY ACCOUNT</span>
+                <h1 id="pageTitle">Welcome back, Ahmed</h1>
+                <p id="pageSubtitle">Manage your profile, orders, rewards and wallet from one place.</p>
+            </div>
+
+            <button class="edit-profile-btn" onclick="openPersonalSection()">
+                <ion-icon name="create-outline"></ion-icon>
+                Edit Profile
+            </button>
+        </div>
+
+
+        <!-- =================================================
+             OVERVIEW SECTION
+             ================================================= -->
+        <section class="profile-section active" id="overview">
+
+            <!-- Overview stats -->
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <ion-icon name="receipt-outline"></ion-icon>
+                    </div>
+                    <div>
+                        <span>Total Orders</span>
+                        <strong>12</strong>
+                        <small>2 currently active</small>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon gold">
+                        <ion-icon name="sparkles-outline"></ion-icon>
+                    </div>
+                    <div>
+                        <span>Reward Points</span>
+                        <strong id="overviewPoints">1,850</strong>
+                        <small>100 points = Rs. 1</small>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon pink">
+                        <ion-icon name="wallet-outline"></ion-icon>
+                    </div>
+                    <div>
+                        <span>Wallet Balance</span>
+                        <strong id="overviewWallet">Rs. 18.50</strong>
+                        <small>Available balance</small>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <ion-icon name="heart-outline"></ion-icon>
+                    </div>
+                    <div>
+                        <span>Wishlist</span>
+                        <strong>8</strong>
+                        <small>Saved products</small>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Quick profile card -->
+            <div class="content-grid two-col">
+
+                <article class="panel profile-card-large">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="panel-kicker">PROFILE</span>
+                            <h2>Personal Information</h2>
+                        </div>
+                        <button class="icon-action" onclick="openPersonalSection()" aria-label="Edit profile">
+                            <ion-icon name="create-outline"></ion-icon>
+                        </button>
+                    </div>
+
+                    <div class="profile-details">
+                        <div>
+                            <span>Full Name</span>
+                            <strong>Ahmed Khan</strong>
+                        </div>
+                        <div>
+                            <span>Email Address</span>
+                            <strong>ahmed@example.com</strong>
+                        </div>
+                        <div>
+                            <span>Mobile Number</span>
+                            <strong>+92 300 1234567</strong>
+                        </div>
+                        <div>
+                            <span>Gender</span>
+                            <strong>Male</strong>
+                        </div>
+                    </div>
+                </article>
+
+
+                <!-- Wallet snapshot -->
+                <article class="panel wallet-preview">
+                    <div class="wallet-top">
+                        <div>
+                            <span class="panel-kicker">SUBEESHA WALLET</span>
+                            <h2>Rs. <span id="walletPreview">18.50</span></h2>
+                        </div>
+                        <div class="wallet-icon">
+                            <ion-icon name="wallet-outline"></ion-icon>
+                        </div>
+                    </div>
+
+                    <p>Your wallet balance can be used for eligible discounts and purchases.</p>
+
+                    <button class="outline-btn" onclick="openSection('wallet')">
+                        Manage Wallet
+                        <ion-icon name="arrow-forward-outline"></ion-icon>
+                    </button>
+                </article>
+
+            </div>
+
+
+            <!-- Recent rewards -->
+            <article class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <span class="panel-kicker">REWARDS</span>
+                        <h2>Recent Earnings</h2>
+                    </div>
+                    <button class="text-btn" onclick="openSection('earnings')">
+                        View All
+                        <ion-icon name="arrow-forward-outline"></ion-icon>
+                    </button>
+                </div>
+
+                <div class="earning-list compact">
+                    <div class="earning-row">
+                        <div class="earning-icon"><ion-icon name="log-in-outline"></ion-icon></div>
+                        <div class="earning-info">
+                            <strong>Daily Login</strong>
+                            <span>Today</span>
+                        </div>
+                        <b>+10 Points</b>
+                    </div>
+
+                    <div class="earning-row">
+                        <div class="earning-icon"><ion-icon name="star-outline"></ion-icon></div>
+                        <div class="earning-info">
+                            <strong>Product Review</strong>
+                            <span>08 Aug 2026</span>
+                        </div>
+                        <b>+50 Points</b>
+                    </div>
+
+                    <div class="earning-row">
+                        <div class="earning-icon"><ion-icon name="bag-handle-outline"></ion-icon></div>
+                        <div class="earning-info">
+                            <strong>Purchase Reward</strong>
+                            <span>05 Aug 2026</span>
+                        </div>
+                        <b>+120 Points</b>
+                    </div>
+                </div>
+            </article>
+
+        </section>
+
+
+        <!-- =================================================
+             PERSONAL INFORMATION SECTION
+             ================================================= -->
+        <section class="profile-section" id="personal">
+
+            <div class="section-title">
+                <span class="eyebrow">BASIC INFORMATION</span>
+                <h2>Personal Information</h2>
+                <p>Update the information connected to your Subeesha account.</p>
+            </div>
+
+            <article class="panel">
+
+                <div class="form-grid">
+
+                    <div class="field">
+                        <label>Full Name</label>
+                        <input type="text" value="Ahmed Khan">
+                    </div>
+
+                    <div class="field">
+                        <label>Email Address</label>
+                        <input type="email" value="ahmed@example.com">
+                    </div>
+
+                    <div class="field">
+                        <label>Mobile Number</label>
+                        <input type="tel" value="+92 300 1234567">
+                    </div>
+
+                    <div class="field">
+                        <label>Gender</label>
+                        <select>
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>Birthday</label>
+                        <input type="date" value="1998-07-08">
+                    </div>
+
+                </div>
+
+                <div class="form-footer">
+                    <button class="primary-btn" onclick="saveProfile()">
+                        Save Changes
+                    </button>
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- =================================================
+             ADDRESS BOOK SECTION
+             ================================================= -->
+        <section class="profile-section" id="addresses">
+
+            <div class="section-title with-action">
+                <div>
+                    <span class="eyebrow">DELIVERY</span>
+                    <h2>Address Book</h2>
+                    <p>Manage your shipping and billing addresses.</p>
+                </div>
+                <button class="primary-btn" onclick="showToast('Success', 'Add address form can be connected to your backend.', 'success')">
+                    <ion-icon name="add-outline"></ion-icon>
+                    Add New Address
+                </button>
+            </div>
+
+            <div class="address-grid">
+
+                <article class="address-card default">
+                    <div class="address-head">
+                        <div>
+                            <span class="address-label"><ion-icon name="home-outline"></ion-icon> HOME</span>
+                            <h3>Ahmed Khan</h3>
+                        </div>
+                        <span class="default-badge">Default</span>
+                    </div>
+                    <p>+92 300 1234567</p>
+                    <p>House 25, Street 4, Latifabad</p>
+                    <p>Hyderabad, Sindh, Pakistan</p>
+                    <div class="address-actions">
+                        <button onclick="showToast('Success', 'Address edit is ready for backend integration.', 'success')">Edit</button>
+                        <button onclick="showToast('Warning', 'This is your default address.', 'warning')">Default</button>
+                    </div>
+                </article>
+
+                <article class="address-card">
+                    <div class="address-head">
+                        <div>
+                            <span class="address-label"><ion-icon name="business-outline"></ion-icon> OFFICE</span>
+                            <h3>Ahmed Khan</h3>
+                        </div>
+                    </div>
+                    <p>+92 300 1234567</p>
+                    <p>Office 12, Main Commercial Road</p>
+                    <p>Hyderabad, Sindh, Pakistan</p>
+                    <div class="address-actions">
+                        <button onclick="showToast('Success', 'Address edit is ready for backend integration.', 'success')">Edit</button>
+                        <button onclick="showToast('Success', 'Office address selected as default.', 'success')">Set Default</button>
+                    </div>
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             MY ORDERS SECTION
+             ================================================= -->
+        <section class="profile-section" id="orders">
+
+            <div class="section-title">
+                <span class="eyebrow">SHOPPING</span>
+                <h2>My Orders</h2>
+                <p>Track your recent purchases and order history.</p>
+            </div>
+
+            <article class="panel">
+
+                <div class="order-tabs">
+                    <button class="active">All Orders</button>
+                    <button>Processing</button>
+                    <button>Delivered</button>
+                    <button>Cancelled</button>
+                    <button>Returns</button>
+                </div>
+
+                <div class="order-table">
+
+                    <div class="order-row order-head">
+                        <span>Order</span>
+                        <span>Date</span>
+                        <span>Total</span>
+                        <span>Status</span>
+                        <span></span>
+                    </div>
+
+                    <div class="order-row">
+                        <strong>#SUB-10842</strong>
+                        <span>08 Aug 2026</span>
+                        <span>Rs. 6,499</span>
+                        <span class="status delivered">Delivered</span>
+                        <button onclick="showToast('Success', 'Order details are ready for backend integration.', 'success')">View</button>
+                    </div>
+
+                    <div class="order-row">
+                        <strong>#SUB-10831</strong>
+                        <span>05 Aug 2026</span>
+                        <span>Rs. 4,499</span>
+                        <span class="status processing">Processing</span>
+                        <button onclick="showToast('Info', 'Order tracking will connect to the order API.', 'info')">Track</button>
+                    </div>
+
+                    <div class="order-row">
+                        <strong>#SUB-10796</strong>
+                        <span>28 Jul 2026</span>
+                        <span>Rs. 3,999</span>
+                        <span class="status delivered">Delivered</span>
+                        <button onclick="showToast('Success', 'Order details are ready for backend integration.', 'success')">View</button>
+                    </div>
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- =================================================
+             MY EARNINGS / REWARDS SECTION
+             ================================================= -->
+        <section class="profile-section" id="earnings">
+
+            <div class="section-title">
+                <span class="eyebrow">SUBEESHA REWARDS</span>
+                <h2>My Earnings</h2>
+                <p>Earn points through shopping and activities, then request a wallet conversion.</p>
+            </div>
+
+            <!-- Earnings summary -->
+            <div class="stats-grid rewards-stats">
+
+                <div class="stat-card">
+                    <div class="stat-icon gold">
+                        <ion-icon name="sparkles-outline"></ion-icon>
+                    </div>
+                    <div>
+                        <span>Total Points</span>
+                        <strong id="earningsPoints">1,850</strong>
+                        <small>Current reward balance</small>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <ion-icon name="trophy-outline"></ion-icon>
+                    </div>
+                    <div>
+                        <span>Points Earned</span>
+                        <strong>2,450</strong>
+                        <small>All-time earnings</small>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon pink">
+                        <ion-icon name="wallet-outline"></ion-icon>
+                    </div>
+                    <div>
+                        <span>Converted</span>
+                        <strong>600</strong>
+                        <small>Points already converted</small>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Conversion information -->
+            <article class="conversion-banner">
+                <div class="conversion-icon">
+                    <ion-icon name="swap-horizontal-outline"></ion-icon>
+                </div>
+                <div>
+                    <span>REWARD CONVERSION</span>
+                    <h3>100 Points = Rs. 1</h3>
+                    <p>You can request eligible points to be converted into your Subeesha Wallet.</p>
+                </div>
+                <button class="primary-btn" onclick="openConvertModal()">
+                    Convert to Wallet
+                </button>
+            </article>
+
+            <!-- Earnings history -->
+            <article class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <span class="panel-kicker">EARNING HISTORY</span>
+                        <h2>Points Activity</h2>
+                    </div>
+                </div>
+
+                <div class="earning-list">
+
+                    <div class="earning-row">
+                        <div class="earning-icon"><ion-icon name="log-in-outline"></ion-icon></div>
+                        <div class="earning-info">
+                            <strong>Daily Login</strong>
+                            <span>11 Aug 2026 · Daily task completed</span>
+                        </div>
+                        <b>+10 Points</b>
+                    </div>
+
+                    <div class="earning-row">
+                        <div class="earning-icon"><ion-icon name="star-outline"></ion-icon></div>
+                        <div class="earning-info">
+                            <strong>Product Review</strong>
+                            <span>08 Aug 2026 · Verified purchase review</span>
+                        </div>
+                        <b>+50 Points</b>
+                    </div>
+
+                    <div class="earning-row">
+                        <div class="earning-icon"><ion-icon name="bag-handle-outline"></ion-icon></div>
+                        <div class="earning-info">
+                            <strong>Purchase Reward</strong>
+                            <span>05 Aug 2026 · Order #SUB-10831</span>
+                        </div>
+                        <b>+120 Points</b>
+                    </div>
+
+                    <div class="earning-row">
+                        <div class="earning-icon"><ion-icon name="people-outline"></ion-icon></div>
+                        <div class="earning-info">
+                            <strong>Friend Referral</strong>
+                            <span>01 Aug 2026 · Referral completed</span>
+                        </div>
+                        <b>+200 Points</b>
+                    </div>
+
+                    <div class="earning-row converted">
+                        <div class="earning-icon"><ion-icon name="wallet-outline"></ion-icon></div>
+                        <div class="earning-info">
+                            <strong>Wallet Conversion</strong>
+                            <span>30 Jul 2026 · 500 points converted</span>
+                        </div>
+                        <b>-500 Points</b>
+                    </div>
+
+                </div>
+            </article>
+
+        </section>
+
+
+        <!-- =================================================
+             MY WALLET SECTION
+             ================================================= -->
+        <section class="profile-section" id="wallet">
+
+            <div class="section-title">
+                <span class="eyebrow">PAYMENT & REWARDS</span>
+                <h2>My Wallet</h2>
+                <p>Manage your Subeesha wallet balance and wallet activity.</p>
+            </div>
+
+            <div class="wallet-layout">
+
+                <article class="wallet-card">
+                    <div class="wallet-brand">
+                        <span>SUBEESHA</span>
+                        <ion-icon name="wallet-outline"></ion-icon>
+                    </div>
+
+                    <p>Available Balance</p>
+                    <h2>Rs. <span id="walletBalance">18.50</span></h2>
+
+                    <div class="wallet-footer">
+                        <span>Wallet ID: SUB-WLT-00241</span>
+                        <span>Active</span>
+                    </div>
+                </article>
+
+                <article class="panel wallet-rules">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="panel-kicker">HOW IT WORKS</span>
+                            <h2>Wallet Rules</h2>
+                        </div>
+                    </div>
+
+                    <div class="rule">
+                        <ion-icon name="checkmark-circle-outline"></ion-icon>
+                        <span>100 reward points can be converted into Rs. 1.</span>
+                    </div>
+
+                    <div class="rule">
+                        <ion-icon name="checkmark-circle-outline"></ion-icon>
+                        <span>Converted balance can be used on eligible purchases.</span>
+                    </div>
+
+                    <div class="rule">
+                        <ion-icon name="checkmark-circle-outline"></ion-icon>
+                        <span>Conversion requests are subject to admin verification.</span>
+                    </div>
+
+                    <button class="primary-btn full-btn" onclick="openSection('earnings')">
+                        Convert More Points
+                    </button>
+                </article>
+
+            </div>
+
+            <article class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <span class="panel-kicker">WALLET ACTIVITY</span>
+                        <h2>Recent Transactions</h2>
+                    </div>
+                </div>
+
+                <div class="wallet-transactions">
+
+                    <div class="transaction-row">
+                        <div class="transaction-icon plus"><ion-icon name="add-outline"></ion-icon></div>
+                        <div>
+                            <strong>Wallet Conversion</strong>
+                            <span>30 Jul 2026</span>
+                        </div>
+                        <b class="positive">+Rs. 5.00</b>
+                    </div>
+
+                    <div class="transaction-row">
+                        <div class="transaction-icon minus"><ion-icon name="cart-outline"></ion-icon></div>
+                        <div>
+                            <strong>Order #SUB-10796</strong>
+                            <span>28 Jul 2026</span>
+                        </div>
+                        <b class="negative">-Rs. 3.50</b>
+                    </div>
+
+                </div>
+            </article>
+
+        </section>
+
+
+        <!-- =================================================
+             WISHLIST SECTION
+             ================================================= -->
+        <section class="profile-section" id="wishlist">
+
+            <div class="section-title">
+                <span class="eyebrow">SAVED FOR LATER</span>
+                <h2>My Wishlist</h2>
+                <p>Products you have saved for your next shopping trip.</p>
+            </div>
+
+            <div class="wishlist-grid">
+
+                <article class="wishlist-card">
+                    <div class="wishlist-image">
+                        <!-- Temporary design image placeholder. Later the Admin Panel can provide the product image. -->
+                        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=80" alt="Premium watch">
+                        <button onclick="showToast('Success', 'Product removed from wishlist.', 'success')" aria-label="Remove wishlist item">
+                            <ion-icon name="heart"></ion-icon>
+                        </button>
+                    </div>
+                    <div class="wishlist-body">
+                        <span>Watches</span>
+                        <h3>Classic Premium Watch</h3>
+                        <strong>Rs. 6,499</strong>
+                        <button class="primary-btn full-btn" onclick="showToast('Success', 'Product added to cart.', 'success')">Add to Cart</button>
+                    </div>
+                </article>
+
+                <article class="wishlist-card">
+                    <div class="wishlist-image">
+                        <!-- Temporary design image placeholder. Later the Admin Panel can provide the product image. -->
+                        <img src="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=700&q=80" alt="Fashion product">
+                        <button onclick="showToast('Success', 'Product removed from wishlist.', 'success')" aria-label="Remove wishlist item">
+                            <ion-icon name="heart"></ion-icon>
+                        </button>
+                    </div>
+                    <div class="wishlist-body">
+                        <span>Fashion</span>
+                        <h3>Elegant Summer Style</h3>
+                        <strong>Rs. 4,499</strong>
+                        <button class="primary-btn full-btn" onclick="showToast('Success', 'Product added to cart.', 'success')">Add to Cart</button>
+                    </div>
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             MY REVIEWS SECTION
+             ================================================= -->
+        <section class="profile-section" id="reviews">
+
+            <div class="section-title">
+                <span class="eyebrow">YOUR FEEDBACK</span>
+                <h2>My Reviews</h2>
+                <p>View the ratings and reviews you have submitted.</p>
+            </div>
+
+            <article class="panel review-item">
+                <div class="review-stars">★★★★★</div>
+                <h3>Premium Casual Sneakers</h3>
+                <p>"Great quality and very comfortable. The delivery was also fast."</p>
+                <span>Reviewed on 08 Aug 2026</span>
+            </article>
+
+            <article class="panel review-item">
+                <div class="review-stars">★★★★★</div>
+                <h3>Classic Premium Watch</h3>
+                <p>"Beautiful presentation and exactly as shown on the website."</p>
+                <span>Reviewed on 28 Jul 2026</span>
+            </article>
+
+        </section>
+
+
+        <!-- =================================================
+             VOUCHERS SECTION
+             ================================================= -->
+        <section class="profile-section" id="vouchers">
+
+            <div class="section-title">
+                <span class="eyebrow">SAVINGS</span>
+                <h2>Vouchers & Promo Codes</h2>
+                <p>Your available discounts and promotional vouchers.</p>
+            </div>
+
+            <div class="voucher-grid">
+
+                <article class="voucher-card">
+                    <div class="voucher-left">
+                        <span>SUBEESHA</span>
+                        <strong>Rs. 500 OFF</strong>
+                        <small>Minimum order Rs. 5,000</small>
+                    </div>
+                    <div class="voucher-code">
+                        <strong>SUB500</strong>
+                        <button onclick="copyCode('SUB500')">Copy</button>
+                    </div>
+                </article>
+
+                <article class="voucher-card">
+                    <div class="voucher-left">
+                        <span>WELCOME OFFER</span>
+                        <strong>10% OFF</strong>
+                        <small>For selected new-arrival products</small>
+                    </div>
+                    <div class="voucher-code">
+                        <strong>WELCOME10</strong>
+                        <button onclick="copyCode('WELCOME10')">Copy</button>
+                    </div>
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             PAYMENT OPTIONS SECTION
+             ================================================= -->
+        <section class="profile-section" id="payments">
+
+            <div class="section-title with-action">
+                <div>
+                    <span class="eyebrow">PAYMENT</span>
+                    <h2>Payment Options</h2>
+                    <p>Manage your saved payment methods.</p>
+                </div>
+                <button class="primary-btn" onclick="showToast('Success', 'Add payment method is ready for gateway integration.', 'success')">
+                    <ion-icon name="add-outline"></ion-icon>
+                    Add Payment
+                </button>
+            </div>
+
+            <div class="payment-list">
+
+                <article class="payment-card">
+                    <div class="payment-icon"><ion-icon name="card-outline"></ion-icon></div>
+                    <div>
+                        <strong>Visa Debit Card</strong>
+                        <span>•••• •••• •••• 4821</span>
+                    </div>
+                    <span class="default-badge">Default</span>
+                    <button onclick="showToast('Success', 'Payment method edit is ready for backend integration.', 'success')">
+                        <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
+                    </button>
+                </article>
+
+                <article class="payment-card">
+                    <div class="payment-icon"><ion-icon name="phone-portrait-outline"></ion-icon></div>
+                    <div>
+                        <strong>Easypaisa</strong>
+                        <span>03XX-XXXXXXX</span>
+                    </div>
+                    <span class="connected-badge">Connected</span>
+                    <button onclick="showToast('Success', 'Payment method management is ready for backend integration.', 'success')">
+                        <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
+                    </button>
+                </article>
+
+                <article class="payment-card">
+                    <div class="payment-icon"><ion-icon name="phone-portrait-outline"></ion-icon></div>
+                    <div>
+                        <strong>JazzCash</strong>
+                        <span>03XX-XXXXXXX</span>
+                    </div>
+                    <span class="connected-badge">Connected</span>
+                    <button onclick="showToast('Success', 'Payment method management is ready for backend integration.', 'success')">
+                        <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
+                    </button>
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             ACCOUNT & SECURITY SECTION
+             ================================================= -->
+        <section class="profile-section" id="security">
+
+            <div class="section-title">
+                <span class="eyebrow">PROTECTION</span>
+                <h2>Account & Security</h2>
+                <p>Keep your account information and login credentials secure.</p>
+            </div>
+
+            <div class="security-grid">
+
+                <article class="panel security-card">
+                    <div class="security-icon"><ion-icon name="lock-closed-outline"></ion-icon></div>
+                    <div>
+                        <h3>Change Password</h3>
+                        <p>Update your account password regularly for better security.</p>
+                    </div>
+                    <button class="outline-btn" onclick="showToast('Success', 'Change password form is ready for backend integration.', 'success')">Change</button>
+                </article>
+
+                <article class="panel security-card">
+                    <div class="security-icon"><ion-icon name="mail-outline"></ion-icon></div>
+                    <div>
+                        <h3>Email Address</h3>
+                        <p>ahmed@example.com</p>
+                    </div>
+                    <button class="outline-btn" onclick="showToast('Success', 'Email verification flow is ready for backend integration.', 'success')">Update</button>
+                </article>
+
+                <article class="panel security-card">
+                    <div class="security-icon"><ion-icon name="call-outline"></ion-icon></div>
+                    <div>
+                        <h3>Mobile Number</h3>
+                        <p>+92 300 1234567 · Verified</p>
+                    </div>
+                    <button class="outline-btn" onclick="showToast('Success', 'Mobile verification flow is ready for backend integration.', 'success')">Update</button>
+                </article>
+
+                <article class="panel security-card">
+                    <div class="security-icon"><ion-icon name="logo-google"></ion-icon></div>
+                    <div>
+                        <h3>Social Accounts</h3>
+                        <p>Google account is not connected.</p>
+                    </div>
+                    <button class="outline-btn" onclick="showToast('Info', 'Social account linking can be connected to OAuth later.', 'info')">Connect</button>
+                </article>
+
+            </div>
+
+        </section>
+
+    </section>
+
+</main>
+
+
+<!-- =========================================================
+     REWARD CONVERSION MODAL
+     ========================================================= -->
+<div class="modal-overlay" id="convertModal">
+
+    <div class="modal-card">
+
+        <button class="modal-close" onclick="closeConvertModal()" aria-label="Close">
+            <ion-icon name="close-outline"></ion-icon>
+        </button>
+
+        <div class="modal-icon">
+            <ion-icon name="wallet-outline"></ion-icon>
+        </div>
+
+        <span class="eyebrow">CONVERT REWARDS</span>
+        <h2>Request Wallet Conversion</h2>
+        <p>Choose how many eligible points you want to request for conversion.</p>
+
+        <div class="conversion-rate">
+            <strong>100 Points = Rs. 1</strong>
+            <span>Current available points: <b id="modalPoints">1,850</b></span>
+        </div>
+
+        <div class="field">
+            <label for="convertPoints">Points to Convert</label>
+            <input id="convertPoints" type="number" min="100" step="100" value="100">
+            <small id="conversionPreview">You will receive Rs. 1.00</small>
+        </div>
+
+        <div class="modal-actions">
+            <button class="outline-btn" onclick="closeConvertModal()">Cancel</button>
+            <button class="primary-btn" onclick="submitConversion()">Send Request</button>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     SUBEESHA TOAST NOTIFICATION
+     ========================================================= -->
+<div class="toast-container" id="toastContainer"></div>
+
+
+<!-- External profile-page JavaScript. -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="../assets/js/firebase-config.js"></script>
+<script src="../assets/js/sub-core.js"></script>
+<script src="../assets/js/profile.js"></script>
+
+<script src="../assets/js/store.js" defer></script>
+</body>
+
+</html>

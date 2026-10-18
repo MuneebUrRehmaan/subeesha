@@ -1,0 +1,190 @@
+rules_version = '2';
+
+/* =========================================================
+   SUBEESHA - FIRESTORE SECURITY RULES
+   Roles are stored in users/{uid}.role :
+     customer | reseller | admin
+   Admin sub-roles in users/{uid}.adminRole :
+     Super Admin | Manager | Staff | Delivery Manager
+   NOTE: there is no server, so money-like values (wallet, points)
+   can only be changed by admins (or by the small, rate-limited
+   daily-login reward below).
+   ========================================================= */
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /* ---------- helpers ---------- */
+    function signedIn()   { return request.auth != null; }
+    function userPath(uid){ return /databases/$(database)/documents/users/$(uid); }
+    function hasProfile() { return signedIn() && exists(userPath(request.auth.uid)); }
+    function me()         { return get(userPath(request.auth.uid)).data; }
+    function active()     { return hasProfile() && me().status == 'active' && me().get('access', 'Allowed') != 'Suspended'; }
+    function isAdmin()    { return active() && me().role == 'admin'; }
+    function adminRole()  { return me().get('adminRole', ''); }
+    function isSuper()    { return isAdmin() && adminRole() == 'Super Admin'; }
+    function isManager()  { return isAdmin() && adminRole() in ['Super Admin', 'Manager']; }
+    function isStaff()    { return isAdmin() && adminRole() in ['Super Admin', 'Manager', 'Staff']; }
+    function isReseller() { return active() && me().role == 'reseller'; }
+    function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+
+    /* ---------- users ---------- */
+    match /users/{uid} {
+      allow get:  if isOwner(uid) || isAdmin();
+      allow list: if isAdmin();
+
+      // self sign-up (always a plain customer with 0 points / 0 wallet)
+      allow create: if (isOwner(uid)
+                        && request.resource.data.keys().hasOnly(['name','email','whatsapp','role','status','access','points','wallet','walletUsed','createdAt'])
+                        && request.resource.data.role == 'customer'
+                        && request.resource.data.status == 'active'
+                        && request.resource.data.access == 'Allowed'
+                        && request.resource.data.points == 0
+                        && request.resource.data.wallet == 0
+                        && request.resource.data.walletUsed == 0)
+                    || isSuper()
+                    || (isStaff() && request.resource.data.role != 'admin');
+
+      allow update: if isSuper()
+                    || (isStaff() && resource.data.role != 'admin' && request.resource.data.role != 'admin')
+                    || (isOwner(uid) && active() && (
+                          // normal profile edit
+                          request.resource.data.diff(resource.data).affectedKeys()
+                            .hasOnly(['name','whatsapp','gender','birthday','addresses','wishlist','photoURL','phone','paymentMethod','account','lastLoginAt'])
+                          ||
+                          // daily login reward: exactly +10, at most once per 20 hours
+                          (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['points','lastRewardAt'])
+                            && request.resource.data.points == resource.data.points + 10
+                            && request.resource.data.lastRewardAt == request.time
+                            && (resource.data.get('lastRewardAt', null) == null
+                                || resource.data.lastRewardAt + duration.value(20, 'h') < request.time))
+                       ));
+      allow delete: if isSuper();
+    }
+
+    /* ---------- catalog ---------- */
+    match /products/{id} {
+      allow read:  if resource.data.get('active', true) == true || isAdmin();
+      allow write: if isStaff();
+    }
+    match /categories/{id} { allow read: if true; allow write: if isStaff(); }
+    match /banners/{id}    { allow read: if true; allow write: if isStaff(); }
+
+    /* ---------- settings (public read, manager write) ---------- */
+    match /settings/{id} { allow read: if true; allow write: if isManager(); }
+
+    /* ---------- coupons ---------- */
+    match /discounts/{code} {
+      allow get:   if signedIn();
+      allow list:  if isAdmin() || resource.data.get('public', false) == true;
+      allow write: if isManager();
+    }
+
+    /* ---------- orders ---------- */
+    match /counters/{id} {
+      allow read:   if isAdmin();
+      allow create: if active() && request.resource.data.n in [1001, 10001];
+      allow update: if active() && request.resource.data.n == resource.data.n + 1;
+    }
+    match /orders/{id} {
+      allow get, list: if isAdmin()
+                       || (signedIn() && (resource.data.userId == request.auth.uid
+                                          || resource.data.resellerId == request.auth.uid));
+
+      allow create: if active()
+                    && request.resource.data.status == 'Pending'
+                    && request.resource.data.orderNo == id
+                    && (
+                         (request.resource.data.userId == request.auth.uid
+                           && request.resource.data.source == 'web'
+                           && request.resource.data.resellerId != request.auth.uid
+                           && (request.resource.data.walletUsed == 0
+                               || request.resource.data.walletUsed <= me().wallet))
+                         ||
+                         (isReseller()
+                           && request.resource.data.source == 'reseller'
+                           && request.resource.data.resellerId == request.auth.uid
+                           && request.resource.data.userId == null
+                           && request.resource.data.walletUsed == 0)
+                         ||
+                         isAdmin()
+                       );
+
+      // admins manage orders; a customer may only cancel their own Pending order
+      allow update: if isAdmin()
+                    || (signedIn() && resource.data.userId == request.auth.uid
+                        && resource.data.status == 'Pending'
+                        && request.resource.data.status == 'Cancelled'
+                        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','updatedAt']));
+      allow delete: if isSuper();
+    }
+
+    /* ---------- reviews ---------- */
+    match /reviews/{id} {
+      allow read:   if resource.data.status == 'approved' || isAdmin()
+                    || (signedIn() && resource.data.uid == request.auth.uid);
+      allow create: if active() && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.status == 'pending';
+      allow update, delete: if isStaff();
+    }
+
+    /* ---------- giveaways ---------- */
+    match /giveaways/{id} { allow read: if true; allow write: if isStaff(); }
+    match /giveawayEntries/{id} {
+      // doc id = giveawayId_emailKey  -> one entry per email per giveaway
+      allow create: if request.resource.data.keys().hasOnly(['giveawayId','emailKey','fullName','email','phone','city','instagramUsername','instagramLink','createdAt'])
+                    && id == request.resource.data.giveawayId + '_' + request.resource.data.emailKey;
+      allow read, update, delete: if isStaff();
+    }
+
+    /* ---------- reseller system ---------- */
+    match /resellerApplications/{id} {
+      allow create: if request.resource.data.status == 'Pending';
+      allow read, update, delete: if isManager();
+    }
+    match /resellerCodes/{code} { allow get: if true; allow list: if isAdmin(); allow write: if isManager(); }
+    match /payouts/{id} {
+      allow read:   if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+      allow create: if isReseller() && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.status == 'Pending' && request.resource.data.amount >= 1000;
+      allow update: if isManager();
+    }
+
+    /* ---------- wallet & rewards ---------- */
+    match /walletRequests/{id} {
+      allow read:   if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+      allow create: if active() && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.status == 'Pending'
+                    && request.resource.data.points >= 100
+                    && request.resource.data.points % 100 == 0
+                    && request.resource.data.points <= me().points;
+      allow update: if isManager();
+    }
+    match /walletTransactions/{id} {
+      allow read:  if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+      allow write: if isStaff();
+    }
+    match /rewardLog/{id} {
+      allow read:   if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+      allow create: if isStaff()
+                    || (active() && request.resource.data.uid == request.auth.uid
+                        && request.resource.data.reason == 'Daily Login' && request.resource.data.points == 10);
+    }
+    match /loyaltyUsed/{orderNo} {
+      allow read:   if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+      allow create: if active() && request.resource.data.uid == request.auth.uid
+                    && get(/databases/$(database)/documents/orders/$(orderNo)).data.userId == request.auth.uid
+                    && get(/databases/$(database)/documents/orders/$(orderNo)).data.status == 'Delivered';
+    }
+    match /loyaltyClaims/{id} {
+      allow read:   if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+      allow create: if active() && request.resource.data.uid == request.auth.uid && request.resource.data.status == 'Pending';
+      allow update: if isManager();
+    }
+
+    /* ---------- newsletter ---------- */
+    match /subscribers/{id} {
+      allow create: if true;
+      allow read, update, delete: if isManager();
+    }
+  }
+}

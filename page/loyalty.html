@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Subeesha Loyalty Rewards</title>
+
+<link rel="stylesheet" href="../assets/css/loyalty.css">
+</head>
+
+<body data-page="loyalty">
+
+<header class="header">
+
+    <nav class="navbar">
+
+        <div class="brand">
+
+            <div class="logo">
+                <img src="../assets/images/logo.jpg" alt="Subeesha Logo">
+            </div>
+
+            <div>
+                <h2>Subeesha</h2>
+                <span>Shop More, Live Better</span>
+            </div>
+
+        </div>
+
+        <div class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="../page/billing.html">My Orders</a>
+            <a href="../page/profile.html" class="dashboard-btn">My Dashboard</a>
+        </div>
+
+    </nav>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="badge">
+            ✦ SUBEESHA LOYALTY PROGRAM
+        </div>
+
+        <h1>Shop More. Collect Stamps. Earn Rewards.</h1>
+
+        <p>
+            Every eligible purchase brings you one step closer to your reward.
+            Complete your digital stamp card and unlock exclusive benefits.
+        </p>
+
+    </div>
+
+</section>
+
+
+<main class="main">
+
+    <section class="loyalty-card">
+
+        <div class="card-top">
+
+            <div class="member-info">
+
+                <div class="avatar">
+                    N
+                </div>
+
+                <div>
+
+                    <h3 id="customerName">
+                        Subeesha Customer
+                    </h3>
+
+                    <p>
+                        Loyalty Member
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="level">
+                DIGITAL LOYALTY CARD
+            </div>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="reward-head">
+
+                <div>
+
+                    <h2>Complete 10 Purchases</h2>
+
+                    <p>
+                        Collect all stamps and unlock your special reward.
+                    </p>
+
+                </div>
+
+                <div class="stamp-count">
+
+                    <span id="stampCount">0</span> / 10 Stamps
+
+                </div>
+
+            </div>
+
+
+            <div class="stamps" id="stampsContainer">
+            </div>
+
+
+            <div class="progress-area">
+
+                <div class="progress-text">
+
+                    <span>Your Progress</span>
+
+                    <span id="progressText">
+                        0% Complete
+                    </span>
+
+                </div>
+
+                <div class="progress">
+
+                    <div
+                        class="progress-bar"
+                        id="progressBar">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="reward-box">
+
+                <div class="reward-left">
+
+                    <div class="reward-icon">
+                        🎁
+                    </div>
+
+                    <div>
+
+                        <h3 id="rewardTitle">
+                            Reward Locked
+                        </h3>
+
+                        <p id="rewardText">
+                            Complete all 10 stamps to unlock your reward.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <button
+                    class="claim-btn"
+                    id="claimBtn"
+                    onclick="claimReward()"
+                >
+                    Complete Stamps First
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="scanner-section">
+
+        <!-- SCANNER -->
+
+        <div class="scan-card">
+
+            <h3>Scan Purchase</h3>
+
+            <p>
+                Scan the eligible purchase QR code to receive your stamp.
+            </p>
+
+
+            <div class="scan-area">
+
+                <div class="scan-icon">
+                    ▣
+                </div>
+
+                <h4>Purchase Scanner</h4>
+
+                <p>
+                    In this demo, use the Purchase ID below.
+                    In the real system, this can be connected
+                    with a QR scanner.
+                </p>
+
+                <button
+                    class="scan-btn"
+                    onclick="focusPurchaseInput()"
+                >
+                    Scan / Add Purchase
+                </button>
+
+            </div>
+
+
+            <div class="manual">
+
+                <input
+                    type="text"
+                    id="purchaseId"
+                    placeholder="Enter Purchase ID e.g. SUB-1001"
+                >
+
+                <button onclick="applyStamp()">
+                    Apply
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACTIVITY -->
+
+        <div class="activity-card">
+
+            <h3>Recent Activity</h3>
+
+            <p>
+                Your latest scanned purchases.
+            </p>
+
+            <div
+                class="activity-list"
+                id="activityList">
+
+                <p style="color:#68736e;font-size:12px;margin-top:20px;">
+                    No purchases scanned yet.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="info-grid">
+
+        <div class="info-card">
+
+            <div class="info-icon">
+                🛍️
+            </div>
+
+            <h3>Make a Purchase</h3>
+
+            <p>
+                Shop eligible products and complete your purchase.
+            </p>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <div class="info-icon">
+                📱
+            </div>
+
+            <h3>Scan & Collect</h3>
+
+            <p>
+                Scan your eligible purchase and automatically collect one stamp.
+            </p>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <div class="info-icon">
+                🎁
+            </div>
+
+            <h3>Unlock Reward</h3>
+
+            <p>
+                Complete your loyalty card and claim your available reward.
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- TOAST -->
+
+<div class="toast" id="toast">
+
+    <div class="toast-icon" id="toastIcon">
+        ✓
+    </div>
+
+    <div>
+
+        <h4 id="toastTitle">
+            Success
+        </h4>
+
+        <p id="toastMessage">
+            Purchase applied successfully.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- REWARD MODAL -->
+
+<div class="modal" id="rewardModal">
+
+    <div class="modal-box">
+
+        <div class="modal-icon">
+            🎉
+        </div>
+
+        <h2>Congratulations!</h2>
+
+        <p>
+            You successfully completed your digital loyalty card.
+            Your reward has been claimed.
+        </p>
+
+        <button onclick="closeRewardModal()">
+            Continue
+        </button>
+
+    </div>
+
+</div>
+
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="../assets/js/firebase-config.js"></script>
+<script src="../assets/js/sub-core.js"></script>
+<script src="../assets/js/loyalty.js"></script>
+
+<script src="../assets/js/store.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Digital Wallet · Subeesha Admin Panel</title>
+
+<!-- Font Awesome -->
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<!-- Styles -->
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+    <div class="logo">
+        <img src="assets/images/logo.jpg" alt="Subeesha Logo" class="logo-image">
+        <div class="logo-text">
+            <h2>Subeesha</h2>
+            <small>ADMINISTRATION</small>
+        </div>
+    </div>
+
+    <div class="menu">
+        <div class="menu-title">Main</div>
+        <a class="nav" data-page="dashboard" href="index.html">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <a class="nav" data-page="orders" href="orders.html">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span>Orders</span>
+            <b class="badge" style="display:none">0</b>
+        </a>
+
+        <a class="nav" data-page="products" href="products.html">
+            <i class="fa-solid fa-box"></i>
+            <span>Products</span>
+        </a>
+
+        <a class="nav" data-page="categories" href="categories.html">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>Categories</span>
+        </a>
+
+        <a class="nav" data-page="customers" href="customers.html">
+            <i class="fa-solid fa-users"></i>
+            <span>Customers</span>
+        </a>
+
+        <a class="nav" data-page="inventory" href="inventory.html">
+            <i class="fa-solid fa-warehouse"></i>
+            <span>Inventory</span>
+            <b class="badge" style="display:none">0</b>
+        </a>
+
+        <div class="menu-title">Reseller System</div>
+        <a class="nav" data-page="resellers" href="resellers.html">
+            <i class="fa-solid fa-handshake"></i>
+            <span>Resellers</span>
+            <b class="badge" style="display:none">0</b>
+        </a>
+
+        <a class="nav" data-page="reseller-requests" href="reseller-requests.html">
+            <i class="fa-solid fa-clipboard-list"></i>
+            <span>Applications</span>
+            <b class="badge" style="display:none">0</b>
+        </a>
+
+        <a class="nav" data-page="reseller-payments" href="reseller-payments.html">
+            <i class="fa-solid fa-money-bill-transfer"></i>
+            <span>Reseller Payments</span>
+        </a>
+
+        <div class="menu-title">Marketing</div>
+        <a class="nav" data-page="discounts" href="discounts.html">
+            <i class="fa-solid fa-tags"></i>
+            <span>Discounts</span>
+        </a>
+
+        <a class="nav" data-page="flash" href="flash.html">
+            <i class="fa-solid fa-bolt"></i>
+            <span>Flash Sale</span>
+        </a>
+
+        <a class="nav" data-page="giveaway" href="giveaway.html">
+            <i class="fa-solid fa-gift"></i>
+            <span>Giveaway</span>
+        </a>
+
+        <a class="nav" data-page="banners" href="banners.html">
+            <i class="fa-solid fa-image"></i>
+            <span>Banners</span>
+        </a>
+
+        <a class="nav" data-page="reviews" href="reviews.html">
+            <i class="fa-solid fa-comments"></i>
+            <span>Reviews</span>
+            <b class="badge" style="display:none">0</b>
+        </a>
+
+
+        <a class="nav" data-page="rewards" href="rewards.html">
+            <i class="fa-solid fa-star"></i>
+            <span>Rewards</span>
+        </a>
+
+        <a class="nav active" data-page="wallet" href="wallet.html">
+            <i class="fa-solid fa-wallet"></i>
+            <span>Digital Wallet</span>
+        </a>
+
+        <a class="nav" data-page="conversion-requests" href="conversion-requests.html">
+            <i class="fa-solid fa-repeat"></i>
+            <span>Wallet Requests</span>
+            <b class="badge" style="display:none">0</b>
+        </a>
+
+        <div class="menu-title">Operations</div>
+        <a class="nav" data-page="shipping" href="shipping.html">
+            <i class="fa-solid fa-truck-fast"></i>
+            <span>Shipping</span>
+        </a>
+
+        <a class="nav" data-page="payments" href="payments.html">
+            <i class="fa-solid fa-credit-card"></i>
+            <span>Payments</span>
+        </a>
+
+        <a class="nav" data-page="reports" href="reports.html">
+            <i class="fa-solid fa-chart-pie"></i>
+            <span>Reports</span>
+        </a>
+
+        <div class="menu-title">System</div>
+        <a class="nav" data-page="users" href="users.html">
+            <i class="fa-solid fa-user-shield"></i>
+            <span>Admin Users</span>
+        </a>
+
+        <a class="nav" data-page="settings" href="settings.html">
+            <i class="fa-solid fa-gear"></i>
+            <span>Settings</span>
+        </a>
+
+    </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+<header class="topbar">
+
+    <div class="page-title">
+
+        <button class="icon-btn menu-toggle-btn"
+                onclick="toggleSidebar()">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <div style="margin-left:8px">
+            <h1>Digital Wallet</h1>
+            <p>Manage customer wallet balances and points.</p>
+        </div>
+
+    </div>
+
+    <div class="top-actions">
+
+        <input class="search"
+               id="globalSearchInput"
+               placeholder="Search anything..."
+               oninput="globalSearch(this.value)">
+
+        <button class="icon-btn"
+                onclick="toast('No new notifications')">
+            <i class="fa-solid fa-bell"></i>
+            <span class="dot"></span>
+        </button>
+
+        <div class="admin">
+            <div class="avatar">NH</div>
+
+            <div class="admin-name">
+                <b style="font-size:12px">Nizakat</b>
+                <small style="display:block;color:#88938f;font-size:10px">
+                    Super Admin
+                </small>
+            </div>
+        </div>
+
+    </div>
+</header>
+
+<div class="content">
+<section class="page active" id="wallet"><div class="section-toolbar"><div><h2>Digital Wallet</h2><p class="label">Manage customer wallet balances and points.</p></div><div class="toolbar-actions"><input class="search" id="fSearch" placeholder="Search customers..." style="min-width:180px"></div></div><div class="cards" id="wStats" style="margin-bottom:16px"></div><div class="card"><div class="table-wrap"><table class="table"><thead><tr><th>Customer</th><th>Points</th><th>Wallet</th><th>Status</th><th>Actions</th></tr></thead><tbody id="walBody"></tbody></table></div></div></section>
+</div>
+</main>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal">
+
+    <div class="modal">
+
+        <div class="modal-head">
+            <h3 id="modalTitle">Modal</h3>
+
+            <button onclick="closeModal()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="modal-body" id="modalBody"></div>
+
+        <div class="modal-foot">
+            <button class="btn secondary" onclick="closeModal()">
+                Cancel
+            </button>
+
+            <button class="btn primary" id="modalSaveBtn">
+                Save
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="../../assets/js/firebase-config.js"></script>
+<script src="../../assets/js/sub-core.js"></script>
+<script src="assets/js/common.js"></script>
+<script src="assets/js/admin-core.js"></script>
+<script src="assets/js/wallet.js"></script>
+</body>
+</html>
