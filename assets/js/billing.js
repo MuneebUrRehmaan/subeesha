@@ -353,7 +353,10 @@ function placeOrder() {
         setTimeout(() => location.href = SUB.url("page/profile.html#orders"), 1800);
     }).catch(e => {
         placing = false; btn.disabled = false; btn.style.opacity = "";
-        showToast("Error", (e && e.message) || "Could not place the order.", "error");
+        const detail = e && e.code === "permission-denied"
+            ? "Your account could not complete checkout because Firebase security rules need to be published. Please contact the store administrator if this continues."
+            : (e && e.message) || "Could not place the order.";
+        showToast("Error", detail, "error");
     });
 }
 

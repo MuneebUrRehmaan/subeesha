@@ -19,6 +19,9 @@ A.ready(function () {
     }
     function load() {
         A.drop("products");
+        grid.innerHTML = Array.from({ length: 8 }, function () {
+            return '<div class="product-card a-product-skeleton" aria-hidden="true"><div class="product-img"><span class="a-skeleton-block image"></span></div><div class="product-info"><span class="a-skeleton-block line"></span><span class="a-skeleton-block line short"></span><span class="a-skeleton-block line price"></span><span class="a-skeleton-block action"></span></div></div>';
+        }).join("");
         return Promise.all([A.load("products", true), A.load("categories", true)]).then(function (r) {
             all = r[0].sort(function (a, b) { return SUB.ms(b.createdAt) - SUB.ms(a.createdAt); });
             cats = r[1].sort(function (a, b) { return SUB.num(a.order) - SUB.num(b.order); });

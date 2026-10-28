@@ -81,9 +81,14 @@ service cloud.firestore {
 
     /* ---------- orders ---------- */
     match /counters/{id} {
-      allow read:   if isAdmin();
-      allow create: if active() && request.resource.data.n in [1001, 10001];
-      allow update: if active() && request.resource.data.n == resource.data.n + 1;
+      // Checkout uses a transaction to reserve the next order number. Customers
+      // need get access to this single counter document; listing counters stays admin-only.
+      allow get:    if active() || isAdmin();
+      allow list:   if isAdmin();
+      allow create: if active() && request.resource.data.keys().hasOnly(['n'])
+                    && request.resource.data.n == 10001;
+      allow update: if active() && request.resource.data.keys().hasOnly(['n'])
+                    && request.resource.data.n == resource.data.n + 1;
     }
     match /orders/{id} {
       allow get, list: if isAdmin()

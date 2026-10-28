@@ -192,11 +192,16 @@ function viewProduct(button){
     const card = button.closest(".card");
     const id = card ? card.dataset.id : "";
     if(id){
-        window.location.href = SUB.url("page/billing.html?product=" + encodeURIComponent(id));
+        window.location.href = SUB.url("page/product.html?id=" + encodeURIComponent(id));
         return;
     }
     const name = card ? (card.querySelector("h3")?.textContent.trim() || "") : "";
-    window.location.href = SUB.url("page/shop.html?search=" + encodeURIComponent(name));
+    const category = card ? (card.querySelector(".product-cat")?.textContent.trim() || "") : "";
+    const image = card ? (card.querySelector(".card-img img")?.src || "") : "";
+    const priceText = card ? (card.querySelector(".price")?.textContent || "") : "";
+    const price = priceText.replace(/[^0-9.]/g, "");
+    const query = new URLSearchParams({ demo: "1", name, category, image, price }).toString();
+    window.location.href = SUB.url("page/product.html?" + query);
 }
 
 function searchProduct(){
@@ -377,3 +382,168 @@ if(document.readyState === "loading"){
 }else{
     initHeroSlider(); initReviewSlider();
 }
+
+
+/* =========================================================
+   SUBEESHA — HOMEPAGE PRODUCT QUICK VIEW
+   Multiple images, description and Add to Cart
+   ========================================================= */
+
+let activeHomeProduct = null
+
+function viewHomeProduct(button) {
+    const card = button.closest(".card")
+
+    if (!card) return
+
+    const mainImage = card.querySelector(".card-img img")
+    const nameElement = card.querySelector(".card-body h3")
+    const categoryElement = card.querySelector(".product-cat")
+    const priceElement = card.querySelector(".price")
+
+    if (!mainImage || !nameElement || !priceElement) return
+
+    const name = nameElement.textContent.trim()
+    const category = categoryElement?.textContent.trim() || "Product"
+
+    const description =
+        card.dataset.description ||
+        card.querySelector(".product-description")?.textContent.trim() ||
+        "Discover this product from the Subeesha collection."
+
+    const price = Number(
+        priceElement.textContent.replace(/[^\d]/g, "")
+    )
+
+    if (!price || !Number.isFinite(price)) return
+
+    const galleryImages = (card.dataset.gallery || "")
+        .split("|")
+        .map(url => url.trim())
+        .filter(Boolean)
+
+    const images = [
+        ...new Set([
+            mainImage.currentSrc || mainImage.src,
+            ...galleryImages
+        ])
+    ]
+
+    activeHomeProduct = {
+        name,
+        category,
+        description,
+        price,
+        images
+    }
+
+    document.getElementById("homeProductCategory").textContent =
+        category
+
+    document.getElementById("homeProductTitle").textContent =
+        name
+
+    document.getElementById("homeProductDescription").textContent =
+        description
+
+    document.getElementById("homeProductPrice").textContent =
+        `Rs. ${price.toLocaleString("en-PK")}`
+
+    const mainModalImage =
+        document.getElementById("homeProductMainImage")
+
+    mainModalImage.src = images[0]
+    mainModalImage.alt = name
+
+    const thumbnails =
+        document.getElementById("homeProductThumbnails")
+
+    thumbnails.replaceChildren()
+
+    images.forEach((imageUrl, index) => {
+        const thumbnail = document.createElement("button")
+        thumbnail.type = "button"
+        thumbnail.className = "home-product-thumb"
+
+        if (index === 0) {
+            thumbnail.classList.add("active")
+        }
+
+        thumbnail.setAttribute(
+            "aria-label",
+            `View ${name} image ${index + 1}`
+        )
+
+        const image = document.createElement("img")
+        image.src = imageUrl
+        image.alt = `${name} image ${index + 1}`
+        image.loading = "lazy"
+
+        thumbnail.appendChild(image)
+
+        thumbnail.addEventListener("click", () => {
+            mainModalImage.src = imageUrl
+            mainModalImage.alt = `${name} image ${index + 1}`
+
+            thumbnails
+                .querySelectorAll(".home-product-thumb")
+                .forEach(item => item.classList.remove("active"))
+
+            thumbnail.classList.add("active")
+        })
+
+        thumbnails.appendChild(thumbnail)
+    })
+
+    const modal = document.getElementById("homeProductModal")
+
+    modal.classList.add("show")
+    modal.setAttribute("aria-hidden", "false")
+
+    document.body.style.overflow = "hidden"
+}
+
+function closeHomeProduct() {
+    const modal = document.getElementById("homeProductModal")
+
+    modal.classList.remove("show")
+    modal.setAttribute("aria-hidden", "true")
+
+    document.body.style.overflow = ""
+}
+
+function addHomeProductToCart() {
+    if (!activeHomeProduct) return
+
+    if (typeof addToCart !== "function") {
+        console.error("The existing addToCart function was not found.")
+        return
+    }
+
+    addToCart(
+        activeHomeProduct.name,
+        activeHomeProduct.price
+    )
+
+    closeHomeProduct()
+}
+
+/* Close when clicking outside the product dialog */
+document.getElementById("homeProductModal").addEventListener(
+    "click",
+    event => {
+        if (event.target.id === "homeProductModal") {
+            closeHomeProduct()
+        }
+    }
+)
+
+/* Close product details using the Escape key */
+document.addEventListener("keydown", event => {
+    if (
+        event.key === "Escape" &&
+        document.getElementById("homeProductModal").classList.contains("show")
+    ) {
+        closeHomeProduct()
+    }
+})

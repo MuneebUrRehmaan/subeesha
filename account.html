@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,198 +12,219 @@
 
     <!-- External account-page stylesheet. -->
     <link rel="stylesheet" href="assets/css/account.css">
+<link rel="stylesheet" href="assets/css/site-polish.css">
 </head>
+
 <body data-page="account">
 
-<!-- ===== ACCOUNT PAGE ===== -->
-<main class="account-page">
+    <!-- ===== ACCOUNT PAGE ===== -->
+    <main class="account-page">
 
-    <!-- ===== BRAND / PROMOTIONAL PANEL ===== -->
-    <section class="account-showcase">
-        <div class="account-showcase-inner">
-            <!-- Circular Subeesha logo. Keep logo.jpg in assets/images/. -->
-            <div class="account-logo">
-                <img src="assets/images/logo.jpg" alt="Subeesha Logo">
+        <!-- ===== BRAND / PROMOTIONAL PANEL ===== -->
+        <section class="account-showcase">
+            <div class="account-showcase-inner">
+                <!-- Circular Subeesha logo. Keep logo.jpg in assets/images/. -->
+                <div class="account-logo">
+                    <img src="assets/images/logo.jpg" alt="Subeesha Logo">
+                </div>
+
+                <div class="account-label">SUBEESHA ACCOUNT</div>
+                <h1>Shop More.<br><em>Live Better.</em></h1>
+                <p>Sign in to manage your account, track orders, save favourites and enjoy the complete Subeesha
+                    shopping experience.</p>
+
+                <div class="account-benefits">
+                    <span><ion-icon name="shield-checkmark-outline"></ion-icon> Secure</span>
+                    <span><ion-icon name="bag-handle-outline"></ion-icon> Easy Shopping</span>
+                    <span><ion-icon name="gift-outline"></ion-icon> Rewards</span>
+                </div>
             </div>
+        </section>
 
-            <div class="account-label">SUBEESHA ACCOUNT</div>
-            <h1>Shop More.<br><em>Live Better.</em></h1>
-            <p>Sign in to manage your account, track orders, save favourites and enjoy the complete Subeesha shopping experience.</p>
+        <!-- ===== LOGIN / SIGN UP PANEL ===== -->
+        <section class="account-form-side">
+            <div class="account-card">
 
-            <div class="account-benefits">
-                <span><ion-icon name="shield-checkmark-outline"></ion-icon> Secure</span>
-                <span><ion-icon name="bag-handle-outline"></ion-icon> Easy Shopping</span>
-                <span><ion-icon name="gift-outline"></ion-icon> Rewards</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== LOGIN / SIGN UP PANEL ===== -->
-    <section class="account-form-side">
-        <div class="account-card">
-
-            <!-- ===== ACCOUNT NAVIGATION ===== -->
-            <div class="account-top">
-                <a href="index.html"><ion-icon name="arrow-back-outline"></ion-icon> Back to Store</a>
-                <span class="account-label">MY ACCOUNT</span>
-            </div>
-
-            <div class="auth-switch">
-                <button type="button" id="loginTab" class="active" onclick="showLogin()">Login</button>
-                <button type="button" id="signupTab" onclick="showSignup()">Sign Up</button>
-            </div>
-
-            <h2 id="authTitle">Welcome Back</h2>
-            <p class="account-subtitle" id="authSubtitle">Login to continue shopping with Subeesha.</p>
-
-            <!-- ===== LOGIN FORM ===== -->
-            <form class="auth-form active" id="loginForm">
-                <div class="auth-message" id="loginMessage"></div>
-
-                <div class="form-group">
-                    <label for="loginEmail">Email Address</label>
-                    <div class="input-wrap">
-                        <ion-icon name="mail-outline"></ion-icon>
-                        <input id="loginEmail" type="email" placeholder="Enter your email" autocomplete="email" required>
-                    </div>
+                <!-- ===== ACCOUNT NAVIGATION ===== -->
+                <div class="account-top">
+                    <a href="index.html"><ion-icon name="arrow-back-outline"></ion-icon> Back to Store</a>
+                    <span class="account-label">MY ACCOUNT</span>
                 </div>
 
-                <div class="form-group">
-                    <label for="loginPassword">Password</label>
-                    <div class="input-wrap">
-                        <ion-icon name="lock-closed-outline"></ion-icon>
-                        <input id="loginPassword" type="password" placeholder="Enter your password" autocomplete="current-password" required>
-                        <button class="password-toggle" type="button" onclick="togglePassword('loginPassword', this)" aria-label="Show password">
-                            <ion-icon name="eye-outline"></ion-icon>
-                        </button>
-                    </div>
+                <div class="auth-switch">
+                    <button type="button" id="loginTab" class="active" onclick="showLogin()">Login</button>
+                    <button type="button" id="signupTab" onclick="showSignup()">Sign Up</button>
                 </div>
 
-                <div class="form-row">
-                    <label class="remember"><input type="checkbox"> Remember me</label>
-                    <a href="#" class="form-link" onclick="showForgot(); return false;">Forgot Password?</a>
-                </div>
+                <h2 id="authTitle">Welcome Back</h2>
+                <p class="account-subtitle" id="authSubtitle">Login to continue shopping with Subeesha.</p>
 
-                <button class="auth-submit" type="submit">Login <ion-icon name="arrow-forward-outline"></ion-icon></button>
+                <!-- ===== LOGIN FORM ===== -->
+                <form class="auth-form active" id="loginForm">
+                    <div class="auth-message" id="loginMessage"></div>
 
-                <!-- Required login-page paragraph links. -->
-                <p class="account-note">Forgot your password? <a href="#" onclick="showForgot(); return false;">Reset it here</a></p>
-            </form>
-
-            <!-- ===== SIGN UP FORM ===== -->
-            <form class="auth-form" id="signupForm">
-                <div class="auth-message" id="signupMessage"></div>
-
-                <div class="form-group">
-                    <label for="signupName">Full Name</label>
-                    <div class="input-wrap">
-                        <ion-icon name="person-outline"></ion-icon>
-                        <input id="signupName" type="text" placeholder="Enter your full name" autocomplete="name" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="signupEmail">Email Address</label>
-                    <div class="input-wrap">
-                        <ion-icon name="mail-outline"></ion-icon>
-                        <input id="signupEmail" type="email" placeholder="Enter your email" autocomplete="email" required>
-                    </div>
-                </div>
-                <div class="form-group">
-    <label for="signupWhatsapp">WhatsApp Number</label>
-    <div class="input-wrap whatsapp-input-wrap">
-        <ion-icon name="logo-whatsapp"></ion-icon>
-        
-        <!-- Country Code Dropdown -->
-        <select id="countryCode" name="countryCode" class="country-code-select">
-            <!-- South Asia & Middle East (Most Popular) -->
-            <option value="+92" selected>+92 (PK)</option>
-            <option value="+91">+91 (IN)</option>
-            <option value="+880">+880 (BD)</option>
-            <option value="+94">+94 (LK)</option>
-            <option value="+977">+977 (NP)</option>
-            <option value="+971">+971 (UAE)</option>
-            <option value="+966">+966 (KSA)</option>
-            <option value="+974">+974 (QA)</option>
-            <option value="+968">+968 (OM)</option>
-            <option value="+965">+965 (KW)</option>
-            <option value="+973">+973 (BH)</option>
-            
-            <!-- North America & Europe -->
-            <option value="+1">+1 (US/CA)</option>
-            <option value="+44">+44 (UK)</option>
-            <option value="+49">+49 (DE)</option>
-            <option value="+33">+33 (FR)</option>
-
-            <!-- SE Asia & Far East -->
-            <option value="+60">+60 (MY)</option>
-            <option value="+65">+65 (SG)</option>
-            <option value="+62">+62 (ID)</option>
-            <option value="+86">+86 (CN)</option>
-
-            <!-- Turkey & South Africa -->
-            <option value="+90">+90 (TR)</option>
-            <option value="+27">+27 (ZA)</option>
-        </select>
-
-        <!-- Phone Number Input -->
-        <input id="signupWhatsapp" type="tel" placeholder="300 1234567" autocomplete="tel" required>
-    </div>
-</div>
-
-                <div class="form-group">
-                    <label for="signupPassword">Password</label>
-                    <div class="input-wrap">
-                        <ion-icon name="lock-closed-outline"></ion-icon>
-                        <input id="signupPassword" type="password" placeholder="Create a password" autocomplete="new-password" required>
-                        <button class="password-toggle" type="button" onclick="togglePassword('signupPassword', this)" aria-label="Show password">
-                            <ion-icon name="eye-outline"></ion-icon>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="signupConfirm">Confirm Password</label>
-                    <div class="input-wrap">
-                        <ion-icon name="shield-checkmark-outline"></ion-icon>
-                        <input id="signupConfirm" type="password" placeholder="Confirm your password" autocomplete="new-password" required>
-                    </div>
-                </div>
-
-                <button class="auth-submit" type="submit">Create Account <ion-icon name="person-add-outline"></ion-icon></button>
-                <p class="account-note">Already have an account? <a href="#" onclick="showLogin(); return false;">Login here</a></p>
-            </form>
-
-            <!-- ===== FORGOT PASSWORD FORM ===== -->
-            <div class="forgot-panel" id="forgotPanel">
-                <h3>Reset Your Password</h3>
-                <p>Enter the email address associated with your Subeesha account. A password reset process can be connected to your backend later.</p>
-
-                <form id="forgotForm">
-                    <div class="auth-message" id="forgotMessage"></div>
                     <div class="form-group">
-                        <label for="forgotEmail">Email Address</label>
+                        <label for="loginEmail">Email Address</label>
                         <div class="input-wrap">
                             <ion-icon name="mail-outline"></ion-icon>
-                            <input id="forgotEmail" type="email" placeholder="Enter your email" autocomplete="email" required>
+                            <input id="loginEmail" type="email" placeholder="Enter your email" autocomplete="email"
+                                required>
                         </div>
                     </div>
-                    <button class="auth-submit" type="submit">Send Reset Link <ion-icon name="paper-plane-outline"></ion-icon></button>
-                    <p class="account-note"><a href="#" onclick="backToLogin(); return false;">← Back to Login</a></p>
+
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <div class="input-wrap">
+                            <ion-icon name="lock-closed-outline"></ion-icon>
+                            <input id="loginPassword" type="password" placeholder="Enter your password"
+                                autocomplete="current-password" required>
+                            <button class="password-toggle" type="button"
+                                onclick="togglePassword('loginPassword', this)" aria-label="Show password">
+                                <ion-icon name="eye-outline"></ion-icon>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label class="remember"><input type="checkbox"> Remember me</label>
+                        <a href="#" class="form-link" onclick="showForgot(); return false;">Forgot Password?</a>
+                    </div>
+
+                    <button class="auth-submit" type="submit">Login <ion-icon
+                            name="arrow-forward-outline"></ion-icon></button>
+
+                    <!-- Required login-page paragraph links. -->
+                    <p class="account-note">Forgot your password? <a href="#"
+                            onclick="showForgot(); return false;">Reset it here</a></p>
                 </form>
+
+                <!-- ===== SIGN UP FORM ===== -->
+                <form class="auth-form" id="signupForm">
+                    <div class="auth-message" id="signupMessage"></div>
+
+                    <div class="form-group">
+                        <label for="signupName">Full Name</label>
+                        <div class="input-wrap">
+                            <ion-icon name="person-outline"></ion-icon>
+                            <input id="signupName" type="text" placeholder="Enter your full name" autocomplete="name"
+                                required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signupEmail">Email Address</label>
+                        <div class="input-wrap">
+                            <ion-icon name="mail-outline"></ion-icon>
+                            <input id="signupEmail" type="email" placeholder="Enter your email" autocomplete="email"
+                                required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupWhatsapp">WhatsApp Number</label>
+                        <div class="input-wrap whatsapp-input-wrap">
+                            <ion-icon name="logo-whatsapp"></ion-icon>
+
+                            <!-- Country Code Dropdown -->
+                            <select id="countryCode" name="countryCode" class="country-code-select">
+                                <!-- South Asia & Middle East (Most Popular) -->
+                                <option value="+92" selected>+92 (PK)</option>
+                                <option value="+91">+91 (IN)</option>
+                                <option value="+880">+880 (BD)</option>
+                                <option value="+94">+94 (LK)</option>
+                                <option value="+977">+977 (NP)</option>
+                                <option value="+971">+971 (UAE)</option>
+                                <option value="+966">+966 (KSA)</option>
+                                <option value="+974">+974 (QA)</option>
+                                <option value="+968">+968 (OM)</option>
+                                <option value="+965">+965 (KW)</option>
+                                <option value="+973">+973 (BH)</option>
+
+                                <!-- North America & Europe -->
+                                <option value="+1">+1 (US/CA)</option>
+                                <option value="+44">+44 (UK)</option>
+                                <option value="+49">+49 (DE)</option>
+                                <option value="+33">+33 (FR)</option>
+
+                                <!-- SE Asia & Far East -->
+                                <option value="+60">+60 (MY)</option>
+                                <option value="+65">+65 (SG)</option>
+                                <option value="+62">+62 (ID)</option>
+                                <option value="+86">+86 (CN)</option>
+
+                                <!-- Turkey & South Africa -->
+                                <option value="+90">+90 (TR)</option>
+                                <option value="+27">+27 (ZA)</option>
+                            </select>
+
+                            <!-- Phone Number Input -->
+                            <input id="signupWhatsapp" type="tel" placeholder="300 1234567" autocomplete="tel" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <div class="input-wrap">
+                            <ion-icon name="lock-closed-outline"></ion-icon>
+                            <input id="signupPassword" type="password" placeholder="Create a password"
+                                autocomplete="new-password" required>
+                            <button class="password-toggle" type="button"
+                                onclick="togglePassword('signupPassword', this)" aria-label="Show password">
+                                <ion-icon name="eye-outline"></ion-icon>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signupConfirm">Confirm Password</label>
+                        <div class="input-wrap">
+                            <ion-icon name="shield-checkmark-outline"></ion-icon>
+                            <input id="signupConfirm" type="password" placeholder="Confirm your password"
+                                autocomplete="new-password" required>
+                        </div>
+                    </div>
+
+                    <button class="auth-submit" type="submit">Create Account <ion-icon
+                            name="person-add-outline"></ion-icon></button>
+                    <p class="account-note">Already have an account? <a href="#"
+                            onclick="showLogin(); return false;">Login here</a></p>
+                </form>
+
+                <!-- ===== FORGOT PASSWORD FORM ===== -->
+                <div class="forgot-panel" id="forgotPanel">
+                    <h3>Reset Your Password</h3>
+                    <p>Enter the email address associated with your Subeesha account. A password reset process can be
+                        connected to your backend later.</p>
+
+                    <form id="forgotForm">
+                        <div class="auth-message" id="forgotMessage"></div>
+                        <div class="form-group">
+                            <label for="forgotEmail">Email Address</label>
+                            <div class="input-wrap">
+                                <ion-icon name="mail-outline"></ion-icon>
+                                <input id="forgotEmail" type="email" placeholder="Enter your email" autocomplete="email"
+                                    required>
+                            </div>
+                        </div>
+                        <button class="auth-submit" type="submit">Send Reset Link <ion-icon
+                                name="paper-plane-outline"></ion-icon></button>
+                        <p class="account-note"><a href="#" onclick="backToLogin(); return false;">← Back to Login</a>
+                        </p>
+                    </form>
+                </div>
+
             </div>
+        </section>
+    </main>
 
-        </div>
-    </section>
-</main>
-
-<!-- External account-page JavaScript. Backend authentication can be connected later. -->
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="assets/js/firebase-config.js"></script>
-<script src="assets/js/sub-core.js"></script>
-<script src="assets/js/account.js"></script>
-<script src="assets/js/store.js" defer></script>
+    <!-- External account-page JavaScript. Backend authentication can be connected later. -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+    <script src="assets/js/firebase-config.js"></script>
+    <script src="assets/js/sub-core.js"></script>
+    <script src="assets/js/account.js"></script>
+    <script src="assets/js/store.js" defer></script>
+<script src="assets/js/site-polish.js"></script>
 </body>
+
 </html>

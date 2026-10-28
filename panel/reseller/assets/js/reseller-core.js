@@ -37,9 +37,15 @@
             R.toast("Your reseller referral link copied!");
         };
         w.shareProduct = function (name, id) {
-            var link = location.origin + location.pathname.replace(/panel\/reseller\/.*/, "page/billing.html") + "?product=" + encodeURIComponent(id || "") + "&ref=" + (p.resellerCode || "");
-            if (navigator.clipboard) navigator.clipboard.writeText(link);
-            R.toast(name + " referral link copied!");
+            var detailUrl = new URL("../../page/product.html", location.href);
+            detailUrl.searchParams.set("id", id || "");
+            if (p.resellerCode) detailUrl.searchParams.set("ref", p.resellerCode);
+            var link = detailUrl.href;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(link).then(function () {
+                    R.toast(name + " product detail link copied!");
+                }).catch(function () { window.prompt("Copy product link", link); });
+            } else window.prompt("Copy product link", link);
         };
     }
     R.logout = function () { SUB.signOut().then(function () { location.href = "login.html"; }); };

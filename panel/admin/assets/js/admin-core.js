@@ -52,7 +52,8 @@
         ".a-login .field{margin-bottom:14px}.a-login .btn{width:100%;justify-content:center}" +
         ".a-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.a-tabs button{padding:8px 14px;border-radius:20px;background:#eef2f0;font-size:12px;font-weight:600}" +
         ".a-tabs button.on{background:#0e3d34;color:#fff}.a-kv{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;font-size:13px;margin:6px 0}.a-kv b{color:#68736e;font-weight:600}" +
-        ".a-logout{background:#fdecec !important;color:#c62828 !important}";
+        ".a-logout{background:#fdecec !important;color:#c62828 !important}" +
+        ".a-skeleton-row td{padding:14px 12px!important}.a-skeleton-bar{display:block;height:10px;max-width:180px;background:linear-gradient(100deg,#edf0ee 20%,#f8f9f8 40%,#edf0ee 60%);background-size:200% 100%;border-radius:3px;animation:a-shimmer 1.3s ease-in-out infinite}.product-card{border-radius:4px!important;transition:box-shadow .2s,border-color .2s,transform .2s}.product-card:hover{transform:translateY(-2px);border-color:#d5dfd9;box-shadow:0 8px 20px rgba(14,61,52,.08)}.product-img{border-radius:3px!important;background:#f4f6f4}.main .btn,.main .search,.main input:not([type=checkbox]):not([type=radio]):not([type=file]),.main select,.main textarea,.main .modal,.main .modal-box{border-radius:4px}.main input:focus,.main select:focus,.main textarea:focus{outline:2px solid #0e3d3422;border-color:#0e3d34}.img-mgr{border-radius:4px}.img-mgr .thumb{border-radius:3px}.a-note{border-radius:4px}.a-product-skeleton .product-img{aspect-ratio:1/1;min-height:130px}.a-skeleton-block{display:block;height:10px;width:80%;background:linear-gradient(100deg,#edf0ee 20%,#f8f9f8 40%,#edf0ee 60%);background-size:200% 100%;border-radius:3px;animation:a-shimmer 1.3s ease-in-out infinite}.a-skeleton-block.image{width:100%;height:100%}.a-skeleton-block.line{margin:8px 0}.a-skeleton-block.short{width:46%}.a-skeleton-block.price{width:35%;height:15px;margin-top:14px}.a-skeleton-block.action{width:100%;height:32px;margin-top:14px}@keyframes a-shimmer{to{background-position-x:-200%}}";
     d.head.appendChild(css);
 
     /* ---------- misc helpers ---------- */
@@ -73,7 +74,17 @@
     A.rows = function (tbody, list, cols, emptyMsg, fn) {
         tbody.innerHTML = list.length ? list.map(fn).join("") : '<tr><td colspan="' + cols + '" class="a-empty">' + esc(emptyMsg || "Nothing to show yet.") + "</td></tr>";
     };
-    A.loading = function (tbody, cols) { if (tbody) tbody.innerHTML = '<tr><td colspan="' + cols + '" class="a-empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</td></tr>'; };
+    A.loading = function (tbody, cols) {
+        if (!tbody) return;
+        var n = Math.max(1, Number(cols) || 5);
+        var rows = '';
+        for (var r = 0; r < 4; r++) {
+            rows += '<tr class="a-skeleton-row">';
+            for (var c = 0; c < n; c++) rows += '<td><span class="a-skeleton-bar" style="width:' + (c === 0 ? '68%' : (45 + ((r + c) % 4) * 12) + '%') + '"></span></td>';
+            rows += '</tr>';
+        }
+        tbody.innerHTML = rows;
+    };
     A.debounce = function (fn, ms) { var t; return function () { var a = arguments, s = this; clearTimeout(t); t = setTimeout(function () { fn.apply(s, a); }, ms || 200); }; };
     A.csv = function (name, rows) {
         var out = rows.map(function (r) {

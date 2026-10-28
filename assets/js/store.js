@@ -88,6 +88,18 @@
         SUB.dailyReward().then(function (ok) { if (ok) SUB.notify("You earned +10 daily login points!", "success", "Rewards"); });
     });
 
+    w.openDemoProduct = function (button) {
+        var card = button && button.closest ? button.closest(".product-card, .card") : null;
+        if (!card) return;
+        var nameEl = card.querySelector("h3"), categoryEl = card.querySelector(".product-category, .product-cat");
+        var imageEl = card.querySelector(".product-image img, .card-img img");
+        var priceEl = card.querySelector(".sale-price, .price");
+        var name = nameEl ? nameEl.textContent.trim() : "Subeesha Product";
+        var price = priceEl ? priceEl.textContent.replace(/[^0-9.]/g, "") : "0";
+        var query = new URLSearchParams({ demo: "1", name: name, category: categoryEl ? categoryEl.textContent.trim() : "Collection", image: imageEl ? imageEl.src : "", price: price }).toString();
+        w.location.href = SUB.url("page/product.html?" + query);
+    };
+
     if (!SUB.configured) return;   // keep static demo content
 
     /* ---------- card templates ---------- */
@@ -109,47 +121,73 @@
         return "";
     }
     function catLabel(p) { return esc(p.category || "General"); }
+    function productDetailsUrl(p) {
+        return SUB.url("page/product.html?id=" + encodeURIComponent(p.id));
+    }
+    function cardActions(p, soldOut) {
+    return '<div class="product-actions">' +
+        '<button type="button" class="add-cart icon-only" ' +
+        'onclick="addToCartFromCard(\'' + esc(p.id) + '\')" ' +
+        'aria-label="Add ' + esc(p.name) + ' to cart" ' +
+        'title="Add to cart"' +
+        (soldOut ? ' disabled' : '') +
+        '><i class="fa-solid fa-cart-shopping" style="font-size:18px;color:#fff;display:inline-block" aria-hidden="true"></i></button>' +
+        '<a class="product-view" href="' + esc(productDetailsUrl(p)) + '" ' +
+        'aria-label="View ' + esc(p.name) + '">' +
+        '<i class="fa-regular fa-eye" style="font-size:16px" aria-hidden="true"></i>' +
+        '<span>View</span></a>' +
+        '</div>';
+}
     function cardHome(p, isNewList) {
-        var wished = SUB.wish.has(p.id), b = badgeText(p, isNewList);
-        var soldOut = p._stock <= 0;
-        return '<article class="card" data-id="' + esc(p.id) + '"><div class="card-img">' +
-            '<img src="' + esc(SUB.img(p._img, 800)) + '" alt="' + esc(p.name) + '" loading="lazy">' +
-            (soldOut ? '<span class="badge">SOLD OUT</span>' : (b ? '<span class="badge">' + esc(b) + "</span>" : "")) +
-            '<button class="wish" onclick="toggleWish(this)" aria-label="Add to wishlist"><ion-icon name="' + (wished ? "heart" : "heart-outline") + '"' + (wished ? ' style="color:var(--pink)"' : "") + "></ion-icon></button>" +
-            '<button class="quick-view" onclick="viewProduct(this)" aria-label="View product"><ion-icon name="eye-outline"></ion-icon></button></div>' +
-            '<div class="card-body"><span class="product-cat">' + catLabel(p) + "</span><h3>" + esc(p.name) + "</h3>" + ratingIon(p.rating) +
-            '<div class="price-row"><span class="price">' + SUB.money(p._price) + "</span>" + (p._old ? '<span class="old">' + SUB.money(p._old) + "</span>" : "") + "</div>" +
-            '<button class="add-cart" onclick="addToCart(\'' + esc(p.id) + '\')"' + (soldOut ? " disabled" : "") + '><ion-icon name="bag-add-outline"></ion-icon> ' + (soldOut ? "Out of Stock" : "Add to Cart") + "</button></div></article>";
+        var wished = SUB.wish.has(p.id), b = badgeText(p, isNewList), soldOut = p._stock <= 0;
+        return '<article class="card" data-id="' + esc(p.id) + '" data-category="' + esc(p.categorySlug || SUB.categoryKey(p)) + '">' +
+            '<div class="card-img"><a class="card-image-link" href="' + esc(productDetailsUrl(p)) + '" aria-label="View ' + esc(p.name) + '"><img src="' + esc(SUB.img(p._img, 800)) + '" alt="' + esc(p.name) + '" loading="lazy"></a>' +
+            (soldOut ? '<span class="badge">SOLD OUT</span>' : (b ? '<span class="badge">' + esc(b) + '</span>' : '')) +
+            '<button class="wish" onclick="toggleWish(this)" aria-label="Add to wishlist"><ion-icon name="' + (wished ? 'heart' : 'heart-outline') + '"' + (wished ? ' style="color:var(--pink)"' : '') + '></ion-icon></button></div>' +
+            '<div class="card-body"><span class="product-cat">' + catLabel(p) + '</span><h3>' + esc(p.name) + '</h3>' + ratingIon(p.rating) +
+            '<div class="price-row"><span class="price">' + SUB.money(p._price) + '</span>' + (p._old ? '<span class="old">' + SUB.money(p._old) + '</span>' : '') + '</div>' + cardActions(p, soldOut) + '</div></article>';
     }
     function cardShop(p, isNewList) {
         var wished = SUB.wish.has(p.id), b = badgeText(p, isNewList), soldOut = p._stock <= 0;
-        return '<div class="product-card" data-id="' + esc(p.id) + '" data-category="' + esc(p.categorySlug || SUB.categoryKey(p)) + '">' +
-            '<div class="product-image"><img src="' + esc(SUB.img(p._img, 700)) + '" alt="' + esc(p.name) + '" loading="lazy">' +
-            (soldOut ? '<span class="product-badge">SOLD OUT</span>' : (b ? '<span class="product-badge">' + esc(b) + "</span>" : "")) +
-            '<button class="wishlist-btn' + (wished ? " active" : "") + '" onclick="toggleWishlist(this)"><i class="fa-' + (wished ? "solid" : "regular") + ' fa-heart"></i></button></div>' +
-            '<div class="product-info"><span class="product-category">' + catLabel(p) + "</span><h3>" + esc(p.name) + "</h3>" + ratingFA(p) +
-            '<div class="price-row"><div><span class="price">' + SUB.money(p._price) + "</span>" + (p._old ? '<span class="old-price">' + SUB.money(p._old) + "</span>" : "") + "</div></div>" +
-            '<div class="product-actions"><button class="add-cart" onclick="addToCart(\'' + esc(p.id) + '\')"' + (soldOut ? " disabled" : "") + ">" + (soldOut ? "Out of Stock" : "Add to Cart") + "</button>" +
-            '<button class="quick-view" onclick="quickViewById(\'' + esc(p.id) + '\')"><i class="fa-regular fa-eye"></i></button></div></div></div>';
+        return '<article class="product-card" data-id="' + esc(p.id) + '" data-category="' + esc(p.categorySlug || SUB.categoryKey(p)) + '">' +
+            '<div class="product-image"><a class="card-image-link" href="' + esc(productDetailsUrl(p)) + '" aria-label="View ' + esc(p.name) + '"><img src="' + esc(SUB.img(p._img, 800)) + '" alt="' + esc(p.name) + '" loading="lazy"></a>' +
+            (soldOut ? '<span class="product-badge">SOLD OUT</span>' : (b ? '<span class="product-badge">' + esc(b) + '</span>' : '')) +
+            '<button class="wishlist-btn' + (wished ? ' active' : '') + '" onclick="toggleWishlist(this)" aria-label="Add to wishlist"><i class="fa-' + (wished ? 'solid' : 'regular') + ' fa-heart"></i></button></div>' +
+            '<div class="product-info"><span class="product-category">' + catLabel(p) + '</span><h3 title="' + esc(p.name) + '">' + esc(p.name) + '</h3>' + ratingFA(p) +
+            '<div class="price-row"><div><span class="price">' + SUB.money(p._price) + '</span>' + (p._old ? '<span class="old-price">' + SUB.money(p._old) + '</span>' : '') + '</div></div>' + cardActions(p, soldOut) + '</div></article>';
     }
     function cardFlash(p) {
         var wished = SUB.wish.has(p.id), soldOut = p._stock <= 0;
         var sold = SUB.num(p.sold), left = p._stock >= 999 ? 0 : p._stock;
         var pct = (sold + left) > 0 ? Math.min(100, Math.round(sold / (sold + left) * 100)) : 0;
-        return '<div class="product-card" data-id="' + esc(p.id) + '" data-category="' + esc(p.categorySlug || SUB.categoryKey(p)) + '">' +
-            '<div class="product-image"><img src="' + esc(SUB.img(p._img, 700)) + '" alt="' + esc(p.name) + '" loading="lazy">' +
-            (p._pct ? '<span class="discount-badge">' + p._pct + "% OFF</span>" : "") +
-            '<button class="wishlist-btn' + (wished ? " active" : "") + '" onclick="toggleWishlist(this)"><ion-icon name="' + (wished ? "heart" : "heart-outline") + '"></ion-icon></button></div>' +
-            '<div class="product-info"><span class="product-category">' + catLabel(p) + "</span><h3>" + esc(p.name) + "</h3>" +
-            '<div class="price-row"><span class="sale-price">' + SUB.money(p._price) + "</span>" + (p._old ? '<span class="old-price">' + SUB.money(p._old) + "</span>" : "") + "</div>" +
-            (p._stock < 999 ? '<div class="stock-area"><div class="stock-text"><span>Sold: ' + sold + "</span><strong>" + (soldOut ? "Sold out" : "Only " + left + " left") + '</strong></div><div class="stock-bar"><div class="stock-progress" style="width:' + pct + '%"></div></div></div>' : "") +
-            '<div class="product-actions"><button class="add-cart" onclick="addToCart(\'' + esc(p.id) + '\')"' + (soldOut ? " disabled" : "") + ">" + (soldOut ? "Sold Out" : "Add to Cart") + "</button>" +
-            '<button class="view-btn" onclick="location.href=SUB.url(\'page/billing.html?product=' + encodeURIComponent(p.id) + '\')"><ion-icon name="eye-outline"></ion-icon></button></div></div></div>';
+        return '<article class="product-card" data-id="' + esc(p.id) + '" data-category="' + esc(p.categorySlug || SUB.categoryKey(p)) + '">' +
+            '<div class="product-image"><a class="card-image-link" href="' + esc(productDetailsUrl(p)) + '" aria-label="View ' + esc(p.name) + '"><img src="' + esc(SUB.img(p._img, 800)) + '" alt="' + esc(p.name) + '" loading="lazy"></a>' +
+            (p._pct ? '<span class="discount-badge">' + p._pct + '% OFF</span>' : '') +
+            '<button class="wishlist-btn' + (wished ? ' active' : '') + '" onclick="toggleWishlist(this)" aria-label="Add to wishlist"><ion-icon name="' + (wished ? 'heart' : 'heart-outline') + '"></ion-icon></button></div>' +
+            '<div class="product-info"><span class="product-category">' + catLabel(p) + '</span><h3 title="' + esc(p.name) + '">' + esc(p.name) + '</h3>' +
+            '<div class="price-row"><span class="sale-price">' + SUB.money(p._price) + '</span>' + (p._old ? '<span class="old-price">' + SUB.money(p._old) + '</span>' : '') + '</div>' +
+            (p._stock < 999 ? '<div class="stock-area"><div class="stock-text"><span>Sold: ' + sold + '</span><strong>' + (soldOut ? 'Sold out' : 'Only ' + left + ' left') + '</strong></div><div class="stock-bar"><div class="stock-progress" style="width:' + pct + '%"></div></div></div>' : '') +
+            cardActions(p, soldOut) + '</div></article>';
     }
+    w.addToCartFromCard = function (id) {
+        var p = (w.__products || []).filter(function (x) { return x.id === id; })[0];
+        if (!p) return;
+        if (p._stock <= 0) return SUB.notify(p.name + ' is out of stock.', 'error', 'Out of Stock');
+        if ((p.sizes && p.sizes.length) || (p.colors && p.colors.length)) {
+            w.location.href = productDetailsUrl(p);
+            return;
+        }
+        w.addToCart(id);
+    };
     function empty(msg) {
         return '<p class="sub-empty" style="grid-column:1/-1;text-align:center;color:#68736e;padding:34px 10px;font-size:14px">' + esc(msg) + "</p>";
     }
-    function loading(el) { if (el) el.innerHTML = empty("Loading..."); }
+    function loading(el) {
+        if (!el) return;
+        el.innerHTML = Array.from({ length: 4 }, function () {
+            return '<article class="product-skeleton" aria-hidden="true"><div class="skeleton skeleton-image"></div><div class="skeleton-content"><div class="skeleton skeleton-line short"></div><div class="skeleton skeleton-line title"></div><div class="skeleton skeleton-line medium"></div><div class="skeleton skeleton-line price"></div><div class="skeleton skeleton-actions"></div></div></article>';
+        }).join("");
+    }
 
     /* shop-like filter buttons built from categories */
     function buildFilters(cats, handler) {
