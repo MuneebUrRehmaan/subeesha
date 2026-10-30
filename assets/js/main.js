@@ -196,12 +196,7 @@ function viewProduct(button){
         return;
     }
     const name = card ? (card.querySelector("h3")?.textContent.trim() || "") : "";
-    const category = card ? (card.querySelector(".product-cat")?.textContent.trim() || "") : "";
-    const image = card ? (card.querySelector(".card-img img")?.src || "") : "";
-    const priceText = card ? (card.querySelector(".price")?.textContent || "") : "";
-    const price = priceText.replace(/[^0-9.]/g, "");
-    const query = new URLSearchParams({ demo: "1", name, category, image, price }).toString();
-    window.location.href = SUB.url("page/product.html?" + query);
+    window.location.href = SUB.url("page/shop.html?search=" + encodeURIComponent(name));
 }
 
 function searchProduct(){

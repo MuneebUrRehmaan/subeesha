@@ -4,7 +4,7 @@ A.ready(function () {
     A.loading(body, 6);
     function draw() {
         A.rows(body, list, 6, "No banners yet. The default design is shown on the homepage until you add slides.", function (b) {
-            return '<tr><td>' + (b.image ? '<img src="' + esc(SUB.img(b.image, 200)) + '" style="width:90px;height:50px;border-radius:8px;object-fit:cover" alt="">' : "-") + "</td><td>" + (b.type === "hero" ? "Hero slide" : "Popup ad") + "</td><td><b>" + esc(b.title || b.titleStrong || b.small || "-") + "</b> " + esc(b.titleEm || "") + "</td><td>" + SUB.num(b.order) + "</td><td>" + A.pill(b.active === false ? "Inactive" : "Active") + "</td>" +
+            return '<tr><td>' + (b.image ? '<img src="' + esc(SUB.img(b.image, 200)) + '" style="width:90px;height:50px;border-radius:4px;object-fit:cover" alt="">' : "-") + "</td><td>" + (b.type === "hero" ? "Hero slide" : "Popup ad") + "</td><td><b>" + esc(b.title || b.titleStrong || b.small || "-") + "</b> " + esc(b.titleEm || "") + "</td><td>" + SUB.num(b.order) + "</td><td>" + A.pill(b.active === false ? "Inactive" : "Active") + "</td>" +
                 '<td><button class="btn small secondary" onclick="openBannerModal(\'' + esc(b.type) + "','" + esc(b.id) + '\')"><i class="fa-solid fa-pen"></i></button> <button class="btn small danger" onclick="deleteBanner(\'' + esc(b.id) + '\')"><i class="fa-solid fa-trash"></i></button></td></tr>';
         });
     }

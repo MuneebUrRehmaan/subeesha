@@ -1,6 +1,7 @@
 /* Products - CRUD with Cloudinary images */
 A.ready(function () {
     var grid = document.getElementById("productGrid"), all = [], cats = [], esc = SUB.esc, mgr = null;
+    grid.innerHTML = new Array(9).join('<div class="product-card"><div class="product-img sk" style="height:150px"></div><div class="product-info"><div class="sk sk-line" style="width:70%;height:14px"></div><div class="sk sk-line" style="width:45%"></div><div class="sk sk-line" style="width:30%;height:16px"></div></div></div>');
 
     function draw() {
         var q = document.getElementById("fSearch").value.toLowerCase().trim();
@@ -19,9 +20,6 @@ A.ready(function () {
     }
     function load() {
         A.drop("products");
-        grid.innerHTML = Array.from({ length: 8 }, function () {
-            return '<div class="product-card a-product-skeleton" aria-hidden="true"><div class="product-img"><span class="a-skeleton-block image"></span></div><div class="product-info"><span class="a-skeleton-block line"></span><span class="a-skeleton-block line short"></span><span class="a-skeleton-block line price"></span><span class="a-skeleton-block action"></span></div></div>';
-        }).join("");
         return Promise.all([A.load("products", true), A.load("categories", true)]).then(function (r) {
             all = r[0].sort(function (a, b) { return SUB.ms(b.createdAt) - SUB.ms(a.createdAt); });
             cats = r[1].sort(function (a, b) { return SUB.num(a.order) - SUB.num(b.order); });

@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
         :root {
             --primary: #008f5a;
@@ -124,7 +123,7 @@
             width: 245px;
             height: 43px;
             border: 1px solid var(--border);
-            border-radius: 10px;
+            border-radius: 4px;
             display: flex;
             align-items: center;
             padding-left: 12px;
@@ -150,7 +149,7 @@
             border: none;
             width: 42px;
             height: 42px;
-            border-radius: 0 9px 9px 0;
+            border-radius: 0 4px 4px 0;
             background: var(--primary);
             color: #fff;
             display: grid;
@@ -169,7 +168,7 @@
             height: 42px;
             border: 1px solid var(--border);
             background: #fff;
-            border-radius: 10px;
+            border-radius: 4px;
             display: grid;
             place-items: center;
             position: relative;
@@ -291,7 +290,7 @@
         .card {
             background: #fff;
             border: 1px solid var(--border);
-            border-radius: 16px;
+            border-radius: 4px;
             padding: 22px;
             box-shadow: var(--shadow);
         }
@@ -335,7 +334,7 @@
             width: 100%;
             height: 400px;
             object-fit: cover;
-            border-radius: 15px;
+            border-radius: 4px;
             background: #f2f4f3;
             transition: opacity .25s ease, transform .25s ease;
         }
@@ -347,7 +346,7 @@
 
         .image-note {
             background: var(--primary-light);
-            border-radius: 9px;
+            border-radius: 4px;
             padding: 9px 11px;
             color: var(--primary);
             font-size: 11px;
@@ -403,7 +402,7 @@
             background: #fff1ee;
             color: var(--danger);
             padding: 5px 8px;
-            border-radius: 6px;
+            border-radius: 4px;
             font-size: 11px;
             font-weight: 700;
         }
@@ -415,7 +414,7 @@
             color: var(--primary);
             background: var(--primary-light);
             padding: 7px 10px;
-            border-radius: 7px;
+            border-radius: 4px;
             font-size: 11px;
             font-weight: 600;
         }
@@ -486,7 +485,7 @@
             padding: 9px 13px;
             border: 1px solid var(--border);
             background: #fff;
-            border-radius: 7px;
+            border-radius: 4px;
             color: var(--dark);
             font-size: 12px;
             font-weight: 600;
@@ -510,7 +509,7 @@
             height: 34px;
             border: 1px solid var(--border);
             background: #fff;
-            border-radius: 8px;
+            border-radius: 4px;
             font-size: 18px;
         }
 
@@ -535,7 +534,7 @@
         .feature {
             padding: 11px;
             background: #f8faf9;
-            border-radius: 9px;
+            border-radius: 4px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -592,7 +591,7 @@
             width: 100%;
             padding: 13px 13px 13px 40px;
             border: 1px solid var(--border);
-            border-radius: 9px;
+            border-radius: 4px;
             outline: none;
             background: #fff;
         }
@@ -601,7 +600,7 @@
             width: 100%;
             min-height: 90px;
             border: 1px solid var(--border);
-            border-radius: 9px;
+            border-radius: 4px;
             padding: 13px;
             outline: none;
             resize: vertical;
@@ -616,7 +615,7 @@
 
         .payment {
             border: 1px solid var(--border);
-            border-radius: 11px;
+            border-radius: 4px;
             margin-bottom: 10px;
         }
 
@@ -644,7 +643,7 @@
             place-items: center;
             background: var(--primary-light);
             color: var(--primary);
-            border-radius: 8px;
+            border-radius: 4px;
             font-size: 20px;
         }
 
@@ -678,14 +677,14 @@
             width: 100%;
             padding: 11px;
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 4px;
             outline: none;
         }
 
         .wallet {
             background: linear-gradient(135deg,#eaf8f2,#f8fcfa);
             border: 1px solid #cdeadd;
-            border-radius: 11px;
+            border-radius: 4px;
             padding: 15px;
         }
 
@@ -729,7 +728,7 @@
             width: 62px;
             height: 62px;
             object-fit: cover;
-            border-radius: 9px;
+            border-radius: 4px;
         }
 
         .summary-product-info {
@@ -765,13 +764,13 @@
             flex: 1;
             padding: 11px;
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 4px;
             outline: none;
         }
 
         .coupon button {
             border: none;
-            border-radius: 8px;
+            border-radius: 4px;
             padding: 0 14px;
             color: #fff;
             background: var(--dark);
@@ -824,7 +823,7 @@
             margin-top: 17px;
             padding: 14px;
             border: none;
-            border-radius: 10px;
+            border-radius: 4px;
             background: var(--primary);
             color: #fff;
             font-size: 14px;
@@ -913,7 +912,7 @@
             width: 38px;
             height: 38px;
             border: 1px solid rgba(255,255,255,.15);
-            border-radius: 8px;
+            border-radius: 4px;
             display: grid;
             place-items: center;
             color: #fff;
@@ -950,7 +949,7 @@
             width: 315px;
             min-height: 62px;
             background: #fff;
-            border-radius: 11px;
+            border-radius: 4px;
             box-shadow: 0 10px 30px rgba(0,0,0,.15);
             border-left: 4px solid var(--primary);
             padding: 12px;
@@ -1153,6 +1152,3 @@
 
         }
 
-
-/* Shared brand typography */
-body, body button, body input, body select, body textarea, body h1, body h2, body h3, body h4, body h5, body h6, body p, body a, body span, body label, body small, body strong, body li, body td, body th, body option, body div, body section, body article { font-family: 'Poppins', sans-serif !important; }

@@ -4,7 +4,7 @@ A.ready(function () {
     A.loading(body, 6);
     function draw() {
         A.rows(body, cats, 6, "No categories yet.", function (c) {
-            return '<tr><td>' + (c.image ? '<img src="' + esc(SUB.img(c.image, 120)) + '" style="width:46px;height:46px;border-radius:8px;object-fit:cover" alt="">' : "-") + "</td><td><b>" + esc(c.name) + "</b><br><small style='color:#88938f'>" + esc(c.slug || c.id) + "</small></td><td>" + esc(c.tagline || "") + "</td><td>" + esc(c.group || "-") + "</td><td>" + (counts[c.slug || c.id] || 0) +
+            return '<tr><td>' + (c.image ? '<img src="' + esc(SUB.img(c.image, 120)) + '" style="width:46px;height:46px;border-radius:4px;object-fit:cover" alt="">' : "-") + "</td><td><b>" + esc(c.name) + "</b><br><small style='color:#88938f'>" + esc(c.slug || c.id) + "</small></td><td>" + esc(c.tagline || "") + "</td><td>" + esc(c.group || "-") + "</td><td>" + (counts[c.slug || c.id] || 0) +
                 '</td><td><button class="btn small secondary" onclick="openCategoryModal(\'' + esc(c.id) + '\')"><i class="fa-solid fa-pen"></i></button> <button class="btn small danger" onclick="deleteCategory(\'' + esc(c.id) + '\')"><i class="fa-solid fa-trash"></i></button></td></tr>';
         });
     }

@@ -13,6 +13,8 @@ let couponDiscount = 0;
 let walletDiscount = 0;
 let shippingCfg = { charge: 250, freeAbove: 5000 };
 let placing = false;
+let loc = null;        // pinned delivery location {lat,lng,address,city,province}
+let cityLoc = null;    // coordinates of the chosen city (fallback for map zones)
 
 /* ---------- TOAST (escaped) ---------- */
 function esc(v){ return SUB.esc(v); }
@@ -63,7 +65,9 @@ function toggleMenu() {
 
 /* ---------- helpers ---------- */
 function subtotal() { return items.reduce((s, i) => s + i.price * i.qty, 0); }
-function shippingCost() { return SUB.shippingFor(subtotal(), shippingCfg); }
+function currentLoc() { const l = loc || cityLoc; return l && isFinite(l.lat) && isFinite(l.lng) ? { lat: l.lat, lng: l.lng } : null; }
+function deliveryInfo() { const l = currentLoc(); return SUB.deliveryInfo(subtotal(), shippingCfg, { city: $("city") ? $("city").value : "", lat: l && l.lat, lng: l && l.lng }); }
+function shippingCost() { return deliveryInfo().charge; }
 function cssColor(name) {
     const n = String(name).trim().toLowerCase();
     return (window.CSS && CSS.supports("color", n)) ? n : "#c9c9c9";
@@ -166,7 +170,7 @@ function renderCartLines() {
     const area = document.querySelector(".product-area");
     area.innerHTML = '<div id="cartLines" style="width:100%">' + items.map((it, i) => `
         <div class="cart-line" style="display:flex;gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid #eee;flex-wrap:wrap">
-            <img src="${esc(SUB.img(it.image, 200))}" alt="" style="width:78px;height:78px;border-radius:12px;object-fit:cover">
+            <img src="${esc(SUB.img(it.image, 200))}" alt="" style="width:78px;height:78px;border-radius:4px;object-fit:cover">
             <div style="flex:1;min-width:140px">
                 <strong style="display:block">${esc(it.name)}</strong>
                 <span style="color:#68736e;font-size:13px">${money(it.price)} each${it.stock < 999 && it.stock <= 10 ? " · only " + it.stock + " left" : ""}</span>
@@ -273,6 +277,7 @@ function calculateTotal() {
     setText("discount", "- " + money(couponDiscount));
     setText("walletDiscount", "- " + money(walletDiscount));
     setText("total", money(total));
+    updateLocText();
 }
 
 /* ---------- PAYMENT ---------- */
@@ -346,17 +351,14 @@ function placeOrder() {
         items: items.map(i => ({ id: i.id, qty: i.qty, color: i.color, size: i.size })),
         customer: { name: firstName + " " + lastName, email, phone: mobile, province, city, area: $("area").value.trim(), postal: $("postal").value.trim(), address },
         paymentMethod: pm, paymentRef: ref, coupon: couponCode,
-        useWallet: $("useWallet").checked, source: "web", resellerCode: SUB.refCode()
+        useWallet: $("useWallet").checked, source: "web", resellerCode: SUB.refCode(), location: currentLoc()
     }).then(order => {
         if (cartMode) SUB.cart.clear();
         showToast("Order placed", "Your order " + order.orderNo + " has been placed successfully.", "success");
         setTimeout(() => location.href = SUB.url("page/profile.html#orders"), 1800);
     }).catch(e => {
         placing = false; btn.disabled = false; btn.style.opacity = "";
-        const detail = e && e.code === "permission-denied"
-            ? "Your account could not complete checkout because Firebase security rules need to be published. Please contact the store administrator if this continues."
-            : (e && e.message) || "Could not place the order.";
-        showToast("Error", detail, "error");
+        showToast("Error", (e && e.message) || "Could not place the order.", "error");
     });
 }
 
@@ -375,6 +377,7 @@ function prefill(profile) {
     if (!$("lastName").value) $("lastName").value = parts.join(" ");
     if (!$("email").value) $("email").value = profile.email || "";
     if (!$("mobile").value) $("mobile").value = (profile.whatsapp || "").replace(/^\+92\s?/, "0");
+    if (profile.location && !loc && isFinite(profile.location.lat)) { loc = profile.location; }
     const a = (profile.addresses || [])[0];
     if (a) {
         if (a.province) $("province").value = a.province;
@@ -383,6 +386,49 @@ function prefill(profile) {
         if (a.postal && !$("postal").value) $("postal").value = a.postal;
         if (a.address && !$("address").value) $("address").value = a.address;
     }
+}
+
+/* ---------- delivery location (Leaflet map) ---------- */
+function pickOption(sel, text) {
+    if (!sel || !text) return false;
+    const t = String(text).toLowerCase();
+    const o = Array.from(sel.options).find(x => x.value && (x.text.toLowerCase() === t || t.includes(x.text.toLowerCase()) || x.text.toLowerCase().includes(t)));
+    if (o) { sel.value = o.value; return true; }
+    return false;
+}
+function updateLocText() {
+    const t = $("locText"); if (!t) return;
+    const info = deliveryInfo();
+    const where = loc ? (loc.address || (loc.lat.toFixed(4) + ", " + loc.lng.toFixed(4))) : "";
+    let msg = where ? "<b>Pinned:</b> " + SUB.esc(where) : "Optional - pin your location for accurate delivery charges.";
+    if (info.label && shippingCfg.mode !== "flat" && subtotal() > 0 && info.label !== "Free delivery") msg += "<br><b>Delivery:</b> " + SUB.esc(info.label) + " - " + (info.charge ? money(info.charge) : "Free");
+    t.innerHTML = msg;
+}
+function setupLocation() {
+    const addr = $("address"); if (!addr || $("locBox")) return;
+    const host = addr.closest(".field, .form-group, .input-group") || addr.parentElement;
+    const box = document.createElement("div");
+    box.className = "loc-box"; box.id = "locBox";
+    box.innerHTML = '<button type="button" class="loc-btn" id="locBtn"><ion-icon name="location-outline"></ion-icon> Pin location on map</button><span class="loc-text" id="locText"></span>';
+    host.insertAdjacentElement("afterend", box);
+    $("locBtn").addEventListener("click", () => {
+        SUB.map.pick(loc).then(r => {
+            if (!r) return;
+            loc = r;
+            pickOption($("province"), r.province);
+            pickOption($("city"), r.city);
+            if (!$("address").value.trim() && r.address) $("address").value = r.address;
+            calculateTotal();
+        }).catch(e => showToast("Error", e.message, "error"));
+    });
+    $("city").addEventListener("change", () => {
+        cityLoc = null; calculateTotal();
+        if (shippingCfg.mode === "zones" && !loc && $("city").value) {
+            const c = $("city").value;
+            SUB.map.geocodeCity(c).then(r => { if (r && $("city").value === c) { cityLoc = r; calculateTotal(); } });
+        }
+    });
+    updateLocText();
 }
 
 function lineFrom(p, qty, extra) {
@@ -398,6 +444,7 @@ async function initCheckout() {
     const [cat, ship, pay] = await Promise.all([SUB.catalog(), SUB.settings("shipping"), SUB.settings("payments")]);
     shippingCfg = ship;
     setupPayments(pay);
+    setupLocation();
 
     if (cartMode) {
         const saved = SUB.cart.get();
@@ -433,5 +480,9 @@ async function initCheckout() {
     calculateTotal();
 }
 
-if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initCheckout);
-else initCheckout();
+function runInit() {
+    initCheckout().catch(e => console.error(e)).then(() => document.body.classList.remove("bk-loading"));
+    setTimeout(() => document.body.classList.remove("bk-loading"), 10000);
+}
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", runInit);
+else runInit();

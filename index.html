@@ -17,72 +17,19 @@
 
     <!-- External main stylesheet: all homepage styles are in assets/css/style.css. -->
     <link rel="stylesheet" href="assets/css/style.css">
-<link rel="stylesheet" href="assets/css/site-polish.css">
-<link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
->
+<link rel="stylesheet" href="assets/css/sub-ui.css">
+<link rel="stylesheet" href="assets/css/navbar.css">
 </head>
 
 <body data-page="index">
-    <div class="site-loader" id="siteLoader" role="status" aria-label="Loading Subeesha">
-      <img src="assets/images/logo.jpg" alt="Subeesha logo">
-      <div class="site-loader-dots" aria-hidden="true"><span></span><span></span><span></span></div>
-    </div>
-
-    <!-- ===== TOP BAR / STORE PROMISES ===== -->
-    <div class="topbar">
-        <span><ion-icon name="shield-checkmark-outline"></ion-icon> Quality Products</span>
-        <span><ion-icon name="car-outline"></ion-icon> Fast Delivery Across Pakistan</span>
-        <span><ion-icon name="gift-outline"></ion-icon> Earn Rewards With Every Order</span>
-    </div>
 
     <!-- ===== HEADER / NAVIGATION ===== -->
-    <header>
-        <nav class="navbar">
-            <a href="#home" class="brand" aria-label="Subeesha Home">
-                <!-- Brand logo: keep the uploaded logo file in the project folder. -->
-                <span class="brand-logo-circle">
-                    <img src="assets/images/logo.jpg" alt="Subeesha - Shop More, Live Better">
-                </span>
-            </a>
+    <!-- ===== TOP BAR ===== -->
+<div class="sb-top"><span><ion-icon name="shield-checkmark-outline"></ion-icon> Quality Products</span><span><ion-icon name="car-outline"></ion-icon> Fast Delivery Across Pakistan</span><span><ion-icon name="gift-outline"></ion-icon> Earn Rewards With Every Order</span></div>
+<!-- ===== NAVBAR (shared) ===== -->
+<div class="sb-header" id="sbHeader" role="banner"><div class="sb-nav"><a href="index.html" class="sb-brand" aria-label="Subeesha Home"><span class="sb-logo"><img src="assets/images/logo.jpg" alt="Subeesha - Shop More, Live Better"></span></a><ul class="sb-links" id="navLinks"><li><a href="index.html">Home</a></li><li><a href="page/Categories.html">Categories</a></li><li><a href="page/shop.html">Shop</a></li><li><a href="page/new-arrivals.html">New Arrivals</a></li><li><a href="page/flashsale.html">Flash Sale</a></li><li><a href="page/loyalty.html">Rewards</a></li><li><a href="index.html#footer">Contact</a></li></ul><div class="sb-tools"><div class="sb-sw"><form class="sb-search" id="sbSearch" autocomplete="off" role="search"><ion-icon name="search-outline"></ion-icon><input id="sbInput" type="search" placeholder="Search products, categories..." autocomplete="off" aria-label="Search products"><button type="submit" aria-label="Submit search"><ion-icon name="arrow-forward-outline"></ion-icon></button></form><div class="sb-suggest" id="sbSuggest"></div></div><div class="sb-actions"><button class="sb-icon sb-stoggle" id="sbSToggle" type="button" aria-label="Search"><ion-icon name="search-outline"></ion-icon></button><a class="sb-icon" href="page/profile.html#wishlist" aria-label="Wishlist"><ion-icon name="heart-outline"></ion-icon></a><a class="sb-icon" id="sbUser" href="account.html" aria-label="Account"><ion-icon name="person-outline"></ion-icon></a><button class="sb-icon" id="sbCart" type="button" aria-label="Cart"><ion-icon name="bag-handle-outline"></ion-icon><span class="sb-count" id="cartCount">0</span></button><button class="sb-icon sb-menu" id="sbMenu" type="button" aria-label="Menu"><ion-icon name="menu-outline"></ion-icon></button></div></div></div></div>
+<div class="sb-msearch" id="sbMSearch"><div class="sb-mtop"><button type="button" id="sbMBack" aria-label="Close search"><ion-icon name="arrow-back-outline"></ion-icon></button><form class="sb-search" id="sbMForm" autocomplete="off"><ion-icon name="search-outline"></ion-icon><input id="sbMInput" type="search" placeholder="Search products, categories..." autocomplete="off" aria-label="Search products"><button type="submit" aria-label="Search"><ion-icon name="arrow-forward-outline"></ion-icon></button></form></div><div class="sb-mlist" id="sbMList"></div></div>
 
-            <ul class="nav-links" id="navLinks">
-                <li><a href="#home">Home</a></li>
-                <li><a href="./page/Categories.html">Categories</a></li>
-                <li><a href="./page/shop.html">Shop</a></li>
-                <li><a href="./page/new-arrivals.html">New Arrivals</a></li>
-                <li><a href="./page/flashsale.html">Flash Sale</a></li>
-                <li><a href="./page/loyalty.html">Rewards</a></li>
-                <li><a href="#footer">Contact</a></li>
-            </ul>
-
-            <div class="nav-tools">
-                <!-- Header search: connect this input to the Admin Panel product search/API later. -->
-                <form class="header-search" onsubmit="handleHeaderSearch(event)">
-                    <ion-icon name="search-outline" aria-hidden="true"></ion-icon>
-                    <input id="headerSearchInput" type="search" placeholder="Search products, categories..."
-                        autocomplete="off" aria-label="Search products">
-                    <button type="submit" aria-label="Submit search"><ion-icon
-                            name="arrow-forward-outline"></ion-icon></button>
-                </form>
-
-                <div class="nav-actions">
-                    <button class="icon-btn" onclick="showToast('Your wishlist is ready.', 'warning', 'Warning')"
-                        aria-label="Wishlist"><ion-icon name="heart-outline"></ion-icon></button>
-                    <!-- Existing profile page: the project owner already has this page. This frontend only links to it. -->
-                    <a class="icon-btn" href="account.html" aria-label="Account"><ion-icon
-                            name="person-outline"></ion-icon></a>
-                    <button class="icon-btn" onclick="showCart()" aria-label="Cart">
-                        <ion-icon name="bag-handle-outline"></ion-icon>
-                        <span class="cart-count" id="cartCount">0</span>
-                    </button>
-                    <button class="icon-btn menu-btn" onclick="toggleMenu()" aria-label="Menu"><ion-icon
-                            name="menu-outline"></ion-icon></button>
-                </div>
-            </div>
-        </nav>
-    </header>
 
 
     <!-- ===== HOME / HERO SLIDER ===== -->
@@ -270,13 +217,16 @@
                     <span class="badge">20% OFF</span>
                     <button class="wish" onclick="toggleWish(this)" aria-label="Add to wishlist"><ion-icon
                             name="heart-outline"></ion-icon></button>
+                    <button class="quick-view" onclick="viewProduct(this)" aria-label="View product"><ion-icon
+                            name="eye-outline"></ion-icon></button>
                 </div>
                 <div class="card-body">
                     <span class="product-cat">Bags</span>
                     <h3>Premium Leather Handbag</h3>
                     <div class="rating">★★★★★</div>
                     <div class="price-row"><span class="price">Rs. 3,999</span><span class="old">Rs. 4,999</span></div>
-                    <div class="product-actions"><button class="add-cart icon-only" onclick="addToCart('Premium Leather Handbag',3999)" aria-label="Add Premium Leather Handbag to cart" title="Add to cart"><ion-icon name="bag-add-outline"></ion-icon></button><a class="product-view" href="#" onclick="viewProduct(this);return false"><ion-icon name="eye-outline"></ion-icon><span>View</span></a></div>
+                    <button class="add-cart" onclick="addToCart('Premium Leather Handbag',3999)"><ion-icon
+                            name="bag-add-outline"></ion-icon> Add to Cart</button>
                 </div>
             </article>
 
@@ -290,13 +240,16 @@
                     <span class="badge">NEW</span>
                     <button class="wish" onclick="toggleWish(this)" aria-label="Add to wishlist"><ion-icon
                             name="heart-outline"></ion-icon></button>
+                    <button class="quick-view" onclick="viewProduct(this)" aria-label="View product"><ion-icon
+                            name="eye-outline"></ion-icon></button>
                 </div>
                 <div class="card-body">
                     <span class="product-cat">Fashion</span>
                     <h3>Elegant Summer Dress</h3>
                     <div class="rating">★★★★★</div>
                     <div class="price-row"><span class="price">Rs. 4,499</span></div>
-                    <div class="product-actions"><button class="add-cart icon-only" onclick="addToCart('Elegant Summer Dress',4499)" aria-label="Add Elegant Summer Dress to cart" title="Add to cart"><ion-icon name="bag-add-outline"></ion-icon></button><a class="product-view" href="#" onclick="viewProduct(this);return false"><ion-icon name="eye-outline"></ion-icon><span>View</span></a></div>
+                    <button class="add-cart" onclick="addToCart('Elegant Summer Dress',4499)"><ion-icon
+                            name="bag-add-outline"></ion-icon> Add to Cart</button>
                 </div>
             </article>
 
@@ -310,13 +263,16 @@
                     <span class="badge">BEST SELLER</span>
                     <button class="wish" onclick="toggleWish(this)" aria-label="Add to wishlist"><ion-icon
                             name="heart-outline"></ion-icon></button>
+                    <button class="quick-view" onclick="viewProduct(this)" aria-label="View product"><ion-icon
+                            name="eye-outline"></ion-icon></button>
                 </div>
                 <div class="card-body">
                     <span class="product-cat">Footwear</span>
                     <h3>Premium Casual Sneakers</h3>
                     <div class="rating">★★★★☆</div>
                     <div class="price-row"><span class="price">Rs. 5,999</span></div>
-                    <div class="product-actions"><button class="add-cart icon-only" onclick="addToCart('Premium Casual Sneakers',5999)" aria-label="Add Premium Casual Sneakers to cart" title="Add to cart"><ion-icon name="bag-add-outline"></ion-icon></button><a class="product-view" href="#" onclick="viewProduct(this);return false"><ion-icon name="eye-outline"></ion-icon><span>View</span></a></div>
+                    <button class="add-cart" onclick="addToCart('Premium Casual Sneakers',5999)"><ion-icon
+                            name="bag-add-outline"></ion-icon> Add to Cart</button>
                 </div>
             </article>
 
@@ -330,13 +286,16 @@
                     <span class="badge">HOT</span>
                     <button class="wish" onclick="toggleWish(this)" aria-label="Add to wishlist"><ion-icon
                             name="heart-outline"></ion-icon></button>
+                    <button class="quick-view" onclick="viewProduct(this)" aria-label="View product"><ion-icon
+                            name="eye-outline"></ion-icon></button>
                 </div>
                 <div class="card-body">
                     <span class="product-cat">Watches</span>
                     <h3>Classic Premium Watch</h3>
                     <div class="rating">★★★★★</div>
                     <div class="price-row"><span class="price">Rs. 6,499</span></div>
-                    <div class="product-actions"><button class="add-cart icon-only" onclick="addToCart('Classic Premium Watch',6499)" aria-label="Add Classic Premium Watch to cart" title="Add to cart"><ion-icon name="bag-add-outline"></ion-icon></button><a class="product-view" href="#" onclick="viewProduct(this);return false"><ion-icon name="eye-outline"></ion-icon><span>View</span></a></div>
+                    <button class="add-cart" onclick="addToCart('Classic Premium Watch',6499)"><ion-icon
+                            name="bag-add-outline"></ion-icon> Add to Cart</button>
                 </div>
             </article>
         </div>
@@ -400,13 +359,16 @@
                     <span class="badge">NEW</span>
                     <button class="wish" onclick="toggleWish(this)" aria-label="Add to wishlist"><ion-icon
                             name="heart-outline"></ion-icon></button>
+                    <button class="quick-view" onclick="viewProduct(this)" aria-label="View product"><ion-icon
+                            name="eye-outline"></ion-icon></button>
                 </div>
                 <div class="card-body">
                     <span class="product-cat">Fashion</span>
                     <h3>Modern Casual Outfit</h3>
                     <div class="rating">★★★★★</div>
                     <div class="price-row"><span class="price">Rs. 3,499</span></div>
-                    <div class="product-actions"><button class="add-cart icon-only" onclick="addToCart('Modern Casual Outfit',3499)" aria-label="Add Modern Casual Outfit to cart" title="Add to cart"><ion-icon name="bag-add-outline"></ion-icon></button><a class="product-view" href="#" onclick="viewProduct(this);return false"><ion-icon name="eye-outline"></ion-icon><span>View</span></a></div>
+                    <button class="add-cart" onclick="addToCart('Modern Casual Outfit',3499)"><ion-icon
+                            name="bag-add-outline"></ion-icon> Add to Cart</button>
                 </div>
             </article>
 
@@ -420,13 +382,16 @@
                     <span class="badge">NEW</span>
                     <button class="wish" onclick="toggleWish(this)" aria-label="Add to wishlist"><ion-icon
                             name="heart-outline"></ion-icon></button>
+                    <button class="quick-view" onclick="viewProduct(this)" aria-label="View product"><ion-icon
+                            name="eye-outline"></ion-icon></button>
                 </div>
                 <div class="card-body">
                     <span class="product-cat">Bags</span>
                     <h3>Everyday Shoulder Bag</h3>
                     <div class="rating">★★★★☆</div>
                     <div class="price-row"><span class="price">Rs. 2,999</span></div>
-                    <div class="product-actions"><button class="add-cart icon-only" onclick="addToCart('Everyday Shoulder Bag',2999)" aria-label="Add Everyday Shoulder Bag to cart" title="Add to cart"><ion-icon name="bag-add-outline"></ion-icon></button><a class="product-view" href="#" onclick="viewProduct(this);return false"><ion-icon name="eye-outline"></ion-icon><span>View</span></a></div>
+                    <button class="add-cart" onclick="addToCart('Everyday Shoulder Bag',2999)"><ion-icon
+                            name="bag-add-outline"></ion-icon> Add to Cart</button>
                 </div>
             </article>
 
@@ -440,13 +405,16 @@
                     <span class="badge">HOT</span>
                     <button class="wish" onclick="toggleWish(this)" aria-label="Add to wishlist"><ion-icon
                             name="heart-outline"></ion-icon></button>
+                    <button class="quick-view" onclick="viewProduct(this)" aria-label="View product"><ion-icon
+                            name="eye-outline"></ion-icon></button>
                 </div>
                 <div class="card-body">
                     <span class="product-cat">Fashion</span>
                     <h3>Premium Streetwear</h3>
                     <div class="rating">★★★★★</div>
                     <div class="price-row"><span class="price">Rs. 4,999</span></div>
-                    <div class="product-actions"><button class="add-cart icon-only" onclick="addToCart('Premium Streetwear',4999)" aria-label="Add Premium Streetwear to cart" title="Add to cart"><ion-icon name="bag-add-outline"></ion-icon></button><a class="product-view" href="#" onclick="viewProduct(this);return false"><ion-icon name="eye-outline"></ion-icon><span>View</span></a></div>
+                    <button class="add-cart" onclick="addToCart('Premium Streetwear',4999)"><ion-icon
+                            name="bag-add-outline"></ion-icon> Add to Cart</button>
                 </div>
             </article>
 
@@ -460,13 +428,16 @@
                     <span class="badge">SALE</span>
                     <button class="wish" onclick="toggleWish(this)" aria-label="Add to wishlist"><ion-icon
                             name="heart-outline"></ion-icon></button>
+                    <button class="quick-view" onclick="viewProduct(this)" aria-label="View product"><ion-icon
+                            name="eye-outline"></ion-icon></button>
                 </div>
                 <div class="card-body">
                     <span class="product-cat">Shoes</span>
                     <h3>Classic Lifestyle Shoes</h3>
                     <div class="rating">★★★★★</div>
                     <div class="price-row"><span class="price">Rs. 4,499</span></div>
-                    <div class="product-actions"><button class="add-cart icon-only" onclick="addToCart('Classic Lifestyle Shoes',4499)" aria-label="Add Classic Lifestyle Shoes to cart" title="Add to cart"><ion-icon name="bag-add-outline"></ion-icon></button><a class="product-view" href="#" onclick="viewProduct(this);return false"><ion-icon name="eye-outline"></ion-icon><span>View</span></a></div>
+                    <button class="add-cart" onclick="addToCart('Classic Lifestyle Shoes',4499)"><ion-icon
+                            name="bag-add-outline"></ion-icon> Add to Cart</button>
                 </div>
             </article>
         </div>
@@ -755,9 +726,9 @@
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
     <script src="assets/js/firebase-config.js"></script>
     <script src="assets/js/sub-core.js"></script>
+<script src="assets/js/navbar.js"></script>
     <script src="assets/js/main.js" defer></script>
     <script src="assets/js/store.js" defer></script>
-<script src="assets/js/site-polish.js"></script>
 </body>
 
 </html>

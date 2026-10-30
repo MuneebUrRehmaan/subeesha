@@ -7,70 +7,20 @@
 <title>Categories | Subeesha</title>
 
 <link rel="stylesheet" href="../assets/css/categories.css">
-<link rel="stylesheet" href="../assets/css/site-polish.css">
+<link rel="stylesheet" href="../assets/css/sub-ui.css">
+<link rel="stylesheet" href="../assets/css/navbar.css">
 </head>
 
 <body data-page="categories">
 
 <!-- ================= HEADER ================= -->
 
-<header>
-<nav>
+<!-- ===== TOP BAR ===== -->
+<div class="sb-top"><span><ion-icon name="shield-checkmark-outline"></ion-icon> Quality Products</span><span><ion-icon name="car-outline"></ion-icon> Fast Delivery Across Pakistan</span><span><ion-icon name="gift-outline"></ion-icon> Earn Rewards With Every Order</span></div>
+<!-- ===== NAVBAR (shared) ===== -->
+<div class="sb-header" id="sbHeader" role="banner"><div class="sb-nav"><a href="../index.html" class="sb-brand" aria-label="Subeesha Home"><span class="sb-logo"><img src="../assets/images/logo.jpg" alt="Subeesha - Shop More, Live Better"></span></a><ul class="sb-links" id="navLinks"><li><a href="../index.html">Home</a></li><li><a href="../page/Categories.html">Categories</a></li><li><a href="../page/shop.html">Shop</a></li><li><a href="../page/new-arrivals.html">New Arrivals</a></li><li><a href="../page/flashsale.html">Flash Sale</a></li><li><a href="../page/loyalty.html">Rewards</a></li><li><a href="../index.html#footer">Contact</a></li></ul><div class="sb-tools"><div class="sb-sw"><form class="sb-search" id="sbSearch" autocomplete="off" role="search"><ion-icon name="search-outline"></ion-icon><input id="sbInput" type="search" placeholder="Search products, categories..." autocomplete="off" aria-label="Search products"><button type="submit" aria-label="Submit search"><ion-icon name="arrow-forward-outline"></ion-icon></button></form><div class="sb-suggest" id="sbSuggest"></div></div><div class="sb-actions"><button class="sb-icon sb-stoggle" id="sbSToggle" type="button" aria-label="Search"><ion-icon name="search-outline"></ion-icon></button><a class="sb-icon" href="../page/profile.html#wishlist" aria-label="Wishlist"><ion-icon name="heart-outline"></ion-icon></a><a class="sb-icon" id="sbUser" href="../account.html" aria-label="Account"><ion-icon name="person-outline"></ion-icon></a><button class="sb-icon" id="sbCart" type="button" aria-label="Cart"><ion-icon name="bag-handle-outline"></ion-icon><span class="sb-count" id="cartCount">0</span></button><button class="sb-icon sb-menu" id="sbMenu" type="button" aria-label="Menu"><ion-icon name="menu-outline"></ion-icon></button></div></div></div></div>
+<div class="sb-msearch" id="sbMSearch"><div class="sb-mtop"><button type="button" id="sbMBack" aria-label="Close search"><ion-icon name="arrow-back-outline"></ion-icon></button><form class="sb-search" id="sbMForm" autocomplete="off"><ion-icon name="search-outline"></ion-icon><input id="sbMInput" type="search" placeholder="Search products, categories..." autocomplete="off" aria-label="Search products"><button type="submit" aria-label="Search"><ion-icon name="arrow-forward-outline"></ion-icon></button></form></div><div class="sb-mlist" id="sbMList"></div></div>
 
-    <a href="../index.html" class="brand" aria-label="Subeesha Home">
-        <span class="brand-logo-circle">
-            <img src="../assets/images/logo.jpg" alt="Subeesha - Shop More, Live Better">
-        </span>
-    </a>
-
-    <ul class="nav-links" id="navLinks">
-        <li><a href="../index.html">Home</a></li>
-        <li><a href="../page/Categories.html" class="active">Categories</a></li>
-        <li><a href="../page/shop.html">Shop</a></li>
-        <li><a href="../page/new-arrivals.html">New Arrivals</a></li>
-        <li><a href="../page/flashsale.html">Flash Sale</a></li>
-        <li><a href="../page/loyalty.html">Rewards</a></li>
-        <li><a href="#footer">Contact</a></li>
-    </ul>
-
-    <div class="header-search">
-        <ion-icon name="search-outline"></ion-icon>
-
-        <input
-            id="searchInput"
-            type="search"
-            placeholder="Search products..."
-            aria-label="Search products"
-        >
-
-        <button type="button" onclick="searchProduct()">
-            <ion-icon name="arrow-forward-outline"></ion-icon>
-        </button>
-    </div>
-
-    <div class="nav-actions">
-
-        <button class="icon-btn" onclick="showToast('Wishlist opened')" aria-label="Wishlist">
-            <ion-icon name="heart-outline"></ion-icon>
-        </button>
-
-        <button class="icon-btn" onclick="showToast('Account page opened')" aria-label="Account">
-            <ion-icon name="person-outline"></ion-icon>
-        </button>
-
-        <button class="icon-btn" onclick="showToast('Your cart is empty')" aria-label="Cart">
-            <ion-icon name="bag-handle-outline"></ion-icon>
-            <span class="cart-count">0</span>
-        </button>
-
-        <button class="icon-btn menu-btn" onclick="toggleMenu()" aria-label="Menu">
-            <ion-icon name="menu-outline"></ion-icon>
-        </button>
-
-    </div>
-
-</nav>
-</header>
 
 
 <!-- ================= HERO ================= -->
@@ -562,9 +512,9 @@ src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.js">
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script src="../assets/js/firebase-config.js"></script>
 <script src="../assets/js/sub-core.js"></script>
+<script src="../assets/js/navbar.js"></script>
 <script src="../assets/js/categories.js"></script>
 
 <script src="../assets/js/store.js" defer></script>
-<script src="../assets/js/site-polish.js"></script>
 </body>
 </html>

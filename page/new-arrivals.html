@@ -10,66 +10,20 @@
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <link rel="stylesheet" href="../assets/css/new-arrivals.css">
-<link rel="stylesheet" href="../assets/css/site-polish.css">
+<link rel="stylesheet" href="../assets/css/sub-ui.css">
+<link rel="stylesheet" href="../assets/css/navbar.css">
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </head>
 
 <body data-page="new-arrivals">
 
-<header>
-<nav>
+<!-- ===== TOP BAR ===== -->
+<div class="sb-top"><span><ion-icon name="shield-checkmark-outline"></ion-icon> Quality Products</span><span><ion-icon name="car-outline"></ion-icon> Fast Delivery Across Pakistan</span><span><ion-icon name="gift-outline"></ion-icon> Earn Rewards With Every Order</span></div>
+<!-- ===== NAVBAR (shared) ===== -->
+<div class="sb-header" id="sbHeader" role="banner"><div class="sb-nav"><a href="../index.html" class="sb-brand" aria-label="Subeesha Home"><span class="sb-logo"><img src="../assets/images/logo.jpg" alt="Subeesha - Shop More, Live Better"></span></a><ul class="sb-links" id="navLinks"><li><a href="../index.html">Home</a></li><li><a href="../page/Categories.html">Categories</a></li><li><a href="../page/shop.html">Shop</a></li><li><a href="../page/new-arrivals.html">New Arrivals</a></li><li><a href="../page/flashsale.html">Flash Sale</a></li><li><a href="../page/loyalty.html">Rewards</a></li><li><a href="../index.html#footer">Contact</a></li></ul><div class="sb-tools"><div class="sb-sw"><form class="sb-search" id="sbSearch" autocomplete="off" role="search"><ion-icon name="search-outline"></ion-icon><input id="sbInput" type="search" placeholder="Search products, categories..." autocomplete="off" aria-label="Search products"><button type="submit" aria-label="Submit search"><ion-icon name="arrow-forward-outline"></ion-icon></button></form><div class="sb-suggest" id="sbSuggest"></div></div><div class="sb-actions"><button class="sb-icon sb-stoggle" id="sbSToggle" type="button" aria-label="Search"><ion-icon name="search-outline"></ion-icon></button><a class="sb-icon" href="../page/profile.html#wishlist" aria-label="Wishlist"><ion-icon name="heart-outline"></ion-icon></a><a class="sb-icon" id="sbUser" href="../account.html" aria-label="Account"><ion-icon name="person-outline"></ion-icon></a><button class="sb-icon" id="sbCart" type="button" aria-label="Cart"><ion-icon name="bag-handle-outline"></ion-icon><span class="sb-count" id="cartCount">0</span></button><button class="sb-icon sb-menu" id="sbMenu" type="button" aria-label="Menu"><ion-icon name="menu-outline"></ion-icon></button></div></div></div></div>
+<div class="sb-msearch" id="sbMSearch"><div class="sb-mtop"><button type="button" id="sbMBack" aria-label="Close search"><ion-icon name="arrow-back-outline"></ion-icon></button><form class="sb-search" id="sbMForm" autocomplete="off"><ion-icon name="search-outline"></ion-icon><input id="sbMInput" type="search" placeholder="Search products, categories..." autocomplete="off" aria-label="Search products"><button type="submit" aria-label="Search"><ion-icon name="arrow-forward-outline"></ion-icon></button></form></div><div class="sb-mlist" id="sbMList"></div></div>
 
-<a href="../index.html" class="brand">
-    <span class="brand-logo-circle">
-        <img src="../assets/images/logo.jpg" alt="Subeesha">
-    </span>
-</a>
-
-<ul class="nav-links" id="navLinks">
-    <li><a href="../index.html">Home</a></li>
-    <li><a href="../page/Categories.html">Categories</a></li>
-    <li><a href="../page/shop.html">Shop</a></li>
-    <li><a href="../page/new-arrivals.html" class="active">New Arrivals</a></li>
-    <li><a href="../page/flashsale.html">Flash Sale</a></li>
-    <li><a href="../page/loyalty.html">Rewards</a></li>
-    <li><a href="#footer">Contact</a></li>
-</ul>
-
-<div class="header-search">
-    <i class="fa-solid fa-magnifying-glass"></i>
-
-    <input type="search"
-           id="searchInput"
-           placeholder="Search new arrivals..."
-           onkeyup="if(event.key === 'Enter') searchProducts()">
-
-    <button onclick="searchProducts()">
-        <i class="fa-solid fa-arrow-right"></i>
-    </button>
-</div>
-
-<div class="nav-actions">
-
-    <button class="icon-btn">
-        <i class="fa-regular fa-heart"></i>
-    </button>
-
-    <a href="../account.html" class="icon-btn">
-        <i class="fa-regular fa-user"></i>
-    </a>
-
-    <button class="icon-btn" onclick="showCart()">
-        <i class="fa-solid fa-bag-shopping"></i>
-        <span class="cart-count" id="cartCount">0</span>
-    </button>
-
-    <button class="icon-btn menu-btn" onclick="toggleMenu()">
-        <i class="fa-solid fa-bars"></i>
-    </button>
-
-</div>
-
-</nav>
-</header>
 
 
 <section class="arrival-hero">
@@ -184,7 +138,25 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 <span class="price">Rs. 3,999</span>
 </div>
 
-<div class="product-actions"><button type="button" class="add-cart icon-only" onclick="addToCart('Elegant Summer Dress')" aria-label="Add Elegant Summer Dress to cart" title="Add to cart"><i class="fa-solid fa-bag-shopping"></i></button><a class="product-view" href="#" onclick="openDemoProduct(this);return false" aria-label="View Elegant Summer Dress"><i class="fa-regular fa-eye"></i><span>View</span></a></div>
+<div class="product-actions">
+
+<button class="add-cart"
+onclick="addToCart('Elegant Summer Dress')">
+Add to Cart
+</button>
+
+<button class="quick-view"
+onclick="quickView(
+'Elegant Summer Dress',
+'Fashion',
+'Rs. 3,999',
+'A stylish and elegant dress from our newest collection.',
+'https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=700&q=80'
+)">
+<i class="fa-regular fa-eye"></i>
+</button>
+
+</div>
 
 </div>
 </div>
@@ -225,7 +197,25 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 <span class="price">Rs. 89,999</span>
 </div>
 
-<div class="product-actions"><button type="button" class="add-cart icon-only" onclick="addToCart('Ultra Slim Laptop')" aria-label="Add Ultra Slim Laptop to cart" title="Add to cart"><i class="fa-solid fa-bag-shopping"></i></button><a class="product-view" href="#" onclick="openDemoProduct(this);return false" aria-label="View Ultra Slim Laptop"><i class="fa-regular fa-eye"></i><span>View</span></a></div>
+<div class="product-actions">
+
+<button class="add-cart"
+onclick="addToCart('Ultra Slim Laptop')">
+Add to Cart
+</button>
+
+<button class="quick-view"
+onclick="quickView(
+'Ultra Slim Laptop',
+'Electronics',
+'Rs. 89,999',
+'A modern slim laptop designed for work, study and creativity.',
+'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?auto=format&fit=crop&w=700&q=80'
+)">
+<i class="fa-regular fa-eye"></i>
+</button>
+
+</div>
 
 </div>
 </div>
@@ -266,7 +256,25 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 <span class="price">Rs. 2,899</span>
 </div>
 
-<div class="product-actions"><button type="button" class="add-cart icon-only" onclick="addToCart('Glow Skincare Collection')" aria-label="Add Glow Skincare Collection to cart" title="Add to cart"><i class="fa-solid fa-bag-shopping"></i></button><a class="product-view" href="#" onclick="openDemoProduct(this);return false" aria-label="View Glow Skincare Collection"><i class="fa-regular fa-eye"></i><span>View</span></a></div>
+<div class="product-actions">
+
+<button class="add-cart"
+onclick="addToCart('Glow Skincare Collection')">
+Add to Cart
+</button>
+
+<button class="quick-view"
+onclick="quickView(
+'Glow Skincare Collection',
+'Beauty',
+'Rs. 2,899',
+'A fresh skincare collection created for your everyday routine.',
+'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=700&q=80'
+)">
+<i class="fa-regular fa-eye"></i>
+</button>
+
+</div>
 
 </div>
 </div>
@@ -307,7 +315,25 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 <span class="price">Rs. 5,499</span>
 </div>
 
-<div class="product-actions"><button type="button" class="add-cart icon-only" onclick="addToCart('Modern Home Decor Set')" aria-label="Add Modern Home Decor Set to cart" title="Add to cart"><i class="fa-solid fa-bag-shopping"></i></button><a class="product-view" href="#" onclick="openDemoProduct(this);return false" aria-label="View Modern Home Decor Set"><i class="fa-regular fa-eye"></i><span>View</span></a></div>
+<div class="product-actions">
+
+<button class="add-cart"
+onclick="addToCart('Modern Home Decor Set')">
+Add to Cart
+</button>
+
+<button class="quick-view"
+onclick="quickView(
+'Modern Home Decor Set',
+'Home',
+'Rs. 5,499',
+'Beautiful modern decor items for refreshing your living space.',
+'https://images.unsplash.com/photo-1583845112203-454cfd4d6d99?auto=format&fit=crop&w=700&q=80'
+)">
+<i class="fa-regular fa-eye"></i>
+</button>
+
+</div>
 
 </div>
 </div>
@@ -348,7 +374,25 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 <span class="price">Rs. 4,799</span>
 </div>
 
-<div class="product-actions"><button type="button" class="add-cart icon-only" onclick="addToCart('Premium Denim Jacket')" aria-label="Add Premium Denim Jacket to cart" title="Add to cart"><i class="fa-solid fa-bag-shopping"></i></button><a class="product-view" href="#" onclick="openDemoProduct(this);return false" aria-label="View Premium Denim Jacket"><i class="fa-regular fa-eye"></i><span>View</span></a></div>
+<div class="product-actions">
+
+<button class="add-cart"
+onclick="addToCart('Premium Denim Jacket')">
+Add to Cart
+</button>
+
+<button class="quick-view"
+onclick="quickView(
+'Premium Denim Jacket',
+'Fashion',
+'Rs. 4,799',
+'A fresh premium denim jacket from our newest fashion collection.',
+'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=700&q=80'
+)">
+<i class="fa-regular fa-eye"></i>
+</button>
+
+</div>
 
 </div>
 </div>
@@ -389,7 +433,25 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 <span class="price">Rs. 125,000</span>
 </div>
 
-<div class="product-actions"><button type="button" class="add-cart icon-only" onclick="addToCart('Premium Laptop')" aria-label="Add Premium Laptop to cart" title="Add to cart"><i class="fa-solid fa-bag-shopping"></i></button><a class="product-view" href="#" onclick="openDemoProduct(this);return false" aria-label="View Premium Laptop"><i class="fa-regular fa-eye"></i><span>View</span></a></div>
+<div class="product-actions">
+
+<button class="add-cart"
+onclick="addToCart('Premium Laptop')">
+Add to Cart
+</button>
+
+<button class="quick-view"
+onclick="quickView(
+'Premium Laptop',
+'Electronics',
+'Rs. 125,000',
+'A newly added high performance laptop for professionals and students.',
+'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=700&q=80'
+)">
+<i class="fa-regular fa-eye"></i>
+</button>
+
+</div>
 
 </div>
 </div>
@@ -430,7 +492,25 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 <span class="price">Rs. 4,499</span>
 </div>
 
-<div class="product-actions"><button type="button" class="add-cart icon-only" onclick="addToCart('Luxury Makeup Kit')" aria-label="Add Luxury Makeup Kit to cart" title="Add to cart"><i class="fa-solid fa-bag-shopping"></i></button><a class="product-view" href="#" onclick="openDemoProduct(this);return false" aria-label="View Luxury Makeup Kit"><i class="fa-regular fa-eye"></i><span>View</span></a></div>
+<div class="product-actions">
+
+<button class="add-cart"
+onclick="addToCart('Luxury Makeup Kit')">
+Add to Cart
+</button>
+
+<button class="quick-view"
+onclick="quickView(
+'Luxury Makeup Kit',
+'Beauty',
+'Rs. 4,499',
+'A premium makeup collection recently added to Subeesha.',
+'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=700&q=80'
+)">
+<i class="fa-regular fa-eye"></i>
+</button>
+
+</div>
 
 </div>
 </div>
@@ -471,7 +551,25 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 <span class="price">Rs. 13,999</span>
 </div>
 
-<div class="product-actions"><button type="button" class="add-cart icon-only" onclick="addToCart('Comfort Lounge Chair')" aria-label="Add Comfort Lounge Chair to cart" title="Add to cart"><i class="fa-solid fa-bag-shopping"></i></button><a class="product-view" href="#" onclick="openDemoProduct(this);return false" aria-label="View Comfort Lounge Chair"><i class="fa-regular fa-eye"></i><span>View</span></a></div>
+<div class="product-actions">
+
+<button class="add-cart"
+onclick="addToCart('Comfort Lounge Chair')">
+Add to Cart
+</button>
+
+<button class="quick-view"
+onclick="quickView(
+'Comfort Lounge Chair',
+'Home',
+'Rs. 13,999',
+'A stylish and comfortable chair for your modern home.',
+'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=700&q=80'
+)">
+<i class="fa-regular fa-eye"></i>
+</button>
+
+</div>
 
 </div>
 </div>
@@ -636,9 +734,9 @@ Add to Cart
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script src="../assets/js/firebase-config.js"></script>
 <script src="../assets/js/sub-core.js"></script>
+<script src="../assets/js/navbar.js"></script>
 <script src="../assets/js/new-arrivals.js"></script>
 
 <script src="../assets/js/store.js" defer></script>
-<script src="../assets/js/site-polish.js"></script>
 </body>
 </html>

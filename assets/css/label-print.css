@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 /* =====================================================
    RESET
@@ -45,7 +44,7 @@ body{
     color:white;
     border:none;
     padding:12px 20px;
-    border-radius:6px;
+    border-radius:4px;
     font-size:14px;
     font-weight:bold;
     cursor:pointer;
@@ -656,6 +655,3 @@ body{
 
 }
 
-
-/* Shared brand typography */
-body, body button, body input, body select, body textarea, body h1, body h2, body h3, body h4, body h5, body h6, body p, body a, body span, body label, body small, body strong, body li, body td, body th, body option, body div, body section, body article { font-family: 'Poppins', sans-serif !important; }

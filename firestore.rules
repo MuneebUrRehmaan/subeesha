@@ -34,7 +34,7 @@ service cloud.firestore {
 
       // self sign-up (always a plain customer with 0 points / 0 wallet)
       allow create: if (isOwner(uid)
-                        && request.resource.data.keys().hasOnly(['name','email','whatsapp','role','status','access','points','wallet','walletUsed','createdAt'])
+                        && request.resource.data.keys().hasOnly(['name','email','whatsapp','role','status','access','points','wallet','walletUsed','createdAt','location'])
                         && request.resource.data.role == 'customer'
                         && request.resource.data.status == 'active'
                         && request.resource.data.access == 'Allowed'
@@ -46,10 +46,11 @@ service cloud.firestore {
 
       allow update: if isSuper()
                     || (isStaff() && resource.data.role != 'admin' && request.resource.data.role != 'admin')
+                    || (isAdmin() && resource.data.role != 'admin' && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['points','wallet','walletUsed']))
                     || (isOwner(uid) && active() && (
                           // normal profile edit
                           request.resource.data.diff(resource.data).affectedKeys()
-                            .hasOnly(['name','whatsapp','gender','birthday','addresses','wishlist','photoURL','phone','paymentMethod','account','lastLoginAt'])
+                            .hasOnly(['name','whatsapp','gender','birthday','addresses','wishlist','photoURL','phone','paymentMethod','account','lastLoginAt','location'])
                           ||
                           // daily login reward: exactly +10, at most once per 20 hours
                           (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['points','lastRewardAt'])
@@ -64,7 +65,9 @@ service cloud.firestore {
     /* ---------- catalog ---------- */
     match /products/{id} {
       allow read:  if resource.data.get('active', true) == true || isAdmin();
-      allow write: if isStaff();
+      allow create, delete: if isStaff();
+      // any admin (e.g. Delivery Manager) may adjust stock/sold when an order moves
+      allow update: if isStaff() || (isAdmin() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['stock','sold']));
     }
     match /categories/{id} { allow read: if true; allow write: if isStaff(); }
     match /banners/{id}    { allow read: if true; allow write: if isStaff(); }
@@ -81,14 +84,9 @@ service cloud.firestore {
 
     /* ---------- orders ---------- */
     match /counters/{id} {
-      // Checkout uses a transaction to reserve the next order number. Customers
-      // need get access to this single counter document; listing counters stays admin-only.
-      allow get:    if active() || isAdmin();
-      allow list:   if isAdmin();
-      allow create: if active() && request.resource.data.keys().hasOnly(['n'])
-                    && request.resource.data.n == 10001;
-      allow update: if active() && request.resource.data.keys().hasOnly(['n'])
-                    && request.resource.data.n == resource.data.n + 1;
+      allow read:   if signedIn();   // customers must read the counter to get the next order number
+      allow create: if active() && request.resource.data.n in [1001, 10001];
+      allow update: if active() && request.resource.data.n == resource.data.n + 1;
     }
     match /orders/{id} {
       allow get, list: if isAdmin()
@@ -166,11 +164,12 @@ service cloud.firestore {
     }
     match /walletTransactions/{id} {
       allow read:  if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
-      allow write: if isStaff();
+      allow create: if isAdmin();
+      allow update, delete: if isStaff();
     }
     match /rewardLog/{id} {
       allow read:   if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
-      allow create: if isStaff()
+      allow create: if isAdmin()
                     || (active() && request.resource.data.uid == request.auth.uid
                         && request.resource.data.reason == 'Daily Login' && request.resource.data.points == 10);
     }
@@ -184,6 +183,16 @@ service cloud.firestore {
       allow read:   if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
       allow create: if active() && request.resource.data.uid == request.auth.uid && request.resource.data.status == 'Pending';
       allow update: if isManager();
+    }
+
+    /* ---------- outgoing email (Firebase 'Trigger Email' extension) ---------- */
+    match /mail/{id} {
+      allow create: if isAdmin()
+                    || (active() && request.resource.data.keys().hasOnly(['to','message','createdAt'])
+                        && request.resource.data.to is string
+                        && (request.resource.data.to == request.auth.token.email
+                            || request.resource.data.to == get(/databases/$(database)/documents/settings/email).data.get('adminEmail', '')));
+      allow read, update, delete: if isManager();
     }
 
     /* ---------- newsletter ---------- */

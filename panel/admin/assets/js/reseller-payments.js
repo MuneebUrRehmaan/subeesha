@@ -16,8 +16,21 @@ A.ready(function () {
     document.getElementById("fStatus").onchange = draw;
     load();
     window.payOut = function (id) {
-        openModal("Mark as Paid", '<div class="field full"><label>Transaction reference (optional)</label><input id="pRef" placeholder="e.g. Easypaisa TID"></div>', A.save(function () {
-            return SUB.db.collection("payouts").doc(id).update({ status: "Paid", ref: A.val("pRef"), processedAt: SUB.now(), processedBy: A.me.name }).then(function () { A.toast("Marked as paid"); return load(); });
+        openModal("Mark as Paid", '<div class="field full"><label>Transaction reference (optional)</label><input id="pRef" placeholder="e.g. Easypaisa TID"></div><p class="label" style="margin-top:8px">The amount is deducted from the reseller\'s wallet balance.</p>', A.save(function () {
+            var db = SUB.db, FV = SUB.FV, ref = db.collection("payouts").doc(id), tid = A.val("pRef");
+            return db.runTransaction(function (tx) {
+                return tx.get(ref).then(function (ps) {
+                    var p = ps.data(); if (!p || p.status !== "Pending") throw new Error("This request was already processed.");
+                    var uref = db.collection("users").doc(p.uid);
+                    return tx.get(uref).then(function (us) {
+                        var bal = SUB.num((us.data() || {}).wallet), amt = SUB.num(p.amount);
+                        if (bal < amt) throw new Error("Reseller balance (" + A.money(bal) + ") is lower than the requested amount.");
+                        tx.update(uref, { wallet: FV.increment(-amt) });
+                        tx.set(db.collection("walletTransactions").doc(), { uid: p.uid, title: "Withdrawal paid", amount: -amt, createdAt: SUB.now() });
+                        tx.update(ref, { status: "Paid", ref: tid, processedAt: SUB.now(), processedBy: A.me.name });
+                    });
+                });
+            }).then(function () { A.toast("Marked as paid and balance deducted"); return load(); });
         }), "Confirm Paid");
     };
     window.rejectPay = function (id) {

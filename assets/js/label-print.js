@@ -59,6 +59,25 @@ function fillLabel(o, store){
         "Discount: " + money(o.discount), "Total: " + money(o.total), "Amount To Collect: " + money(collect)
     ].join("\n"));
     document.title = "Label " + no + " - Subeesha";
+    makeEditable(no, items);
+}
+
+/* click-to-edit fields; QR is rebuilt from whatever is on the label */
+function makeEditable(no, items){
+    const sel = ".customer-name,.customer-phone,.customer-address,.return-name,.return-phone,.return-details,.website-info p,.order-bar .order-box strong,.summary-section .summary-row strong,.total-row strong,.cod-box strong,.cod-box span,.qr-order";
+    const t = s => ($q(s) ? $q(s).innerText.replace(/\s+/g, " ").trim() : "");
+    let timer = null;
+    const rebuild = () => buildQr([
+        "SUBEESHA ORDER DETAILS", "", "Order Number: " + t(".qr-order").replace(/^#/, ""), "",
+        "CUSTOMER", "Name: " + t(".customer-name"), "Phone: " + t(".customer-phone"), "Address: " + t(".customer-address"), "",
+        "ITEMS: " + items, "", "Total: " + t(".total-row strong"), "Amount To Collect: " + t(".cod-box strong")
+    ].join("\n"));
+    document.querySelectorAll(sel).forEach(el => {
+        el.setAttribute("contenteditable", "true"); el.setAttribute("spellcheck", "false");
+        el.addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(rebuild, 500); });
+        el.addEventListener("paste", e => { e.preventDefault(); document.execCommand("insertText", false, (e.clipboardData || window.clipboardData).getData("text")); });
+        el.addEventListener("keydown", e => { if (e.key === "Enter" && !el.classList.contains("customer-address") && !el.classList.contains("return-details")) { e.preventDefault(); el.blur(); } });
+    });
 }
 
 function fail(msg){

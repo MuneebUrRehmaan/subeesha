@@ -88,7 +88,7 @@ body.giveaway-page{
     background:rgba(255,255,255,.12);
     border:1px solid rgba(255,255,255,.25);
 
-    border-radius:50px;
+    border-radius:4px;
 
     font-size:12px;
     font-weight:700;
@@ -136,7 +136,7 @@ body.giveaway-page{
 
     padding:15px 25px;
 
-    border-radius:8px;
+    border-radius:4px;
 
     text-decoration:none;
     font-weight:700;
@@ -182,7 +182,7 @@ body.giveaway-page{
 
     padding:30px;
 
-    border-radius:18px;
+    border-radius:4px;
 
     box-shadow:0 18px 50px rgba(0,0,0,.12);
 
@@ -218,7 +218,7 @@ body.giveaway-page{
 
     background:var(--light);
 
-    border-radius:12px;
+    border-radius:4px;
 }
 
 .timer-box strong{
@@ -300,7 +300,7 @@ body.giveaway-page{
 
     border:1px solid var(--border);
 
-    border-radius:18px;
+    border-radius:4px;
 
     overflow:hidden;
 
@@ -343,7 +343,7 @@ body.giveaway-page{
 
     padding:7px 12px;
 
-    border-radius:30px;
+    border-radius:4px;
 
     background:rgba(214,168,95,.15);
 
@@ -478,7 +478,7 @@ body.giveaway-page{
 
     background:rgba(255,255,255,.07);
 
-    border-radius:16px;
+    border-radius:4px;
 }
 
 .instagram-task h3{
@@ -530,7 +530,7 @@ body.giveaway-page{
 
     padding:38px;
 
-    border-radius:20px;
+    border-radius:4px;
 
     box-shadow:0 20px 60px rgba(0,0,0,.2);
 }
@@ -592,7 +592,7 @@ body.giveaway-page{
 
     border:1px solid var(--border);
 
-    border-radius:9px;
+    border-radius:4px;
 
     outline:none;
 
@@ -619,7 +619,7 @@ body.giveaway-page{
 
     padding:18px;
 
-    border-radius:12px;
+    border-radius:4px;
 
     margin-bottom:18px;
 }
@@ -674,7 +674,7 @@ body.giveaway-page{
 
     padding:16px;
 
-    border-radius:10px;
+    border-radius:4px;
 
     font-size:15px;
     font-weight:700;
@@ -710,7 +710,7 @@ body.giveaway-page{
 
     padding:25px;
 
-    border-radius:16px;
+    border-radius:4px;
 
     display:flex;
 
@@ -726,7 +726,7 @@ body.giveaway-page{
     display:grid;
     place-items:center;
 
-    border-radius:13px;
+    border-radius:4px;
 
     background:rgba(14,61,52,.08);
 
@@ -781,7 +781,7 @@ body.giveaway-page{
 
     padding:30px;
 
-    border-radius:17px;
+    border-radius:4px;
 
     text-align:center;
 }
@@ -823,7 +823,7 @@ body.giveaway-page{
 
     padding:7px 13px;
 
-    border-radius:30px;
+    border-radius:4px;
 
     background:var(--light);
 
@@ -865,7 +865,7 @@ body.giveaway-page{
 
     background:white;
 
-    border-radius:22px;
+    border-radius:4px;
 
     padding:40px 30px;
 
@@ -925,7 +925,7 @@ body.giveaway-page{
 
     padding:13px 28px;
 
-    border-radius:8px;
+    border-radius:4px;
 
     cursor:pointer;
 
@@ -1004,7 +1004,10 @@ body.giveaway-page{
 }
 
 </style>
-<link rel="stylesheet" href="../assets/css/site-polish.css">
+<link rel="stylesheet" href="../assets/css/navbar.css">
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<link rel="stylesheet" href="../assets/css/sub-ui.css">
 </head>
 
 
@@ -1012,134 +1015,15 @@ body.giveaway-page{
 
 
 <!-- =========================================================
-     TOP BAR
-========================================================= -->
-
-<div class="topbar">
-
-    <span>
-        <i class="fa-solid fa-shield-halved"></i>
-        Quality Products
-    </span>
-
-    <span>
-        <i class="fa-solid fa-truck-fast"></i>
-        Fast Delivery Across Pakistan
-    </span>
-
-    <span>
-        <i class="fa-solid fa-gift"></i>
-        Earn Rewards With Every Order
-    </span>
-
-</div>
-
-
-<!-- =========================================================
      HEADER
 ========================================================= -->
 
-<header>
+<!-- ===== TOP BAR ===== -->
+<div class="sb-top"><span><ion-icon name="shield-checkmark-outline"></ion-icon> Quality Products</span><span><ion-icon name="car-outline"></ion-icon> Fast Delivery Across Pakistan</span><span><ion-icon name="gift-outline"></ion-icon> Earn Rewards With Every Order</span></div>
+<!-- ===== NAVBAR (shared) ===== -->
+<div class="sb-header" id="sbHeader" role="banner"><div class="sb-nav"><a href="../index.html" class="sb-brand" aria-label="Subeesha Home"><span class="sb-logo"><img src="../assets/images/logo.jpg" alt="Subeesha - Shop More, Live Better"></span></a><ul class="sb-links" id="navLinks"><li><a href="../index.html">Home</a></li><li><a href="../page/Categories.html">Categories</a></li><li><a href="../page/shop.html">Shop</a></li><li><a href="../page/new-arrivals.html">New Arrivals</a></li><li><a href="../page/flashsale.html">Flash Sale</a></li><li><a href="../page/loyalty.html">Rewards</a></li><li><a href="../index.html#footer">Contact</a></li></ul><div class="sb-tools"><div class="sb-sw"><form class="sb-search" id="sbSearch" autocomplete="off" role="search"><ion-icon name="search-outline"></ion-icon><input id="sbInput" type="search" placeholder="Search products, categories..." autocomplete="off" aria-label="Search products"><button type="submit" aria-label="Submit search"><ion-icon name="arrow-forward-outline"></ion-icon></button></form><div class="sb-suggest" id="sbSuggest"></div></div><div class="sb-actions"><button class="sb-icon sb-stoggle" id="sbSToggle" type="button" aria-label="Search"><ion-icon name="search-outline"></ion-icon></button><a class="sb-icon" href="../page/profile.html#wishlist" aria-label="Wishlist"><ion-icon name="heart-outline"></ion-icon></a><a class="sb-icon" id="sbUser" href="../account.html" aria-label="Account"><ion-icon name="person-outline"></ion-icon></a><button class="sb-icon" id="sbCart" type="button" aria-label="Cart"><ion-icon name="bag-handle-outline"></ion-icon><span class="sb-count" id="cartCount">0</span></button><button class="sb-icon sb-menu" id="sbMenu" type="button" aria-label="Menu"><ion-icon name="menu-outline"></ion-icon></button></div></div></div></div>
+<div class="sb-msearch" id="sbMSearch"><div class="sb-mtop"><button type="button" id="sbMBack" aria-label="Close search"><ion-icon name="arrow-back-outline"></ion-icon></button><form class="sb-search" id="sbMForm" autocomplete="off"><ion-icon name="search-outline"></ion-icon><input id="sbMInput" type="search" placeholder="Search products, categories..." autocomplete="off" aria-label="Search products"><button type="submit" aria-label="Search"><ion-icon name="arrow-forward-outline"></ion-icon></button></form></div><div class="sb-mlist" id="sbMList"></div></div>
 
-<nav class="navbar">
-
-    <a href="../index.html#home"
-       class="brand"
-       aria-label="Subeesha Home">
-
-        <span class="brand-logo-circle">
-
-            <img src="../assets/images/logo.jpg"
-                 alt="Subeesha">
-
-        </span>
-
-    </a>
-
-
-    <ul class="nav-links" id="navLinks">
-
-        <li><a href="../index.html#home">Home</a></li>
-
-        <li><a href="../index.html#categories">Categories</a></li>
-
-        <li><a href="shop.html">Shop</a></li>
-
-        <li><a href="../index.html#new">New Arrivals</a></li>
-
-        <li><a href="flashsale.html">Flash Sale</a></li>
-
-        <li><a href="loyalty.html">Rewards</a></li>
-
-        <li><a href="#footer">Contact</a></li>
-
-    </ul>
-
-
-    <div class="nav-tools">
-
-        <form class="header-search"
-              onsubmit="handleHeaderSearch(event)">
-
-            <i class="fa-solid fa-magnifying-glass"></i>
-
-            <input id="headerSearchInput"
-                   type="search"
-                   placeholder="Search products, categories..."
-                   autocomplete="off">
-
-            <button type="submit">
-
-                <i class="fa-solid fa-arrow-right"></i>
-
-            </button>
-
-        </form>
-
-
-        <div class="nav-actions">
-
-            <button class="icon-btn"
-                    onclick="showToast('Your wishlist is ready.','warning','Wishlist')">
-
-                <i class="fa-regular fa-heart"></i>
-
-            </button>
-
-
-            <a class="icon-btn"
-               href="../account.html">
-
-                <i class="fa-regular fa-user"></i>
-
-            </a>
-
-
-            <button class="icon-btn"
-                    onclick="showCart()">
-
-                <i class="fa-solid fa-bag-shopping"></i>
-
-                <span class="cart-count"
-                      id="cartCount">0</span>
-
-            </button>
-
-
-            <button class="icon-btn menu-btn"
-                    onclick="toggleMenu()">
-
-                <i class="fa-solid fa-bars"></i>
-
-            </button>
-
-        </div>
-
-    </div>
-
-</nav>
-
-</header>
 
 
 <!-- =========================================================
@@ -2154,12 +2038,12 @@ body.giveaway-page{
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script src="../assets/js/firebase-config.js"></script>
 <script src="../assets/js/sub-core.js"></script>
+<script src="../assets/js/navbar.js"></script>
 <script src="../assets/js/main.js" defer></script>
 
 
 <script src="../assets/js/giveaway.js"></script>
 
 <script src="../assets/js/store.js" defer></script>
-<script src="../assets/js/site-polish.js"></script>
 </body>
 </html>

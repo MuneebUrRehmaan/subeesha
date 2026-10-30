@@ -61,3 +61,35 @@ Because outbound network to Firebase/Cloudinary is blocked in the environment th
 - Walk through: sign up -> add to cart -> checkout -> admin marks Delivered -> check stock/wallet/points changed correctly.
 - Test the Firestore rules in the Rules Playground, especially order status transitions and the reseller/admin creation flow (uses a secondary Firebase Auth app instance so the admin doesn't get signed out).
 - Confirm Cloudinary uploads work with your unsigned preset (some Cloudinary accounts restrict unsigned uploads to specific folders).
+
+
+---
+## v3 additions (read this after deploying)
+
+### 1. RE-PUBLISH `firestore.rules` (important)
+Orders were failing with "no permission" because customers could not read the order counter. The updated rules fix this
+(and let every admin role adjust stock/points, and let the site write order emails). Firebase Console > Firestore > Rules > paste `firestore.rules` > **Publish**.
+
+### 2. Delivery charges (Admin > Shipping)
+Three methods, switch any time:
+- **Flat rate** - one charge for all orders.
+- **By city (manual)** - a charge per city (checkout city list now has ~70 Pakistani cities) + a default for other cities.
+- **By map zones (auto)** - search or click on the map to add a zone (e.g. Hyderabad, radius 10 km, Rs. 150). A customer inside a zone pays that zone's charge; outside every zone pays the default. If the customer pinned a location it is used, otherwise the selected city is geocoded automatically.
+"Free delivery above" works with every method.
+Customers can pin their location on a Leaflet/OpenStreetMap map at **signup** (optional) and at **checkout**.
+Maps use OpenStreetMap tiles and Nominatim search (free, no API key; fair-use limits apply).
+
+### 3. Order emails (Admin > Settings > Email Notifications)
+Master ON/OFF switch plus separate switches for: email to customer on order, alert to admin on new order, status-change emails.
+Two services:
+- **EmailJS** (no billing needed; sends through your Gmail). Follow the 5-minute box shown in Settings.
+- **Firebase Trigger Email extension** (needs Blaze plan): site writes to the `mail` collection, the extension sends via your Gmail/SMTP.
+Use "Send test email" to verify. EmailJS keys are public by design; add your domain to EmailJS allowed origins.
+
+### 4. Reseller money flow
+Commission is credited to the reseller wallet when an order is **Delivered** and taken back if it is **Returned**.
+Withdrawals are deducted from the wallet when admin presses **Mark Paid**; pending requests are reserved in the reseller's available balance.
+
+### 5. Other
+- One navbar (copied from the home page) on every storefront page, with mobile search overlay, recent searches and live suggestions.
+- All corners are max 4px (circles/avatars stay round). Label/invoice is A6 and click-to-edit before printing.

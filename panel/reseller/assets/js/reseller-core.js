@@ -37,15 +37,9 @@
             R.toast("Your reseller referral link copied!");
         };
         w.shareProduct = function (name, id) {
-            var detailUrl = new URL("../../page/product.html", location.href);
-            detailUrl.searchParams.set("id", id || "");
-            if (p.resellerCode) detailUrl.searchParams.set("ref", p.resellerCode);
-            var link = detailUrl.href;
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(link).then(function () {
-                    R.toast(name + " product detail link copied!");
-                }).catch(function () { window.prompt("Copy product link", link); });
-            } else window.prompt("Copy product link", link);
+            var link = location.origin + location.pathname.replace(/panel\/reseller\/.*/, "page/billing.html") + "?product=" + encodeURIComponent(id || "") + "&ref=" + (p.resellerCode || "");
+            if (navigator.clipboard) navigator.clipboard.writeText(link);
+            R.toast(name + " referral link copied!");
         };
     }
     R.logout = function () { SUB.signOut().then(function () { location.href = "login.html"; }); };
@@ -59,7 +53,7 @@
         var s = d.querySelector(".page-section.active") || d.querySelector(".page-section");
         if (!s) return;
         var n = d.createElement("div");
-        n.style.cssText = "background:#fff6e4;border:1px solid #f0dcaa;color:#7a5a12;padding:12px 14px;border-radius:10px;font-size:12px;margin-bottom:14px;line-height:1.6";
+        n.style.cssText = "background:#fff6e4;border:1px solid #f0dcaa;color:#7a5a12;padding:12px 14px;border-radius:4px;font-size:12px;margin-bottom:14px;line-height:1.6";
         n.innerHTML = msg; s.insertBefore(n, s.firstChild);
     }
     if (!SUB.configured) {

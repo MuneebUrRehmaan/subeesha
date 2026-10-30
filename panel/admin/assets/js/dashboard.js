@@ -2,6 +2,11 @@
 A.ready(function () {
     var db = SUB.db, $ = function (id) { return document.getElementById(id); };
     var orders = [];
+    ["stSales", "stOrders", "stCustomers", "activeResellerCount"].forEach(function (id) { $(id).innerHTML = '<span class="sk" style="display:inline-block;width:90px;height:24px"></span>'; });
+    ["stSalesCh", "stOrdersCh", "stCustomersCh"].forEach(function (id) { $(id).innerHTML = '<span class="sk" style="display:inline-block;width:110px;height:10px"></span>'; });
+    $("chart").innerHTML = '<div class="sk" style="width:100%;height:100%"></div>';
+    $("alerts").innerHTML = '<div class="sk" style="height:62px;margin-bottom:10px"></div><div class="sk" style="height:62px;margin-bottom:10px"></div><div class="sk" style="height:62px"></div>';
+    A.loading($("recentOrders"), 5, 5);
 
     function monthKey(d) { return d.getFullYear() + "-" + d.getMonth(); }
     function valid(o) { return !/^(Cancelled|Returned)$/.test(o.status); }
@@ -50,7 +55,7 @@ A.ready(function () {
 
         var st = r[6] || SUB.defaults.store, low = products.filter(function (p) { return p.active !== false && p.stock != null && p.stock <= SUB.num(st.lowStock); }).length;
         var pend = orders.filter(function (o) { return o.status === "Pending"; }).length;
-        function al(bg, icon, t, txt, href) { return '<a href="' + href + '" style="display:block;padding:12px;background:' + bg + ';border-radius:8px;margin-bottom:10px;font-size:12px;color:inherit;text-decoration:none"><b><i class="fa-solid fa-' + icon + '"></i> ' + t + '</b><br><br><span style="color:#777">' + txt + "</span></a>"; }
+        function al(bg, icon, t, txt, href) { return '<a href="' + href + '" style="display:block;padding:12px;background:' + bg + ';border-radius:4px;margin-bottom:10px;font-size:12px;color:inherit;text-decoration:none"><b><i class="fa-solid fa-' + icon + '"></i> ' + t + '</b><br><br><span style="color:#777">' + txt + "</span></a>"; }
         $("alerts").innerHTML =
             al("#fff6e4", "triangle-exclamation", "Low Stock", low + " product(s) are running low.", "inventory.html") +
             al("#eaf5ef", "cart-shopping", "Pending Orders", pend + " order(s) waiting to be processed.", "orders.html") +

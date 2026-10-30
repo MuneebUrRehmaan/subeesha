@@ -61,6 +61,28 @@ function togglePassword(inputId, button){
     }
 }
 
+/* ===== SIGNUP LOCATION (Leaflet map, optional) ===== */
+let signupLoc = null;
+(function(){
+    const f = document.getElementById("signupForm");
+    const submit = f && f.querySelector(".auth-submit");
+    if(!f || !submit) return;
+    const g = document.createElement("div");
+    g.className = "form-group";
+    g.innerHTML = '<label>Delivery Location <small style="color:#8d9691;font-weight:400">(optional)</small></label>' +
+        '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button type="button" id="pickLoc" style="padding:11px 14px;border:1px solid #0e3d34;color:#0e3d34;background:#fff;border-radius:4px;font-weight:600;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit"><ion-icon name="location-outline"></ion-icon> Select on map</button>' +
+        '<span id="locText" style="font-size:12px;color:#68736e;flex:1;min-width:150px;line-height:1.5"></span></div>';
+    f.insertBefore(g, submit);
+    document.getElementById("pickLoc").addEventListener("click", function(){
+        if(!window.SUB || !SUB.map) return;
+        SUB.map.pick(signupLoc).then(function(r){
+            if(!r) return;
+            signupLoc = { lat:r.lat, lng:r.lng, address:r.address || "", city:r.city || "", province:r.province || "" };
+            document.getElementById("locText").textContent = signupLoc.address || (r.lat.toFixed(4) + ", " + r.lng.toFixed(4));
+        }).catch(function(e){ setMessage("signupMessage", "error", "Error: " + e.message); });
+    });
+})();
+
 /* ===== FIREBASE AUTH (login / sign up / reset) ===== */
 function setMessage(elementId, type, text){
     const box = document.getElementById(elementId);
@@ -133,7 +155,7 @@ signupForm.addEventListener("submit", function(event){
     }
     if(needFirebase("signupMessage")) return;
     setBusy(signupForm, true);
-    SUB.signUp({ name: name, email: email, password: password, whatsapp: (code + " " + phone).trim() }).then(function(){
+    SUB.signUp({ name: name, email: email, password: password, whatsapp: (code + " " + phone).trim(), location: signupLoc }).then(function(){
         setMessage("signupMessage", "success", "Success: Account created. Redirecting...");
         setTimeout(() => goAfterLogin(SUB.profile || { role: "customer" }), 600);
     }).catch(function(e){

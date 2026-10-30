@@ -88,105 +88,68 @@
         SUB.dailyReward().then(function (ok) { if (ok) SUB.notify("You earned +10 daily login points!", "success", "Rewards"); });
     });
 
-    w.openDemoProduct = function (button) {
-        var card = button && button.closest ? button.closest(".product-card, .card") : null;
-        if (!card) return;
-        var nameEl = card.querySelector("h3"), categoryEl = card.querySelector(".product-category, .product-cat");
-        var imageEl = card.querySelector(".product-image img, .card-img img");
-        var priceEl = card.querySelector(".sale-price, .price");
-        var name = nameEl ? nameEl.textContent.trim() : "Subeesha Product";
-        var price = priceEl ? priceEl.textContent.replace(/[^0-9.]/g, "") : "0";
-        var query = new URLSearchParams({ demo: "1", name: name, category: categoryEl ? categoryEl.textContent.trim() : "Collection", image: imageEl ? imageEl.src : "", price: price }).toString();
-        w.location.href = SUB.url("page/product.html?" + query);
-    };
-
     if (!SUB.configured) return;   // keep static demo content
 
-    /* ---------- card templates ---------- */
-    function ratingIon(n) {
-        n = Math.round(n || 0); if (!n) return "";
-        var s = ""; for (var i = 1; i <= 5; i++) s += i <= n ? "\u2605" : "\u2606";
-        return '<div class="rating">' + s + "</div>";
-    }
-    function ratingFA(p) {
-        var n = Math.round(p.rating || 0); if (!n) return "";
-        var s = ""; for (var i = 1; i <= 5; i++) s += '<i class="fa-' + (i <= n ? "solid" : "regular") + ' fa-star"></i>';
-        return '<div class="rating">' + s + (p.reviewCount ? "<span>(" + p.reviewCount + ")</span>" : "") + "</div>";
-    }
+    /* ---------- ONE product card for every page ---------- */
+    var IC = {
+        bag: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>',
+        eye: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+        heart: '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>'
+    };
     function badgeText(p, isNewList) {
         if (p.badge) return p.badge;
-        if (p._flash && p._pct) return p._pct + "% OFF";
         if (p._pct) return p._pct + "% OFF";
         if (isNewList || p.isNew) return "NEW";
         return "";
     }
     function catLabel(p) { return esc(p.category || "General"); }
-    function productDetailsUrl(p) {
-        return SUB.url("page/product.html?id=" + encodeURIComponent(p.id));
+    function productUrl(id) { return SUB.url("page/product.html?id=" + encodeURIComponent(id)); }
+    function card(p, isNewList) {
+        var b = badgeText(p, isNewList), sold = p._stock <= 0, url = productUrl(p.id), wished = SUB.wish.has(p.id);
+        var rate = Math.round(p.rating || 0);
+        return '<article class="sc-card product-card" data-id="' + esc(p.id) + '" data-category="' + esc(p.categorySlug || SUB.categoryKey(p)) + '">' +
+            '<a class="sc-media" href="' + url + '" aria-label="View ' + esc(p.name) + '"><img src="' + esc(SUB.img(p._img, 600)) + '" alt="' + esc(p.name) + '" loading="lazy" onload="this.classList.add(\'ld\')" onerror="this.onerror=null;this.src=SUB.url(\'assets/images/logo.jpg\');this.classList.add(\'ld\')">' +
+            (sold ? '<span class="sc-badge sold">Sold out</span>' : (b ? '<span class="sc-badge">' + esc(b) + "</span>" : "")) + "</a>" +
+            '<button class="sc-heart' + (wished ? " on" : "") + '" onclick="SUBUI.wish(this,\'' + esc(p.id) + '\')" aria-label="Add to wishlist">' + IC.heart + "</button>" +
+            '<div class="sc-body"><span class="sc-cat">' + catLabel(p) + '</span><h3><a href="' + url + '">' + esc(p.name) + "</a></h3>" +
+            (rate ? '<div class="sc-rate">' + SUB.stars(rate) + "</div>" : "") +
+            '<div class="sc-price"><b>' + SUB.money(p._price) + "</b>" + (p._old ? "<s>" + SUB.money(p._old) + "</s>" : "") + "</div>" +
+            '<div class="sc-actions"><button class="sc-bag" onclick="SUBUI.add(\'' + esc(p.id) + '\')" aria-label="Add to cart"' + (sold ? " disabled" : "") + ">" + IC.bag + '</button>' +
+            '<a class="sc-view" href="' + url + '">' + IC.eye + " View</a></div></div></article>";
     }
-    function cardActions(p, soldOut) {
-    return '<div class="product-actions">' +
-        '<button type="button" class="add-cart icon-only" ' +
-        'onclick="addToCartFromCard(\'' + esc(p.id) + '\')" ' +
-        'aria-label="Add ' + esc(p.name) + ' to cart" ' +
-        'title="Add to cart"' +
-        (soldOut ? ' disabled' : '') +
-        '><i class="fa-solid fa-cart-shopping" style="font-size:18px;color:#fff;display:inline-block" aria-hidden="true"></i></button>' +
-        '<a class="product-view" href="' + esc(productDetailsUrl(p)) + '" ' +
-        'aria-label="View ' + esc(p.name) + '">' +
-        '<i class="fa-regular fa-eye" style="font-size:16px" aria-hidden="true"></i>' +
-        '<span>View</span></a>' +
-        '</div>';
-}
-    function cardHome(p, isNewList) {
-        var wished = SUB.wish.has(p.id), b = badgeText(p, isNewList), soldOut = p._stock <= 0;
-        return '<article class="card" data-id="' + esc(p.id) + '" data-category="' + esc(p.categorySlug || SUB.categoryKey(p)) + '">' +
-            '<div class="card-img"><a class="card-image-link" href="' + esc(productDetailsUrl(p)) + '" aria-label="View ' + esc(p.name) + '"><img src="' + esc(SUB.img(p._img, 800)) + '" alt="' + esc(p.name) + '" loading="lazy"></a>' +
-            (soldOut ? '<span class="badge">SOLD OUT</span>' : (b ? '<span class="badge">' + esc(b) + '</span>' : '')) +
-            '<button class="wish" onclick="toggleWish(this)" aria-label="Add to wishlist"><ion-icon name="' + (wished ? 'heart' : 'heart-outline') + '"' + (wished ? ' style="color:var(--pink)"' : '') + '></ion-icon></button></div>' +
-            '<div class="card-body"><span class="product-cat">' + catLabel(p) + '</span><h3>' + esc(p.name) + '</h3>' + ratingIon(p.rating) +
-            '<div class="price-row"><span class="price">' + SUB.money(p._price) + '</span>' + (p._old ? '<span class="old">' + SUB.money(p._old) + '</span>' : '') + '</div>' + cardActions(p, soldOut) + '</div></article>';
-    }
-    function cardShop(p, isNewList) {
-        var wished = SUB.wish.has(p.id), b = badgeText(p, isNewList), soldOut = p._stock <= 0;
-        return '<article class="product-card" data-id="' + esc(p.id) + '" data-category="' + esc(p.categorySlug || SUB.categoryKey(p)) + '">' +
-            '<div class="product-image"><a class="card-image-link" href="' + esc(productDetailsUrl(p)) + '" aria-label="View ' + esc(p.name) + '"><img src="' + esc(SUB.img(p._img, 800)) + '" alt="' + esc(p.name) + '" loading="lazy"></a>' +
-            (soldOut ? '<span class="product-badge">SOLD OUT</span>' : (b ? '<span class="product-badge">' + esc(b) + '</span>' : '')) +
-            '<button class="wishlist-btn' + (wished ? ' active' : '') + '" onclick="toggleWishlist(this)" aria-label="Add to wishlist"><i class="fa-' + (wished ? 'solid' : 'regular') + ' fa-heart"></i></button></div>' +
-            '<div class="product-info"><span class="product-category">' + catLabel(p) + '</span><h3 title="' + esc(p.name) + '">' + esc(p.name) + '</h3>' + ratingFA(p) +
-            '<div class="price-row"><div><span class="price">' + SUB.money(p._price) + '</span>' + (p._old ? '<span class="old-price">' + SUB.money(p._old) + '</span>' : '') + '</div></div>' + cardActions(p, soldOut) + '</div></article>';
-    }
-    function cardFlash(p) {
-        var wished = SUB.wish.has(p.id), soldOut = p._stock <= 0;
-        var sold = SUB.num(p.sold), left = p._stock >= 999 ? 0 : p._stock;
-        var pct = (sold + left) > 0 ? Math.min(100, Math.round(sold / (sold + left) * 100)) : 0;
-        return '<article class="product-card" data-id="' + esc(p.id) + '" data-category="' + esc(p.categorySlug || SUB.categoryKey(p)) + '">' +
-            '<div class="product-image"><a class="card-image-link" href="' + esc(productDetailsUrl(p)) + '" aria-label="View ' + esc(p.name) + '"><img src="' + esc(SUB.img(p._img, 800)) + '" alt="' + esc(p.name) + '" loading="lazy"></a>' +
-            (p._pct ? '<span class="discount-badge">' + p._pct + '% OFF</span>' : '') +
-            '<button class="wishlist-btn' + (wished ? ' active' : '') + '" onclick="toggleWishlist(this)" aria-label="Add to wishlist"><ion-icon name="' + (wished ? 'heart' : 'heart-outline') + '"></ion-icon></button></div>' +
-            '<div class="product-info"><span class="product-category">' + catLabel(p) + '</span><h3 title="' + esc(p.name) + '">' + esc(p.name) + '</h3>' +
-            '<div class="price-row"><span class="sale-price">' + SUB.money(p._price) + '</span>' + (p._old ? '<span class="old-price">' + SUB.money(p._old) + '</span>' : '') + '</div>' +
-            (p._stock < 999 ? '<div class="stock-area"><div class="stock-text"><span>Sold: ' + sold + '</span><strong>' + (soldOut ? 'Sold out' : 'Only ' + left + ' left') + '</strong></div><div class="stock-bar"><div class="stock-progress" style="width:' + pct + '%"></div></div></div>' : '') +
-            cardActions(p, soldOut) + '</div></article>';
-    }
-    w.addToCartFromCard = function (id) {
-        var p = (w.__products || []).filter(function (x) { return x.id === id; })[0];
-        if (!p) return;
-        if (p._stock <= 0) return SUB.notify(p.name + ' is out of stock.', 'error', 'Out of Stock');
-        if ((p.sizes && p.sizes.length) || (p.colors && p.colors.length)) {
-            w.location.href = productDetailsUrl(p);
-            return;
+    var cardHome = card, cardShop = card, cardFlash = card;
+
+    w.SUBUI = {
+        card: function (p, n) { return card(p, n); },
+        skCards: function (n) { var o = ""; for (var i = 0; i < n; i++) o += skCard(); return o; },
+        add: function (id) {
+            var p = (w.__products || []).filter(function (x) { return x.id === id; })[0]; if (!p) return;
+            if (p._stock <= 0) return SUB.notify(p.name + " is out of stock.", "error", "Out of Stock");
+            // products with sizes/colours need a choice first -> open the detail page
+            if ((p.sizes && p.sizes.length) || (p.colors && p.colors.length)) { w.location.href = productUrl(id); return; }
+            SUB.cart.add({ id: p.id, name: p.name, price: p._price, image: p._img, qty: 1 });
+            SUB.notify(p.name + " added to your cart.", "success", "Added to Cart");
+        },
+        wish: function (btn, id) {
+            var on = SUB.wish.toggle(id);
+            btn.classList.toggle("on", on);
+            SUB.notify(on ? "Added to your wishlist." : "Removed from your wishlist.", on ? "success" : "warning", "Wishlist");
         }
-        w.addToCart(id);
     };
+
+    /* ---------- skeleton (shimmer) loaders ---------- */
+    function skCard() {
+        return '<div class="sc-card"><div class="sc-media sk"></div><div class="sc-body"><div class="sk sk-line" style="width:40%"></div><div class="sk sk-line" style="width:88%;height:14px"></div><div class="sk sk-line" style="width:35%;height:16px;margin-bottom:14px"></div><div class="sc-actions"><div class="sk" style="width:42px;height:38px"></div><div class="sk" style="flex:1;height:38px"></div></div></div></div>';
+    }
+    function skBlocks(n, h) { var o = ""; for (var i = 0; i < n; i++) o += '<div class="sk" style="height:' + h + 'px"></div>'; return o; }
     function empty(msg) {
         return '<p class="sub-empty" style="grid-column:1/-1;text-align:center;color:#68736e;padding:34px 10px;font-size:14px">' + esc(msg) + "</p>";
     }
     function loading(el) {
         if (!el) return;
-        el.innerHTML = Array.from({ length: 4 }, function () {
-            return '<article class="product-skeleton" aria-hidden="true"><div class="skeleton skeleton-image"></div><div class="skeleton-content"><div class="skeleton skeleton-line short"></div><div class="skeleton skeleton-line title"></div><div class="skeleton skeleton-line medium"></div><div class="skeleton skeleton-line price"></div><div class="skeleton skeleton-actions"></div></div></article>';
-        }).join("");
+        el.classList.add("sc-grid");
+        var o = ""; for (var i = 0; i < 8; i++) o += skCard();
+        el.innerHTML = o;
     }
 
     /* shop-like filter buttons built from categories */
@@ -208,8 +171,21 @@
             }
         }
         if (q) {
-            var inp = d.getElementById("searchInput");
-            if (inp) { inp.value = q; var fn = w.searchProducts || w.searchProduct; if (fn) fn(); }
+            var words = q.toLowerCase().split(/\s+/).filter(Boolean), n = 0;
+            [].forEach.call(d.querySelectorAll(".product-card"), function (c) {
+                var t = (((c.querySelector("h3") || {}).textContent || "") + " " + ((c.querySelector(".sc-cat") || {}).textContent || "")).toLowerCase();
+                var ok = words.every(function (x) { return t.indexOf(x) > -1; });
+                c.style.display = ok ? "" : "none"; if (ok) n++;
+            });
+            var grid = d.getElementById("productsGrid") || d.querySelector(".products-grid");
+            if (grid) {
+                var old = d.getElementById("scNote"); if (old) old.parentNode.removeChild(old);
+                var note = d.createElement("div"); note.id = "scNote";
+                note.style.cssText = "display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:#f7faf8;border:1px solid #e4ebe7;border-radius:4px;padding:12px 16px;margin-bottom:16px;font-size:14px";
+                note.innerHTML = "<span>" + n + " result" + (n === 1 ? "" : "s") + " for <b>&ldquo;" + esc(q) + "&rdquo;</b></span><a href=\"shop.html\" style=\"color:#0e3d34;font-weight:600\">Clear search</a>";
+                grid.parentNode.insertBefore(note, grid);
+                if (!n) grid.insertAdjacentHTML("beforeend", empty("No products match your search. Try a different word."));
+            }
         }
     }
 
@@ -220,6 +196,11 @@
         var prodBoxes = d.querySelectorAll("#shop .products, #new .products");
         var featBox = prodBoxes[0], newBox = prodBoxes[1];
         loading(featBox); loading(newBox);
+        var sale0 = d.getElementById("sale"); if (sale0) sale0.style.display = "none";
+        var cat0 = d.querySelector("#categories .categories"); if (cat0) cat0.innerHTML = skBlocks(6, 150);
+        var heroSk = null, hs = d.querySelector(".hero-slider");
+        if (hs) { if (getComputedStyle(hs).position === "static") hs.style.position = "relative"; heroSk = d.createElement("div"); heroSk.className = "sk sk-hero"; hs.appendChild(heroSk); }
+        function hideHeroSk() { if (heroSk && heroSk.parentNode) heroSk.parentNode.removeChild(heroSk); heroSk = null; }
 
         SUB.catalog().then(function (c) {
             w.__products = c.products;
@@ -245,6 +226,7 @@
             var sale = d.getElementById("sale");
             if (sale) {
                 if (SUB.flashActive(c.flash)) {
+                    sale.style.display = "";
                     var h2 = sale.querySelector(".sale-copy h2"), p = sale.querySelector(".sale-copy p");
                     if (h2) h2.textContent = c.flash.name || "Flash Sale";
                     if (p) p.textContent = "Save up to " + SUB.num(c.flash.discountPercent) + "% on selected products.";
@@ -255,6 +237,7 @@
 
         // banners: hero + popup
         SUB.db.collection("banners").get().then(function (snap) {
+            hideHeroSk();
             var all = SUB.docs(snap).filter(function (b) { return b.active !== false; })
                 .sort(function (a, b) { return SUB.num(a.order) - SUB.num(b.order); });
             var heroes = all.filter(function (b) { return b.type === "hero"; });
@@ -287,21 +270,24 @@
                     if (a) { a.innerHTML = esc(pop.btnText || "Shop Now") + ' <ion-icon name="arrow-forward-outline"></ion-icon>'; a.setAttribute("href", pop.btnLink || "#shop"); }
                 }
             } else { w.__adDisabled = true; }
-        }).catch(function () { });
+        }).catch(function () { hideHeroSk(); });
 
         // reviews carousel
         var track = d.getElementById("reviewTrack");
         if (track) {
+            try { reviewPaused = true; } catch (e) { }
+            track.innerHTML = '<article class="review"><div class="sk" style="height:130px"></div></article><article class="review"><div class="sk" style="height:130px"></div></article><article class="review"><div class="sk" style="height:130px"></div></article>';
             SUB.db.collection("reviews").where("status", "==", "approved").get().then(function (snap) {
                 var rv = SUB.docs(snap).sort(function (a, b) { return SUB.ms(b.createdAt) - SUB.ms(a.createdAt); }).slice(0, 8);
                 var wrap = d.querySelector(".reviews-wrap");
-                if (!rv.length) { if (wrap) wrap.style.display = "none"; return; }
+                if (!rv.length) { if (wrap) wrap.style.display = "none"; try { reviewPaused = false; } catch (e) { } return; }
                 track.innerHTML = rv.map(function (r, i) {
                     return '<article class="review' + (i ? "" : " active") + '"><div class="review-top"><div class="stars">' + SUB.stars(r.rating) + '</div><span class="review-badge"><ion-icon name="checkmark-circle"></ion-icon> Verified</span></div>' +
                         '<p>"' + esc(r.review) + '"</p><div class="customer"><span class="customer-avatar">' + esc(SUB.initials(r.name)) + "</span><span><strong>" + esc(r.name) + "</strong><small>Verified Buyer</small></span></div></article>";
                 }).join("");
                 w.initReviewSlider();
-            }).catch(function () { });
+                try { reviewPaused = false; } catch (e) { }
+            }).catch(function () { try { reviewPaused = false; } catch (e) { } });
         }
     }
 
@@ -311,6 +297,7 @@
     function listPage(kind) {
         var grid = d.getElementById("productsGrid") || d.querySelector(".products-grid");
         loading(grid);
+        if (kind === "flash") { var bar0 = d.querySelector(".flash-sale-bar"); if (bar0) bar0.style.visibility = "hidden"; }
         SUB.catalog().then(function (c) {
             w.__products = c.products;
             var list = c.products;
@@ -329,6 +316,7 @@
                     if (grid) grid.innerHTML = empty("There is no active flash sale right now. Please check back soon!");
                     return;
                 }
+                if (bar) bar.style.visibility = "";
                 if (typeof w.setSaleEnd === "function") w.setSaleEnd(SUB.ms(c.flash.endsAt));
                 var inf = d.getElementById("sale-info");
                 if (inf) { var s = inf.querySelector("h2, h3, strong"); if (s) s.textContent = c.flash.name || s.textContent; }
@@ -366,7 +354,7 @@
 
     function categoriesPage() {
         var grid = d.getElementById("categoriesGrid");
-        loading(grid);
+        if (grid) grid.innerHTML = skBlocks(8, 280);
         SUB.catalog().then(function (c) {
             if (!grid) return;
             if (!c.categories.length) { grid.innerHTML = empty("Categories will appear here soon."); return; }

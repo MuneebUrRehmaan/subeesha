@@ -1,0 +1,101 @@
+/* =========================================================
+   SUBEESHA SHARED UI  -  one product card everywhere,
+   product detail page and shimmer skeleton loaders.
+   Corner radius is 4px across cards, buttons and images.
+   ========================================================= */
+:root{--sc-primary:var(--primary,#0e3d34);--sc-dark:var(--primary-dark,#082b25);--sc-border:var(--border,#e4ebe7);--sc-muted:var(--muted,#71807a);--sc-text:var(--text,#1f2d29)}
+
+/* ---------- shimmer skeleton ---------- */
+.sk{position:relative;overflow:hidden;background:#e8edea;border-radius:4px}
+.sk::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);animation:skSlide 1.3s ease-in-out infinite}
+@keyframes skSlide{to{transform:translateX(100%)}}
+.sk-line{height:12px;margin:9px 0}
+.sk-hero{position:absolute;inset:0;z-index:30;border-radius:0}
+@media (prefers-reduced-motion:reduce){.sk::after{animation:none}}
+
+/* ---------- product grid ---------- */
+.sc-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:20px!important;align-items:stretch}
+@media(max-width:1100px){.sc-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media(max-width:760px){.sc-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}}
+
+/* ---------- product card ---------- */
+.sc-card,.sc-card.product-card{display:block;position:relative;background:#fff;border:1px solid var(--sc-border);border-radius:4px;overflow:hidden;box-shadow:none;transform:none;padding:0;transition:box-shadow .2s,border-color .2s}
+.sc-card.product-card:hover{box-shadow:0 10px 26px rgba(14,61,52,.10);border-color:#d2dcd7;transform:none}
+.sc-media{position:relative;display:block;aspect-ratio:4/5;background:#eef2f0;overflow:hidden}
+.sc-media img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .35s,transform .5s}
+.sc-media img.ld{opacity:1}
+.sc-card:hover .sc-media img{transform:scale(1.04)}
+.sc-badge{position:absolute;top:10px;left:10px;background:var(--sc-primary);color:#fff;font-size:10px;font-weight:700;letter-spacing:.5px;padding:4px 8px;border-radius:2px;text-transform:uppercase}
+.sc-badge.sold{background:#7c8581}
+.sc-heart{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:4px;background:#fff;border:0;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#55635d;box-shadow:0 2px 8px rgba(0,0,0,.10);z-index:2}
+.sc-heart:hover{color:#d9534f}
+.sc-heart.on{color:#d9534f}.sc-heart.on svg{fill:currentColor}
+.sc-body{padding:12px 12px 14px;text-align:left}
+.sc-cat{display:block;font-size:11px;color:var(--sc-muted);text-transform:uppercase;letter-spacing:.6px}
+.sc-body h3{font-size:14px;font-weight:600;line-height:1.35;margin:4px 0 6px;color:var(--sc-text);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.7em}
+.sc-body h3 a{color:inherit}.sc-body h3 a:hover{color:var(--sc-primary)}
+.sc-rate{color:#e0a13a;font-size:12px;letter-spacing:1px;margin-bottom:4px}
+.sc-price{display:flex;align-items:baseline;gap:8px;margin:2px 0 12px}
+.sc-price b{font-size:16px;color:var(--sc-primary)}
+.sc-price s{font-size:12px;color:var(--sc-muted)}
+.sc-actions{display:flex;gap:8px}
+.sc-bag{width:42px;height:38px;flex:none;border-radius:4px;background:var(--sc-primary);color:#fff;border:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s}
+.sc-bag:hover{background:var(--sc-dark)}.sc-bag:disabled{opacity:.4;cursor:not-allowed}
+.sc-view{flex:1;height:38px;border-radius:4px;border:1px solid var(--sc-primary);color:var(--sc-primary);background:transparent;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:all .2s}
+.sc-view:hover{background:var(--sc-primary);color:#fff}
+.sc-card button:focus-visible,.sc-card a:focus-visible{outline:2px solid var(--sc-primary);outline-offset:2px}
+
+/* ---------- product detail page ---------- */
+.pd{max-width:1180px;margin:0 auto;padding:28px 20px 72px}
+.pd-crumbs{font-size:12px;color:var(--sc-muted);margin-bottom:22px;display:flex;flex-wrap:wrap;gap:6px}
+.pd-crumbs a:hover{color:var(--sc-primary)}.pd-crumbs span:last-child{color:var(--sc-text)}
+.pd-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:48px;align-items:start}
+.pd-gallery{display:grid;grid-template-columns:84px minmax(0,1fr);gap:14px}
+.pd-gallery.single{grid-template-columns:1fr}
+.pd-thumbs{display:flex;flex-direction:column;gap:10px;max-height:680px;overflow:auto}
+.pd-thumb{width:84px;aspect-ratio:1;padding:0;border:2px solid transparent;border-radius:4px;overflow:hidden;cursor:pointer;background:#eef2f0;flex:none}
+.pd-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.pd-thumb.on{border-color:var(--sc-primary)}
+.pd-main{border-radius:4px;overflow:hidden;background:#eef2f0;aspect-ratio:4/5}
+.pd-main img{width:100%;height:100%;object-fit:cover;display:block}
+.pd-info h1{font-size:30px;line-height:1.2;font-weight:600;color:var(--sc-text);margin:0}
+.pd-rate{display:flex;align-items:center;gap:10px;margin:12px 0 0;color:#e0a13a;font-size:16px;letter-spacing:2px}
+.pd-rate small{color:var(--sc-text);font-size:14px;letter-spacing:0}
+.pd-price{display:flex;align-items:baseline;flex-wrap:wrap;gap:12px;margin:18px 0}
+.pd-price b{font-size:34px;color:var(--sc-text);font-weight:700}
+.pd-price s{font-size:18px;color:var(--sc-muted)}
+.pd-price em{font-style:normal;background:var(--sc-primary);color:#fff;font-size:12px;font-weight:700;padding:4px 8px;border-radius:2px}
+.pd-desc{color:var(--sc-muted);line-height:1.8;font-size:15px;margin:0 0 24px;white-space:pre-line}
+.pd-stock{font-size:13px;font-weight:600;margin:0 0 20px;color:#2f8a64}
+.pd-stock.low{color:#c9822b}.pd-stock.out{color:#c62828}
+.pd-label{font-weight:600;font-size:15px;margin:0 0 10px;color:var(--sc-text)}
+.pd-opts{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px}
+.pd-opt{min-width:50px;height:46px;padding:0 16px;border-radius:4px;border:1px solid var(--sc-border);background:#f2f5f3;font-weight:600;color:var(--sc-text);cursor:pointer;transition:all .15s}
+.pd-opt:hover{border-color:var(--sc-primary)}
+.pd-opt.on{background:var(--sc-primary);border-color:var(--sc-primary);color:#fff}
+.pd-qty{display:inline-flex;align-items:center;border:1px solid var(--sc-border);border-radius:4px;margin-bottom:24px;background:#fff}
+.pd-qty button{width:42px;height:44px;border:0;background:transparent;font-size:18px;cursor:pointer;color:var(--sc-text)}
+.pd-qty button:hover{background:#f2f5f3}
+.pd-qty span{min-width:40px;text-align:center;font-weight:600}
+.pd-buy{display:flex;gap:10px}
+.pd-add{flex:1;max-width:340px;height:52px;border-radius:4px;border:0;background:var(--sc-primary);color:#fff;font-weight:700;letter-spacing:.7px;text-transform:uppercase;font-size:14px;cursor:pointer;transition:background .2s}
+.pd-add:hover{background:var(--sc-dark)}.pd-add:disabled{opacity:.45;cursor:not-allowed}
+.pd-fav{width:52px;height:52px;flex:none;border-radius:4px;border:1px solid var(--sc-border);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#55635d}
+.pd-fav.on{color:#d9534f}.pd-fav.on svg{fill:currentColor}
+.pd-empty{text-align:center;padding:70px 10px}.pd-empty h2{margin-bottom:8px}.pd-empty p{color:var(--sc-muted);margin-bottom:22px}
+@media(max-width:900px){
+ .pd-grid{grid-template-columns:1fr;gap:26px}
+ .pd-gallery{grid-template-columns:1fr}
+ .pd-thumbs{flex-direction:row;order:2;max-height:none;overflow-x:auto}
+ .pd-thumb{width:68px}
+ .pd-info h1{font-size:24px}.pd-price b{font-size:28px}
+ .pd-add{max-width:none}
+}
+
+/* related products + global mobile safety */
+.pd-related{margin-top:64px}.pd-related h2{font-size:22px;font-weight:600;margin:0 0 18px;color:var(--sc-text)}
+html{-webkit-text-size-adjust:100%}
+html,body{max-width:100%;overflow-x:clip}
+img,video,iframe,canvas{max-width:100%}
+table{max-width:100%}
+@media(max-width:600px){.pd{padding:18px 14px 56px}.pd-related{margin-top:44px}.pd-qty button{height:40px}}

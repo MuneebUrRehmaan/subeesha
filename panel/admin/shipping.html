@@ -12,7 +12,6 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
 <!-- Styles -->
 <link rel="stylesheet" href="assets/css/style.css">
-<link rel="stylesheet" href="../../assets/css/site-polish.css">
 </head>
 
 <body>
@@ -202,12 +201,26 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 </header>
 
 <div class="content">
-<section class="page active" id="shipping"><div class="section-toolbar"><div><h2>Shipping</h2><p class="label">Configure delivery charges.</p></div><div class="toolbar-actions"><button class="btn primary" onclick="saveShipping()"><i class="fa-solid fa-floppy-disk"></i> Save</button></div></div>
-<div class="card"><div class="form-grid">
- <div class="field"><label>Standard Delivery Charge (Rs.)</label><input id="shCharge" type="number" min="0"></div>
- <div class="field"><label>Free Shipping Above (Rs.)</label><input id="shFree" type="number" min="0"><small class="label">0 = never free</small></div>
- <div class="field full"><label>Delivery Partner / Notes</label><input id="shPartner" placeholder="e.g. TCS, Leopards, M&amp;P"></div>
-</div></div></section>
+<section class="page active" id="shipping">
+<style>.sh-modes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.sh-mode{border:1px solid #e3e9e6;border-radius:4px;padding:14px;cursor:pointer;display:flex;flex-direction:column;gap:4px}.sh-mode input{margin-bottom:4px;align-self:flex-start}.sh-mode.on{border-color:#0e3d34;background:#f3f8f6}.sh-mode span{font-size:12px;color:#68736e;line-height:1.5}.sh-panel{margin-bottom:18px}.sh-panel input[type=number]{width:110px;padding:8px}@media(max-width:800px){.sh-modes{grid-template-columns:1fr}}</style>
+<div class="section-toolbar"><div><h2>Delivery Charges</h2><p class="label">Choose how delivery charges are calculated for customers.</p></div><div class="toolbar-actions"><button class="btn primary" onclick="saveShipping()"><i class="fa-solid fa-floppy-disk"></i> Save</button></div></div>
+<div class="card" style="margin-bottom:18px"><div class="card-head"><h3>Charging method</h3></div><div class="sh-modes">
+<label class="sh-mode"><input type="radio" name="shMode" value="flat"><b>Flat rate</b><span>One delivery charge for every order.</span></label>
+<label class="sh-mode"><input type="radio" name="shMode" value="city"><b>By city (manual)</b><span>You set a delivery charge for each city yourself.</span></label>
+<label class="sh-mode"><input type="radio" name="shMode" value="zones"><b>By map zones (auto)</b><span>Pick places on the map, set a radius and a charge. Customers inside a zone pay that zone's charge.</span></label></div></div>
+<div class="card" style="margin-bottom:18px"><div class="form-grid"><div class="field"><label>Free delivery above (Rs.)</label><input id="shFree" type="number" min="0"><small class="label">0 = never free</small></div><div class="field"><label>Courier / notes</label><input id="shPartner" placeholder="e.g. TCS, Leopards"></div></div></div>
+<div class="card sh-panel" id="pFlat"><div class="card-head"><h3>Flat rate</h3></div><div class="form-grid"><div class="field"><label>Delivery charge (Rs.)</label><input id="shCharge" type="number" min="0"></div></div></div>
+<div class="card sh-panel" id="pCity"><div class="card-head"><h3>City charges</h3></div>
+<div class="form-grid"><div class="field"><label>Charge for all other cities (Rs.)</label><input id="shCityDef" type="number" min="0"></div><div class="field"><label>Add a city</label><div style="display:flex;gap:8px"><select id="shCitySel"></select><button class="btn secondary" onclick="addCity()">Add</button></div></div></div>
+<div style="margin:10px 0"><button class="btn small secondary" onclick="addAllCities()">Add all cities with the default charge</button></div>
+<div class="table-wrap"><table class="table"><thead><tr><th>City</th><th>Charge (Rs.)</th><th></th></tr></thead><tbody id="cityBody"></tbody></table></div></div>
+<div class="card sh-panel" id="pZones"><div class="card-head"><h3>Map zones</h3></div>
+<p class="label" style="margin-bottom:10px">Search a city or area, or click on the map to add a zone. Set the radius (km) and charge for each zone. Orders outside every zone pay the "outside zones" charge. If zones overlap, the zone whose centre is nearest wins.</p>
+<div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap"><input id="zQ" placeholder="Search city or area..." style="flex:1;min-width:180px"><button class="btn secondary" onclick="zSearch()">Search</button></div>
+<div id="zMap" style="height:380px;border-radius:4px;border:1px solid #e3e9e6;z-index:1"></div>
+<div class="form-grid" style="margin-top:14px"><div class="field"><label>Charge outside all zones (Rs.)</label><input id="shZoneDef" type="number" min="0"></div><div class="field"><label>New zone defaults: radius (km) / charge (Rs.)</label><div style="display:flex;gap:8px"><input id="zRad" type="number" min="1" value="10"><input id="zChg" type="number" min="0" value="150"></div></div></div>
+<div class="table-wrap"><table class="table"><thead><tr><th>Zone</th><th>Radius (km)</th><th>Charge (Rs.)</th><th></th></tr></thead><tbody id="zoneBody"></tbody></table></div></div>
+</section>
 </div>
 </main>
 </div>
@@ -250,7 +263,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 <script src="../../assets/js/sub-core.js"></script>
 <script src="assets/js/common.js"></script>
 <script src="assets/js/admin-core.js"></script>
+<script src="../../assets/js/sub-map.js"></script>
 <script src="assets/js/shipping.js"></script>
-<script src="../../assets/js/site-polish.js"></script>
 </body>
 </html>

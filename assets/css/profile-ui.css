@@ -1,0 +1,8 @@
+/* Profile page: shimmer skeleton until Firestore data arrives (no demo name flash) */
+@keyframes pfSlide{to{transform:translateX(100%)}}
+body.pf-loading .profile-sidebar,body.pf-loading .profile-content{position:relative;overflow:hidden;min-height:300px}
+body.pf-loading .profile-sidebar::before,body.pf-loading .profile-content::before{content:"";position:absolute;inset:0;z-index:20;border-radius:4px;background-color:#eef2f0}
+body.pf-loading .profile-sidebar::before{background-image:radial-gradient(circle at 58px 60px,#dde4e0 0 34px,transparent 35px),linear-gradient(#dde4e0,#dde4e0),linear-gradient(#dde4e0,#dde4e0),linear-gradient(#dde4e0,#dde4e0),linear-gradient(#dde4e0,#dde4e0),linear-gradient(#dde4e0,#dde4e0);background-repeat:no-repeat;background-position:0 0,110px 44px,110px 70px,20px 140px,20px 192px,20px 244px;background-size:auto,120px 14px,90px 12px,calc(100% - 40px) 40px,calc(100% - 40px) 40px,calc(100% - 40px) 40px}
+body.pf-loading .profile-content::before{background-image:linear-gradient(#dde4e0,#dde4e0),linear-gradient(#dde4e0,#dde4e0),linear-gradient(#dde4e0,#dde4e0),linear-gradient(#dde4e0,#dde4e0);background-repeat:no-repeat;background-position:24px 24px,24px 72px,24px 124px,24px 262px;background-size:240px 26px,60% 14px,calc(100% - 48px) 112px,calc(100% - 48px) 170px}
+body.pf-loading .profile-sidebar::after,body.pf-loading .profile-content::after{content:"";position:absolute;inset:0;z-index:21;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);animation:pfSlide 1.3s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){body.pf-loading .profile-sidebar::after,body.pf-loading .profile-content::after{animation:none}}

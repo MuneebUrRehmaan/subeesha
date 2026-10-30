@@ -22,7 +22,7 @@ A.ready(function () {
             var c = o.customer || {}, opts = nextOptions(o);
             var sel = opts.length ? '<select onchange="changeStatus(\'' + esc(o.id) + '\',this)" style="margin-left:6px;padding:4px;font-size:11px"><option value="">Change...</option>' + opts.map(function (x) { return "<option>" + x + "</option>"; }).join("") + "</select>" : "";
             return "<tr><td><b>#" + esc(o.orderNo || o.id) + "</b>" + (o.resellerId ? ' <small style="color:#0e3d34">(reseller)</small>' : "") + "</td><td>" + esc(c.name || "-") + "<br><small style='color:#88938f'>" + esc(c.phone || "") + "</small></td><td>" + A.date(o.createdAt) + "</td><td>" + A.money(o.total) + "</td><td>" + esc(o.paymentMethod || "-") + "</td><td>" + A.pill(o.status) + sel + "</td>" +
-                '<td><button class="btn small secondary" onclick="viewOrder(\'' + esc(o.id) + '\')"><i class="fa-solid fa-eye"></i></button> <a class="btn small secondary" target="_blank" href="../../page/invoice.html?id=' + encodeURIComponent(o.id) + '" title="Open editable invoice"><i class="fa-solid fa-file-invoice"></i></a> <a class="btn small secondary" target="_blank" href="../../page/label-print.html?id=' + encodeURIComponent(o.id) + '" title="Print shipping label"><i class="fa-solid fa-print"></i></a></td></tr>';
+                '<td><button class="btn small secondary" onclick="viewOrder(\'' + esc(o.id) + '\')"><i class="fa-solid fa-eye"></i></button> <a class="btn small secondary" target="_blank" href="../../page/label-print.html?id=' + encodeURIComponent(o.id) + '" title="Print label"><i class="fa-solid fa-print"></i></a></td></tr>';
         });
     }
     function load() {
@@ -37,7 +37,7 @@ A.ready(function () {
     window.changeStatus = function (id, sel) {
         var v = sel.value; if (!v) return;
         if (!confirm("Change order status to " + v + "?")) { sel.value = ""; return; }
-        A.setOrderStatus(id, v).then(function () { A.toast("Order updated to " + v); A.refreshBadges(); return load(); }).catch(function (e) { sel.value = ""; A.err(e); });
+        A.setOrderStatus(id, v).then(function () { var oo = all.filter(function (x) { return x.id === id; })[0]; if (oo) SUB.mail.statusChanged(oo, v); A.toast("Order updated to " + v); A.refreshBadges(); return load(); }).catch(function (e) { sel.value = ""; A.err(e); });
     };
 
     window.viewOrder = function (id) {
@@ -46,7 +46,7 @@ A.ready(function () {
         var items = (o.items || []).map(function (i) { return "<tr><td>" + esc(i.name) + (i.color ? " · " + esc(i.color) : "") + (i.size ? " · " + esc(i.size) : "") + "</td><td>" + i.qty + "</td><td>" + A.money(i.price * i.qty) + "</td></tr>"; }).join("");
         var hist = (o.statusHistory || []).map(function (h) { return esc(h.status) + " (" + new Date(h.at).toLocaleString() + ")"; }).join(" → ");
         openModal("Order #" + (o.orderNo || o.id),
-            '<div style="display:flex;justify-content:flex-end;margin-bottom:10px"><a class="btn small secondary" target="_blank" href="../../page/invoice.html?id=' + encodeURIComponent(o.id) + '"><i class="fa-solid fa-file-invoice"></i> Edit / Print Invoice</a></div><div class="a-kv"><b>Customer</b><span>' + esc(c.name || "") + "</span><b>Phone</b><span>" + esc(c.phone || "") + "</span><b>Email</b><span>" + esc(c.email || "-") + "</span>" +
+            '<div class="a-kv"><b>Customer</b><span>' + esc(c.name || "") + "</span><b>Phone</b><span>" + esc(c.phone || "") + "</span><b>Email</b><span>" + esc(c.email || "-") + "</span>" +
             "<b>Address</b><span>" + esc([c.address, c.area, c.city, c.province].filter(Boolean).join(", ")) + "</span><b>Payment</b><span>" + esc(o.paymentMethod || "") + (o.paymentRef ? " · ref: " + esc(o.paymentRef) : "") + "</span>" +
             "<b>Status</b><span>" + A.pill(o.status) + "</span><b>Placed</b><span>" + SUB.dateTime(o.createdAt) + "</span>" + (o.resellerId ? "<b>Commission</b><span>" + A.money(o.commission) + (o.commissionVoid ? " (void)" : "") + "</span>" : "") + "</div>" +
             '<div class="table-wrap"><table class="table"><thead><tr><th>Item</th><th>Qty</th><th>Amount</th></tr></thead><tbody>' + items + "</tbody></table></div>" +

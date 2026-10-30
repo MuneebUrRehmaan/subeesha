@@ -12,7 +12,6 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
 <!-- Styles -->
 <link rel="stylesheet" href="assets/css/style.css">
-<link rel="stylesheet" href="../../assets/css/site-polish.css">
 </head>
 
 <body>
@@ -211,6 +210,27 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
  <div class="field full"><label>Return / Store Address (printed on shipping labels)</label><input id="stAddr"></div>
 </div></div>
 <div class="card" style="margin-top:18px"><div class="card-head"><h3>My Account</h3></div><p class="label" id="myAcc"></p><br><button class="btn secondary" onclick="resetMyPassword()"><i class="fa-solid fa-key"></i> Send Password Reset Email</button></div>
+<div class="card" style="margin-top:18px" id="emailCard"><div class="card-head"><h3>Email Notifications</h3></div>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px"><div><b>Send emails</b><p class="label">Master switch. Turn OFF to stop every order email instantly.</p></div><div class="toggle" id="emOn" onclick="this.classList.toggle('on')"></div></div>
+<div class="form-grid">
+<div class="field"><label>Email service</label><select id="emProv" onchange="emProvChange()"><option value="emailjs">EmailJS (free, no billing, uses your Gmail)</option><option value="firebase">Firebase "Trigger Email" extension (Gmail / SMTP)</option></select></div>
+<div class="field"><label>From name</label><input id="emFrom" placeholder="Subeesha"></div>
+<div class="field full"><label>Admin email (receives new-order alerts)</label><input id="emAdmin" type="email" placeholder="you@gmail.com"></div>
+</div>
+<div id="emJs" class="form-grid" style="margin-top:12px">
+<div class="field"><label>EmailJS Service ID</label><input id="emSvc" placeholder="service_xxxxxxx"></div>
+<div class="field"><label>EmailJS Template ID</label><input id="emTpl" placeholder="template_xxxxxxx"></div>
+<div class="field full"><label>EmailJS Public Key</label><input id="emKey" placeholder="Public key from EmailJS > Account"></div>
+</div>
+<p class="label" id="emFb" style="display:none;margin-top:12px;line-height:1.7">Install the <b>Trigger Email from Firestore</b> extension in Firebase Console (Extensions). Set the collection name to <code>mail</code> and add your Gmail SMTP details there. Needs the Blaze plan. The site only writes documents to <code>mail</code>; passwords stay inside Firebase.</p>
+<div style="display:grid;gap:10px;margin-top:16px">
+<label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="emCust"> Email the customer when an order is placed</label>
+<label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="emAd"> Email me (admin) when a new order is placed</label>
+<label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="emSt"> Email the customer when status changes (Processing, Shipped, Delivered, Cancelled)</label></div>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;align-items:center"><button class="btn primary" onclick="saveEmail()"><i class="fa-solid fa-floppy-disk"></i> Save email settings</button>
+<input id="emTest" type="email" placeholder="Send test to..." style="min-width:200px;padding:10px"><button class="btn secondary" onclick="testEmail()"><i class="fa-solid fa-paper-plane"></i> Send test email</button></div>
+<div class="a-note" style="margin-top:16px;margin-bottom:0"><b>EmailJS setup (5 min):</b> create a free account at emailjs.com &rarr; Email Services &rarr; add Gmail &rarr; copy the Service ID. Email Templates &rarr; new template: <i>To</i> = <code>{{to_email}}</code>, <i>Subject</i> = <code>{{subject}}</code>, <i>Content</i> (HTML) = <code>{{{message_html}}}</code> &rarr; copy the Template ID. Account &rarr; copy the Public Key. In EmailJS also add your website domain under allowed origins. These three values are public by design.</div>
+</div>
 <div class="card" style="margin-top:18px" id="demoCard"><div class="card-head"><h3>Demo Data</h3></div><p class="label">Import the sample categories, products, banners and coupons from the original design so your store is not empty. Safe to run once; existing items with the same id are overwritten.</p><br><button class="btn secondary" onclick="importDemo()"><i class="fa-solid fa-database"></i> Import Demo Data</button></div></section>
 </div>
 </main>
@@ -256,6 +276,5 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 <script src="assets/js/admin-core.js"></script>
 <script src="assets/js/demo-data.js"></script>
 <script src="assets/js/settings.js"></script>
-<script src="../../assets/js/site-polish.js"></script>
 </body>
 </html>

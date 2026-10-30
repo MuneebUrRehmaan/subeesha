@@ -32,28 +32,36 @@
     A.isStaff = function () { return A.can(STAFF); };
 
     /* ---------- extra styles used by new widgets ---------- */
+    var SKCSS =
+        ".sk{position:relative;overflow:hidden;background:#e8edea;border-radius:4px}" +
+        ".sk::after{content:'';position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);animation:aSkSlide 1.3s ease-in-out infinite}" +
+        "@keyframes aSkSlide{to{transform:translateX(100%)}}.sk-line{height:12px;margin:4px 0}" +
+        ".sk-row td{padding:16px 14px}.sk-row td:nth-child(odd) .sk{width:82%}.sk-row td:nth-child(even) .sk{width:55%}" +
+        ".a-sk-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.a-sk-row .sk{height:96px}" +
+        "@media(max-width:800px){.a-sk-row{grid-template-columns:repeat(2,1fr)}}" +
+        "html.a-booting .content>*:not(#aBootSk){display:none!important}html.a-booting .sidebar .menu{visibility:hidden}" +
+        ".toggle{border-radius:20px!important}" + "@media (prefers-reduced-motion:reduce){.sk::after{animation:none}}";
     var css = d.createElement("style");
     css.textContent =
-        ".a-note{background:#fff6e4;border:1px solid #f0dcaa;color:#7a5a12;padding:12px 14px;border-radius:10px;font-size:12px;margin-bottom:14px;line-height:1.6}" +
+        ".a-note{background:#fff6e4;border:1px solid #f0dcaa;color:#7a5a12;padding:12px 14px;border-radius:4px;font-size:12px;margin-bottom:14px;line-height:1.6}" +
         ".a-note.err{background:#fdecec;border-color:#f3c0c0;color:#8a2323}.a-note.ok{background:#eaf5ef;border-color:#bfdccb;color:#1f5a3a}" +
         ".a-empty{text-align:center;color:#88938f;padding:30px 10px;font-size:13px}" +
-        ".img-mgr{border:1px dashed #cfd8d4;border-radius:12px;padding:12px;background:#fafcfb}" +
+        ".img-mgr{border:1px dashed #cfd8d4;border-radius:4px;padding:12px;background:#fafcfb}" +
         ".img-mgr .thumbs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}" +
-        ".img-mgr .thumb{position:relative;width:78px;height:78px;border-radius:10px;overflow:hidden;border:2px solid #e3e9e6;background:#fff}" +
+        ".img-mgr .thumb{position:relative;width:78px;height:78px;border-radius:4px;overflow:hidden;border:2px solid #e3e9e6;background:#fff}" +
         ".img-mgr .thumb.main{border-color:#0e3d34}.img-mgr .thumb img{width:100%;height:100%;object-fit:cover}" +
         ".img-mgr .thumb button{position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:50%;background:#c62828;color:#fff;font-size:11px;line-height:1;padding:0}" +
         ".img-mgr .thumb em{position:absolute;left:0;bottom:0;right:0;background:rgba(14,61,52,.85);color:#fff;font-size:9px;text-align:center;font-style:normal;padding:1px}" +
         ".img-mgr .thumb.up{display:flex;align-items:center;justify-content:center;font-size:10px;color:#68736e}" +
         ".img-mgr small{color:#88938f;font-size:11px;display:block;margin-top:6px}" +
         ".a-login{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0e3d34,#072620);padding:20px}" +
-        ".a-login .box{background:#fff;border-radius:18px;padding:34px;width:100%;max-width:400px;box-shadow:0 30px 60px rgba(0,0,0,.25)}" +
+        ".a-login .box{background:#fff;border-radius:4px;padding:34px;width:100%;max-width:400px;box-shadow:0 30px 60px rgba(0,0,0,.25)}" +
         ".a-login img{width:64px;height:64px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 12px}" +
         ".a-login h2{text-align:center;margin-bottom:4px}.a-login p.sub{text-align:center;color:#68736e;font-size:12px;margin-bottom:20px}" +
         ".a-login .field{margin-bottom:14px}.a-login .btn{width:100%;justify-content:center}" +
-        ".a-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.a-tabs button{padding:8px 14px;border-radius:20px;background:#eef2f0;font-size:12px;font-weight:600}" +
+        ".a-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.a-tabs button{padding:8px 14px;border-radius:4px;background:#eef2f0;font-size:12px;font-weight:600}" +
         ".a-tabs button.on{background:#0e3d34;color:#fff}.a-kv{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;font-size:13px;margin:6px 0}.a-kv b{color:#68736e;font-weight:600}" +
-        ".a-logout{background:#fdecec !important;color:#c62828 !important}" +
-        ".a-skeleton-row td{padding:14px 12px!important}.a-skeleton-bar{display:block;height:10px;max-width:180px;background:linear-gradient(100deg,#edf0ee 20%,#f8f9f8 40%,#edf0ee 60%);background-size:200% 100%;border-radius:3px;animation:a-shimmer 1.3s ease-in-out infinite}.product-card{border-radius:4px!important;transition:box-shadow .2s,border-color .2s,transform .2s}.product-card:hover{transform:translateY(-2px);border-color:#d5dfd9;box-shadow:0 8px 20px rgba(14,61,52,.08)}.product-img{border-radius:3px!important;background:#f4f6f4}.main .btn,.main .search,.main input:not([type=checkbox]):not([type=radio]):not([type=file]),.main select,.main textarea,.main .modal,.main .modal-box{border-radius:4px}.main input:focus,.main select:focus,.main textarea:focus{outline:2px solid #0e3d3422;border-color:#0e3d34}.img-mgr{border-radius:4px}.img-mgr .thumb{border-radius:3px}.a-note{border-radius:4px}.a-product-skeleton .product-img{aspect-ratio:1/1;min-height:130px}.a-skeleton-block{display:block;height:10px;width:80%;background:linear-gradient(100deg,#edf0ee 20%,#f8f9f8 40%,#edf0ee 60%);background-size:200% 100%;border-radius:3px;animation:a-shimmer 1.3s ease-in-out infinite}.a-skeleton-block.image{width:100%;height:100%}.a-skeleton-block.line{margin:8px 0}.a-skeleton-block.short{width:46%}.a-skeleton-block.price{width:35%;height:15px;margin-top:14px}.a-skeleton-block.action{width:100%;height:32px;margin-top:14px}@keyframes a-shimmer{to{background-position-x:-200%}}";
+        ".a-logout{background:#fdecec !important;color:#c62828 !important}" + SKCSS;
     d.head.appendChild(css);
 
     /* ---------- misc helpers ---------- */
@@ -74,16 +82,10 @@
     A.rows = function (tbody, list, cols, emptyMsg, fn) {
         tbody.innerHTML = list.length ? list.map(fn).join("") : '<tr><td colspan="' + cols + '" class="a-empty">' + esc(emptyMsg || "Nothing to show yet.") + "</td></tr>";
     };
-    A.loading = function (tbody, cols) {
+    A.loading = function (tbody, cols, rows) {
         if (!tbody) return;
-        var n = Math.max(1, Number(cols) || 5);
-        var rows = '';
-        for (var r = 0; r < 4; r++) {
-            rows += '<tr class="a-skeleton-row">';
-            for (var c = 0; c < n; c++) rows += '<td><span class="a-skeleton-bar" style="width:' + (c === 0 ? '68%' : (45 + ((r + c) % 4) * 12) + '%') + '"></span></td>';
-            rows += '</tr>';
-        }
-        tbody.innerHTML = rows;
+        var tr = "<tr class=\"sk-row\">" + new Array(cols + 1).join('<td><div class="sk sk-line"></div></td>') + "</tr>";
+        tbody.innerHTML = new Array((rows || 6) + 1).join(tr);
     };
     A.debounce = function (fn, ms) { var t; return function () { var a = arguments, s = this; clearTimeout(t); t = setTimeout(function () { fn.apply(s, a); }, ms || 200); }; };
     A.csv = function (name, rows) {
@@ -210,9 +212,14 @@
                         var reads = [];
                         if (needStock || giveBack) items.forEach(function (i) { reads.push(tx.get(db.collection("products").doc(i.id)).then(function (s) { return { i: i, s: s }; })); });
                         var userRead = (o.userId && (needWallet || refund || award || reverse)) ? tx.get(db.collection("users").doc(o.userId)) : Promise.resolve(null);
+                        // reseller commission: credit on Delivered, take back on Returned
+                        var comm = SUB.num(o.commission);
+                        var payC = next === "Delivered" && o.resellerId && !o.commissionVoid && comm > 0 && !o.commissionCredited;
+                        var clawC = next === "Returned" && o.resellerId && o.commissionCredited && comm > 0;
+                        var resRead = (payC || clawC) ? tx.get(db.collection("users").doc(o.resellerId)) : Promise.resolve(null);
 
-                        return Promise.all([Promise.all(reads), userRead]).then(function (x) {
-                            var prods = x[0], us = x[1];
+                        return Promise.all([Promise.all(reads), userRead, resRead]).then(function (x) {
+                            var prods = x[0], us = x[1], rs = x[2];
                             var upd = { status: next, updatedAt: SUB.now(), statusHistory: FV.arrayUnion({ status: next, at: Date.now(), by: (A.me && A.me.name) || "admin" }) };
                             if (needStock) {
                                 prods.forEach(function (p) {
@@ -261,6 +268,16 @@
                                 tx.update(us.ref, { points: FV.increment(-SUB.num(o.pointsGiven)) });
                                 tx.set(db.collection("rewardLog").doc(), { uid: o.userId, points: -SUB.num(o.pointsGiven), reason: "Order Returned", note: "Order #" + o.orderNo, createdAt: SUB.now() });
                                 upd.pointsAwarded = false;
+                            }
+                            if (payC && rs && rs.exists) {
+                                tx.update(rs.ref, { wallet: FV.increment(comm) });
+                                tx.set(db.collection("walletTransactions").doc(), { uid: o.resellerId, title: "Commission - Order #" + o.orderNo, amount: comm, createdAt: SUB.now() });
+                                upd.commissionCredited = true;
+                            }
+                            if (clawC && rs && rs.exists) {
+                                tx.update(rs.ref, { wallet: FV.increment(-comm) });
+                                tx.set(db.collection("walletTransactions").doc(), { uid: o.resellerId, title: "Commission reversed - Order #" + o.orderNo, amount: -comm, createdAt: SUB.now() });
+                                upd.commissionCredited = false;
                             }
                             if (["Cancelled", "Returned"].indexOf(next) > -1 && o.resellerId) upd.commissionVoid = true;
                             tx.update(oref, upd);
@@ -400,11 +417,30 @@
     }
     A.refreshBadges = function () { try { sessionStorage.removeItem("sub_admin_badges"); } catch (e) { } if (booted) badges(); };
 
+    var STAT_BOXES = ["invStats", "rwStats", "wStats", "payStats", "rpStats"];
+    function startBoot() {
+        d.documentElement.classList.add("a-booting");
+        var c = d.querySelector(".content");
+        if (c && !d.getElementById("aBootSk")) {
+            var n = d.createElement("div"); n.id = "aBootSk";
+            n.innerHTML = '<div class="a-sk-row"><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div></div><div class="sk" style="height:340px;margin-top:18px"></div>';
+            c.insertBefore(n, c.firstChild);
+        }
+    }
+    function unboot() {
+        d.documentElement.classList.remove("a-booting");
+        var n = d.getElementById("aBootSk"); if (n && n.parentNode) n.parentNode.removeChild(n);
+        STAT_BOXES.forEach(function (id) {
+            var e = d.getElementById(id);
+            if (e && !e.children.length) e.innerHTML = '<div class="sk" style="height:96px"></div><div class="sk" style="height:96px"></div><div class="sk" style="height:96px"></div>';
+        });
+    }
+
     function boot(profile) {
         A.me = profile;
         var allow = A.access[A.page];
         if (allow && allow.indexOf(profile.adminRole) < 0) {
-            d.documentElement.style.visibility = "";
+            unboot();
             var c = d.querySelector(".content");
             if (c) c.innerHTML = '<div class="a-note err"><b>Access restricted.</b> Your role (' + esc(profile.adminRole || "-") + ') cannot open this page.</div>';
             chrome();
@@ -412,7 +448,7 @@
         }
         chrome();
         booted = true;
-        d.documentElement.style.visibility = "";
+        unboot();
         queue.splice(0).forEach(function (fn) { try { fn(profile); } catch (e) { console.error(e); } });
     }
 
@@ -422,7 +458,7 @@
                 banner("<b>Firebase is not configured yet.</b> Open <code>assets/js/firebase-config.js</code> and paste your Firebase + Cloudinary keys. The pages below show static demo content until then.", "");
             });
         } else {
-            d.documentElement.style.visibility = "hidden";
+            startBoot();
             SUB.onAuth(function (user, profile) {
                 if (booted) { if (!user) location.replace("login.html"); return; }
                 if (!user || !profile || profile.role !== "admin") {
@@ -432,7 +468,7 @@
                 boot(profile);
             });
             // safety net: never leave the page hidden
-            setTimeout(function () { d.documentElement.style.visibility = ""; }, 8000);
+            setTimeout(unboot, 8000);
         }
     }
 })(window, document);

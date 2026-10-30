@@ -344,7 +344,7 @@ function viewOrder(id) {
     const idx = steps.indexOf(o.status);
     const track = o.status === "Cancelled" || o.status === "Returned"
         ? `<p style="color:#c62828;font-weight:700">This order is ${SUB.esc(o.status)}.</p>`
-        : `<div style="display:flex;gap:6px;margin:12px 0">${steps.map((s, i) => `<div style="flex:1;text-align:center;font-size:12px;font-weight:700;padding:8px 2px;border-radius:8px;background:${i <= idx ? "#0e3d34" : "#eef2f0"};color:${i <= idx ? "#fff" : "#68736e"}">${s}</div>`).join("")}</div>`;
+        : `<div style="display:flex;gap:6px;margin:12px 0">${steps.map((s, i) => `<div style="flex:1;text-align:center;font-size:12px;font-weight:700;padding:8px 2px;border-radius:4px;background:${i <= idx ? "#0e3d34" : "#eef2f0"};color:${i <= idx ? "#fff" : "#68736e"}">${s}</div>`).join("")}</div>`;
     const c = o.customer || {};
     modal(`<span class="eyebrow">ORDER</span><h2>#${SUB.esc(o.orderNo || o.id)}</h2><p>${fmtDate(o.createdAt)} · ${SUB.esc(o.paymentMethod || "")}</p>${track}${lines}
         <div style="padding-top:10px;font-size:14px;line-height:1.9">
@@ -538,8 +538,10 @@ function changePassword() {
 function logout() { SUB.signOut().then(() => location.href = "../account.html?stay=1"); }
 
 async function initProfile() {
+    const done = () => document.body.classList.remove("pf-loading");
+    setTimeout(done, 8000);
     wireStaticButtons();
-    if (!SUB.configured) { setPoints(); return; }        // static demo when not connected
+    if (!SUB.configured) { setPoints(); done(); return; }        // static demo when not connected
     const { user, profile } = await SUB.ready;
     if (!user || !profile) { location.href = "../account.html?next=" + encodeURIComponent("page/profile.html"); return; }
     if (profile.role === "admin") { location.href = "../panel/admin/index.html"; return; }
@@ -547,7 +549,7 @@ async function initProfile() {
     me = profile;
     SUB.settings("rewards").then(r => { CONVERSION = Number(r.conversion) || 100; });
     fillUser(); renderAddresses();
-    loadOrders(); loadEarnings(); loadWallet(); loadWishlist(); loadReviews(); loadVouchers(); loadPayments();
+    Promise.allSettled([loadOrders(), loadEarnings(), loadWallet(), loadWishlist(), loadReviews(), loadVouchers(), loadPayments()]).then(done);
     if (location.hash && $id(location.hash.slice(1))) openSection(location.hash.slice(1));
     // refresh points/wallet after the daily reward is granted
     SUB.onAuth((u, p) => { if (p && me && p.id === me.id) { me = p; fillUser(); loadEarnings(); } });

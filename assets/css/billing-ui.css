@@ -1,0 +1,14 @@
+/* Checkout polish: shimmer skeleton while loading, delivery-location widget, sticky summary */
+@keyframes bkSlide{to{transform:translateX(100%)}}
+body.bk-loading .container .card{position:relative;overflow:hidden;min-height:150px}
+body.bk-loading .container .card::before{content:"";position:absolute;inset:0;background:#e8edea;z-index:20}
+body.bk-loading .container .card::after{content:"";position:absolute;inset:0;z-index:21;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);animation:bkSlide 1.3s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){body.bk-loading .container .card::after{animation:none}}
+.container .right{position:sticky;top:110px;align-self:start}
+@media (max-width:1050px){.container .right{position:static}}
+.container .card{border:1px solid #e4ebe7;box-shadow:0 2px 12px rgba(14,61,52,.05)}
+.loc-box{margin-top:12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px;border:1px dashed #b9c9c2;background:#f7faf8;border-radius:4px}
+.loc-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 14px;border:1px solid #0e3d34;color:#0e3d34;background:#fff;border-radius:4px;font-weight:600;font-size:13px;cursor:pointer;font-family:inherit}
+.loc-btn:hover{background:#0e3d34;color:#fff}
+.loc-text{font-size:12px;color:#68736e;flex:1;min-width:160px;line-height:1.5}
+.loc-text b{color:#0e3d34}

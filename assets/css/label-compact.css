@@ -1,0 +1,16 @@
+/* Compact, editable shipping label (A6 landscape = 148 x 105 mm) */
+@media screen and (min-width:901px){
+  .shipping-label{zoom:.72}
+  .page-header{width:150mm}
+}
+.edit-hint{display:flex;gap:8px;align-items:center;max-width:150mm;margin:0 auto 12px;padding:10px 14px;border:1px dashed #0e3d34;background:#f3f8f6;border-radius:4px;font:13px/1.5 Arial,sans-serif;color:#0e3d34}
+[contenteditable="true"]{outline:1px dashed transparent;outline-offset:2px;border-radius:2px;cursor:text;transition:background .15s,outline-color .15s}
+[contenteditable="true"]:hover{outline-color:#0e3d34;background:#fffbe8}
+[contenteditable="true"]:focus{outline:2px solid #0e3d34;background:#fffbe8}
+@page{size:148mm 105mm;margin:0}
+@media print{
+  html,body{width:148mm!important;height:105mm!important;margin:0!important;padding:0!important;overflow:hidden!important;display:block!important;background:#fff!important}
+  .edit-hint,.page-header{display:none!important}
+  .shipping-label{zoom:.7;margin:0!important;border:1px solid #111!important}
+  [contenteditable]{outline:none!important;background:none!important}
+}

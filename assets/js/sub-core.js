@@ -154,6 +154,7 @@
                 status: "active", access: "Allowed", points: 0, wallet: 0, walletUsed: 0,
                 createdAt: SUB.now()
             };
+            if (o.location) p.location = o.location;
             return SUB.db.collection("users").doc(cred.user.uid).set(p).then(function () {
                 return SUB.refreshProfile();
             }).then(function () { return cred.user; });
@@ -285,7 +286,7 @@
     /* ---------- settings ---------- */
     var DEFAULTS = {
         store: { name: "Subeesha", email: "info@subeesha.com", phone: "+92 300 0000000", currency: "PKR", lowStock: 10, address: "Office No. 12, Main Commercial Area, Latifabad, Hyderabad, Sindh, Pakistan" },
-        shipping: { charge: 250, freeAbove: 5000, partner: "Default Courier" },
+        shipping: { mode: "flat", charge: 250, freeAbove: 5000, partner: "Default Courier", cities: [], cityDefault: 250, zones: [], zoneDefault: 250 },
         payments: { cod: true, easypaisa: true, jazzcash: true, bank: true, online: false, easypaisaNumber: "", jazzcashNumber: "", bankDetails: "" },
         rewards: { conversion: 100, dailyLogin: 10, review: 50, firstOrder: 100, referral: 200, purchasePer100: 3, minConvert: 100 },
         flash: { active: false, name: "Flash Sale", discountPercent: 20, endsAt: null }
@@ -458,7 +459,9 @@
                 lines.push(line);
             }
             var subtotal = lines.reduce(function (s, l) { return s + l.price * l.qty; }, 0);
-            var shipping = SUB.shippingFor(subtotal, ship);
+            var loc = o.location && isFinite(o.location.lat) && isFinite(o.location.lng) ? { lat: Number(o.location.lat), lng: Number(o.location.lng) } : null;
+            var dinfo = SUB.deliveryInfo(subtotal, ship, { city: (o.customer || {}).city, lat: loc && loc.lat, lng: loc && loc.lng });
+            var shipping = dinfo.charge;
             var couponP = o.coupon ? SUB.checkCoupon(o.coupon, subtotal) : Promise.resolve(null);
             var resP = (o.resellerCode && !o.resellerId)
                 ? SUB.db.collection("resellerCodes").doc(o.resellerCode).get().then(function (s) { return s.exists ? s.data().uid : null; }).catch(function () { return null; })
@@ -478,7 +481,7 @@
                     subtotal: subtotal, shipping: shipping, discount: discount, couponCode: coupon ? coupon.code : "",
                     walletUsed: walletUsed, total: total,
                     paymentMethod: o.paymentMethod || "Cash on Delivery", paymentRef: o.paymentRef || "",
-                    status: "Pending", source: o.source || "web",
+                    status: "Pending", source: o.source || "web", location: loc, deliveryZone: dinfo.label || "",
                     resellerId: resellerId, commission: commission,
                     createdAt: SUB.now(), updatedAt: SUB.now()
                 };
@@ -492,9 +495,105 @@
                         tx.set(SUB.db.collection("orders").doc(no), order);
                         return no;
                     });
-                }).then(function (no) { order.id = no; return order; });
+                }).then(function (no) { order.id = no; try { SUB.mail.orderPlaced(order); } catch (e) { } return order; });
             });
         });
+    };
+
+    /* ---------- delivery charges: flat | by city | by map zones ---------- */
+    SUB.distanceKm = function (a, b, c, d2) {
+        var R = 6371, rad = Math.PI / 180, dLat = (c - a) * rad, dLng = (d2 - b) * rad;
+        var x = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(a * rad) * Math.cos(c * rad) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        return 2 * R * Math.asin(Math.sqrt(x));
+    };
+    /* ctx = { city, lat, lng } -> { charge, label, mode } */
+    SUB.deliveryInfo = function (subtotal, cfg, ctx) {
+        cfg = cfg || {}; ctx = ctx || {};
+        var mode = cfg.mode || "flat", flat = SUB.num(cfg.charge);
+        if (subtotal <= 0) return { charge: 0, label: "", mode: mode };
+        if (SUB.num(cfg.freeAbove) > 0 && subtotal >= SUB.num(cfg.freeAbove)) return { charge: 0, label: "Free delivery", mode: mode };
+        if (mode === "city") {
+            var c = String(ctx.city || "").trim().toLowerCase();
+            var m = (cfg.cities || []).filter(function (x) { return String(x.name).trim().toLowerCase() === c; })[0];
+            if (m) return { charge: SUB.num(m.charge), label: m.name, mode: mode };
+            return { charge: SUB.num(cfg.cityDefault != null ? cfg.cityDefault : flat), label: "Other cities", mode: mode };
+        }
+        if (mode === "zones") {
+            if (ctx.lat != null && ctx.lng != null && isFinite(ctx.lat) && isFinite(ctx.lng)) {
+                var best = null, bestD = 1e9;
+                (cfg.zones || []).forEach(function (z) {
+                    var dist = SUB.distanceKm(ctx.lat, ctx.lng, SUB.num(z.lat), SUB.num(z.lng));
+                    if (dist <= SUB.num(z.radius) && dist < bestD) { best = z; bestD = dist; }
+                });
+                if (best) return { charge: SUB.num(best.charge), label: best.name, mode: mode };
+            }
+            return { charge: SUB.num(cfg.zoneDefault != null ? cfg.zoneDefault : flat), label: "Outside delivery zones", mode: mode };
+        }
+        return { charge: flat, label: "", mode: mode };
+    };
+    SUB.deliveryCharge = function (subtotal, cfg, ctx) { return SUB.deliveryInfo(subtotal, cfg, ctx).charge; };
+
+    /* ---------- email notifications (controlled from Admin > Settings) ---------- */
+    DEFAULTS.email = { enabled: false, provider: "emailjs", adminEmail: "", fromName: "Subeesha", toCustomer: true, toAdmin: true, onStatus: true, emailjs: { service: "", template: "", key: "" } };
+    SUB.mail = {
+        cfg: function (force) {
+            return SUB.settings("email", force).then(function (c) {
+                return Object.assign({}, DEFAULTS.email, c, { emailjs: Object.assign({}, DEFAULTS.email.emailjs, c.emailjs || {}) });
+            });
+        },
+        /* throws on failure */
+        _send: function (to, subject, html, c) {
+            if (!to) return Promise.resolve(false);
+            if (c.provider === "firebase") {
+                return SUB.db.collection("mail").add({ to: to, message: { subject: subject, html: html }, createdAt: SUB.now() }).then(function () { return true; });
+            }
+            var j = c.emailjs || {};
+            if (!j.service || !j.template || !j.key) return Promise.reject(new Error("EmailJS Service ID, Template ID and Public Key are required."));
+            return fetch("https://api.emailjs.com/api/v1.0/email/send", {
+                method: "POST", headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ service_id: j.service, template_id: j.template, user_id: j.key,
+                    template_params: { to_email: to, subject: subject, message_html: html, from_name: c.fromName || "Subeesha", reply_to: c.adminEmail || "" } })
+            }).then(function (r) { return r.text().then(function (t) { if (!r.ok) throw new Error("EmailJS: " + (t || r.status)); return true; }); });
+        },
+        html: function (o, title, note) {
+            var e = SUB.esc, m = SUB.money, c = o.customer || {};
+            var rows = (o.items || []).map(function (i) {
+                return '<tr><td style="padding:9px 6px;border-bottom:1px solid #eee">' + e(i.name) + (i.size ? " &middot; " + e(i.size) : "") + (i.color ? " &middot; " + e(i.color) : "") +
+                    '</td><td style="padding:9px 6px;border-bottom:1px solid #eee" align="center">&times;' + e(i.qty) + '</td><td style="padding:9px 6px;border-bottom:1px solid #eee" align="right">' + m(i.price * i.qty) + "</td></tr>";
+            }).join("");
+            return '<div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;border:1px solid #e4ebe7;border-radius:4px;overflow:hidden;color:#333">' +
+                '<div style="background:#0e3d34;color:#fff;padding:18px 22px;font-size:20px;font-weight:bold">Subeesha</div><div style="padding:22px">' +
+                '<h2 style="margin:0 0 6px;color:#0e3d34;font-size:20px">' + e(title) + '</h2><p style="color:#555;margin:0 0 16px;font-size:14px">' + e(note) + "</p>" +
+                '<p style="font-size:14px;line-height:1.7"><b>Order:</b> #' + e(o.orderNo) + "<br><b>Payment:</b> " + e(o.paymentMethod || "") + "</p>" +
+                '<table width="100%" cellspacing="0" style="font-size:14px;margin:8px 0">' + rows + "</table>" +
+                '<p style="text-align:right;line-height:1.9;font-size:14px">Subtotal: ' + m(o.subtotal) + "<br>Delivery: " + (o.shipping ? m(o.shipping) : "Free") + (o.discount ? "<br>Discount: -" + m(o.discount) : "") + (o.walletUsed ? "<br>Wallet: -" + m(o.walletUsed) : "") +
+                '<br><b style="font-size:17px;color:#0e3d34">Total: ' + m(o.total) + "</b></p>" +
+                '<p style="font-size:13px;color:#555;line-height:1.7;border-top:1px solid #eee;padding-top:12px"><b>Deliver to</b><br>' + e(c.name || "") + ", " + e(c.phone || "") + "<br>" + e([c.address, c.area, c.city].filter(Boolean).join(", ")) + "</p></div></div>";
+        },
+        orderPlaced: function (o) {
+            return SUB.mail.cfg().then(function (c) {
+                if (!c.enabled) return;
+                var jobs = [], mine = SUB.user && SUB.user.email, to = c.provider === "firebase" ? mine : ((o.customer && o.customer.email) || mine);
+                if (c.toCustomer && to) jobs.push(SUB.mail._send(to, "Order #" + o.orderNo + " confirmed - " + (c.fromName || "Subeesha"), SUB.mail.html(o, "Thank you for your order!", "We have received your order and will keep you updated as it moves along."), c));
+                if (c.toAdmin && c.adminEmail) jobs.push(SUB.mail._send(c.adminEmail, "New order #" + o.orderNo + " - " + SUB.money(o.total), SUB.mail.html(o, "New order received", "A customer just placed a new order."), c));
+                return Promise.all(jobs.map(function (j) { return j.catch(function (e) { console.warn("[mail]", e); }); }));
+            }).catch(function () { });
+        },
+        statusChanged: function (o, status) {
+            return SUB.mail.cfg().then(function (c) {
+                var to = o.customer && o.customer.email;
+                if (!c.enabled || !c.onStatus || !to) return;
+                var note = { Processing: "Your order is being prepared.", Shipped: "Good news - your order has been shipped and is on its way.", Delivered: "Your order has been delivered. We hope you love it!", Cancelled: "Your order has been cancelled.", Returned: "Your return has been recorded." }[status];
+                if (!note) return;
+                return SUB.mail._send(to, "Order #" + o.orderNo + " is " + status, SUB.mail.html(o, "Order " + status, note), c).catch(function (e) { console.warn("[mail]", e); });
+            }).catch(function () { });
+        },
+        test: function (to) {
+            return SUB.mail.cfg(true).then(function (c) {
+                var demo = { orderNo: "TEST-0001", paymentMethod: "Cash on Delivery", items: [{ name: "Sample product", qty: 1, price: 1000 }], subtotal: 1000, shipping: 200, total: 1200, customer: { name: "Test Customer", phone: "0300 0000000", address: "Sample address", city: "Hyderabad" } };
+                return SUB.mail._send(to, "Test email from " + (c.fromName || "Subeesha"), SUB.mail.html(demo, "Email is working", "This is a test email sent from your admin panel."), Object.assign({}, c, { enabled: true }));
+            });
+        }
     };
 
     /* ---------- misc ---------- */
