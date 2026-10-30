@@ -80,11 +80,35 @@ Customers can pin their location on a Leaflet/OpenStreetMap map at **signup** (o
 Maps use OpenStreetMap tiles and Nominatim search (free, no API key; fair-use limits apply).
 
 ### 3. Order emails (Admin > Settings > Email Notifications)
-Master ON/OFF switch plus separate switches for: email to customer on order, alert to admin on new order, status-change emails.
-Two services:
-- **EmailJS** (no billing needed; sends through your Gmail). Follow the 5-minute box shown in Settings.
-- **Firebase Trigger Email extension** (needs Blaze plan): site writes to the `mail` collection, the extension sends via your Gmail/SMTP.
-Use "Send test email" to verify. EmailJS keys are public by design; add your domain to EmailJS allowed origins.
+The admin panel already writes outgoing email jobs to the Firestore `mail` collection. The project includes a self-managed Firebase Cloud Function that processes this queue using Hostinger SMTP.
+
+**Hostinger SMTP values**
+- SMTP host: `smtp.hostinger.com`
+- Port: `465`
+- Security: SSL/TLS (`secure: true`)
+- SMTP username: `info@subeesha.com`
+- SMTP password: the mailbox password from Hostinger hPanel
+- Sender: `Subeesha <info@subeesha.com>`
+
+**One-time deployment** (run from the project root):
+1. Upgrade the Firebase project to the Blaze plan and select the Firebase project `subeesha-74d2f` when prompted by `firebase use --add`.
+2. Run `cd functions && npm install && cd ..`.
+3. Run `firebase functions:secrets:set HOSTINGER_SMTP_USER` and enter `info@subeesha.com` when prompted.
+4. Run `firebase functions:secrets:set HOSTINGER_SMTP_PASS` and enter the Hostinger mailbox password when prompted. Do not put this password in frontend files or Firestore settings.
+5. Run `firebase deploy --only functions:sendSubeeshaMail`.
+6. Deploy the updated admin UI with `firebase deploy --only hosting`.
+
+Then open **Admin > Settings > Email Notifications**:
+- Turn **Send emails** ON.
+- Choose **Firebase Cloud Function (Hostinger SMTP)**.
+- Set **From name** to `Subeesha`.
+- Set **Admin email** to `info@subeesha.com` if you want new-order alerts sent to this mailbox.
+- Enable the customer order confirmation, admin new-order alert, and status-change switches as required.
+- Click **Save email settings**, enter a test recipient in **Send test to...**, and click **Send test email**.
+
+When an admin changes an order status, the existing admin code writes a message to `mail`; `sendSubeeshaMail` sends it from `info@subeesha.com`. Customer checkout emails are taken from the saved order. The Admin > Orders > Add Order form now also has an optional Customer Email field so manually created orders can receive status notifications too. The function records `delivery.state` (`PROCESSING`, `SUCCESS`, or `ERROR`) on each mail document. Check Firebase Functions logs and the Firestore `mail` document's `delivery` field if a test fails.
+
+Firebase Cloud Functions requires the Blaze (pay-as-you-go) plan. Hostinger's alternative SMTP setting is port `587` with STARTTLS, but this function is configured for the recommended port `465` with SSL/TLS. Firebase Extensions are not used by this implementation.
 
 ### 4. Reseller money flow
 Commission is credited to the reseller wallet when an order is **Delivered** and taken back if it is **Returned**.

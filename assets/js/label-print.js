@@ -50,6 +50,7 @@ function fillLabel(o, store){
 
     const items = (o.items || []).map(i => i.name + " x" + i.qty).join(", ");
     buildQr([
+        "SUBEESHA - QUALITY POINTS", "Visit https://subeesha.com and upload this QR code to earn Quality Points.", "",
         "SUBEESHA ORDER DETAILS", "",
         "Order Number: " + no, "Order Date: " + SUB.date(o.createdAt), "Payment Method: " + (o.paymentMethod || ""), "",
         "CUSTOMER", "Name: " + (c.name || ""), "Phone: " + (c.phone || ""),
@@ -68,6 +69,7 @@ function makeEditable(no, items){
     const t = s => ($q(s) ? $q(s).innerText.replace(/\s+/g, " ").trim() : "");
     let timer = null;
     const rebuild = () => buildQr([
+        "SUBEESHA - QUALITY POINTS", "Visit https://subeesha.com and upload this QR code to earn Quality Points.", "",
         "SUBEESHA ORDER DETAILS", "", "Order Number: " + t(".qr-order").replace(/^#/, ""), "",
         "CUSTOMER", "Name: " + t(".customer-name"), "Phone: " + t(".customer-phone"), "Address: " + t(".customer-address"), "",
         "ITEMS: " + items, "", "Total: " + t(".total-row strong"), "Amount To Collect: " + t(".cod-box strong")
@@ -87,7 +89,7 @@ function fail(msg){
 
 (function init(){
     if (!SUB.configured) {          // static demo label
-        buildQr("SUBEESHA ORDER DETAILS\nOrder Number: SUB-10842\nTotal Amount: Rs. 6,750");
+        buildQr("SUBEESHA - QUALITY POINTS\nVisit https://subeesha.com and upload this QR code to earn Quality Points.\n\nSUBEESHA ORDER DETAILS\nOrder Number: SUB-10842\nTotal Amount: Rs. 6,750");
         return;
     }
     const id = (SUB.qs("id") || "").trim().toUpperCase();

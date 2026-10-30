@@ -15,7 +15,7 @@ A.ready(function () {
 
     /* ---------- email notifications ---------- */
     var $ = function (id) { return document.getElementById(id); };
-    window.emProvChange = function () { var f = $("emProv").value === "firebase"; $("emJs").style.display = f ? "none" : ""; $("emFb").style.display = f ? "" : "none"; };
+    window.emProvChange = function () { var f = $("emProv").value === "firebase"; $("emJs").style.display = f ? "none" : ""; $("emJsGuide").style.display = f ? "none" : ""; $("emFb").style.display = f ? "" : "none"; };
     if (!A.isMgr()) $("emailCard").style.display = "none";
     SUB.mail.cfg(true).then(function (c) {
         $("emOn").classList.toggle("on", !!c.enabled); $("emProv").value = c.provider || "emailjs"; $("emFrom").value = c.fromName || "";

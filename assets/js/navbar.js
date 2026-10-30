@@ -113,7 +113,39 @@
     var links = $("navLinks"), menu = $("sbMenu");
     w.toggleMenu = function () { if (links) links.classList.toggle("active"); };
     if (menu) menu.addEventListener("click", w.toggleMenu);
-    if (links) links.addEventListener("click", function (e) { if (e.target.closest("a")) links.classList.remove("active"); });
+    if (links) links.addEventListener("click", function (e) {
+        var trigger = e.target.closest(".sb-nav-trigger");
+        if (trigger) {
+            e.preventDefault();
+            var parent = trigger.closest(".sb-has-submenu");
+            var nextOpen = !parent.classList.contains("open");
+            [].forEach.call(links.querySelectorAll(".sb-has-submenu.open"), function (item) {
+                item.classList.remove("open");
+                var btn = item.querySelector(".sb-nav-trigger");
+                if (btn) btn.setAttribute("aria-expanded", "false");
+            });
+            if (nextOpen) parent.classList.add("open");
+            trigger.setAttribute("aria-expanded", nextOpen ? "true" : "false");
+            return;
+        }
+        if (e.target.closest("a")) {
+            links.classList.remove("active");
+            [].forEach.call(links.querySelectorAll(".sb-has-submenu.open"), function (item) {
+                item.classList.remove("open");
+                var btn = item.querySelector(".sb-nav-trigger");
+                if (btn) btn.setAttribute("aria-expanded", "false");
+            });
+        }
+    });
+    d.addEventListener("click", function (e) {
+        if (!e.target.closest(".sb-has-submenu") && links) {
+            [].forEach.call(links.querySelectorAll(".sb-has-submenu.open"), function (item) {
+                item.classList.remove("open");
+                var btn = item.querySelector(".sb-nav-trigger");
+                if (btn) btn.setAttribute("aria-expanded", "false");
+            });
+        }
+    });
     var cart = $("sbCart");
     if (cart) cart.addEventListener("click", function () {
         if (!SUB.cart.count()) return SUB.notify("Your cart is empty.", "warning", "Cart");
@@ -124,10 +156,78 @@
         var f = (a.getAttribute("href").split("#")[0].split("/").pop() || "").toLowerCase();
         if (f && f === here && a.getAttribute("href").indexOf("#") < 0) a.classList.add("on");
     });
+    [].forEach.call(d.querySelectorAll(".sb-has-submenu"), function (item) {
+        if (item.querySelector(".sb-submenu a.on")) {
+            var trigger = item.querySelector(".sb-nav-trigger");
+            if (trigger) trigger.classList.add("on");
+        }
+    });
+    var reminderCheckUid = null;
+    function maybeShowReviewReminder(user, profile) {
+        if (!user || !profile || profile.role !== "customer" || !SUB.configured) return;
+        if ((w.location.pathname.split("/").pop() || "").toLowerCase() === "customer-love.html") return;
+        // SUB.onAuth may notify once from the auth listener and once from SUB.ready.
+        // Keep a single reminder lookup per signed-in user to avoid duplicate cards.
+        if (reminderCheckUid === user.uid) return;
+        reminderCheckUid = user.uid;
+        var promptKey = "subeesha_review_prompted_" + user.uid;
+        try { if (w.sessionStorage.getItem(promptKey)) return; } catch (e) { }
+
+        Promise.all([
+            SUB.db.collection("orders").where("userId", "==", user.uid).get(),
+            SUB.db.collection("reviews").where("uid", "==", user.uid).get()
+        ]).then(function (results) {
+            var orders = SUB.docs(results[0]).filter(function (o) { return o.status === "Delivered"; });
+            var reviewed = {};
+            SUB.docs(results[1]).forEach(function (r) {
+                if (r.orderId && r.productId) reviewed[r.orderId + "__" + r.productId] = true;
+            });
+            var candidate = null;
+            orders.some(function (order) {
+                return (order.items || []).some(function (item) {
+                    if (!item.id || reviewed[order.id + "__" + item.id]) return false;
+                    candidate = { order: order, item: item };
+                    return true;
+                });
+            });
+            if (!candidate) return;
+
+            try { w.sessionStorage.setItem(promptKey, "1"); } catch (e) { }
+            var order = candidate.order, item = candidate.item;
+            var notice = d.createElement("aside");
+            notice.className = "sb-review-reminder";
+            notice.setAttribute("role", "status");
+            notice.innerHTML = '<div class="sb-review-reminder__icon"><ion-icon name="star-outline"></ion-icon></div>' +
+                '<div class="sb-review-reminder__content"><strong>Your order has been delivered!</strong><p>' +
+                esc(item.name || "Your product") + ' from order #' + esc(order.orderNo || order.id) + ' is ready for your review.</p>' +
+                '<a href="' + SUB.url("page/customer-love.html?order=" + encodeURIComponent(order.id) + "&product=" + encodeURIComponent(item.id)) + '">Write a review <ion-icon name="arrow-forward-outline"></ion-icon></a></div>' +
+                '<button class="sb-review-reminder__close" type="button" aria-label="Dismiss"><ion-icon name="close-outline"></ion-icon></button>';
+            d.body.appendChild(notice);
+            var timer = w.setTimeout(function () { if (notice.parentNode) notice.parentNode.removeChild(notice); }, 30000);
+            notice.querySelector(".sb-review-reminder__close").addEventListener("click", function () {
+                w.clearTimeout(timer);
+                if (notice.parentNode) notice.parentNode.removeChild(notice);
+            });
+        }).catch(function (e) {
+            if (reminderCheckUid === user.uid) reminderCheckUid = null;
+            if (w.console) console.warn("Review reminder not available", e);
+        });
+    }
+
+    var reminderUid = null;
     SUB.onAuth(function (user, profile) {
-        var u = $("sbUser"); if (!u) return;
-        u.setAttribute("href", user && profile ? SUB.url("page/profile.html") : SUB.url("account.html"));
-        u.setAttribute("title", user && profile ? (profile.name || "My account") : "Login / Sign up");
+        if (!user && reminderUid) {
+            try { w.sessionStorage.removeItem("subeesha_review_prompted_" + reminderUid); } catch (e) { }
+            reminderUid = null;
+            reminderCheckUid = null;
+        }
+        if (user) reminderUid = user.uid;
+        var u = $("sbUser");
+        if (u) {
+            u.setAttribute("href", user && profile ? SUB.url("page/profile.html") : SUB.url("account.html"));
+            u.setAttribute("title", user && profile ? (profile.name || "My account") : "Login / Sign up");
+        }
+        maybeShowReviewReminder(user, profile);
     });
     SUB.cart.render();
     }

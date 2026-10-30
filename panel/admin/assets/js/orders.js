@@ -68,13 +68,14 @@ A.ready(function () {
             var line = function (n) { return '<div style="display:grid;grid-template-columns:1fr 70px;gap:8px;margin-bottom:6px"><select id="moP' + n + '">' + opts + '</select><input id="moQ' + n + '" type="number" min="1" value="1"></div>'; };
             openModal("Add Manual Order",
                 '<div class="form-grid"><div class="field"><label>Customer Name *</label><input id="moName"></div><div class="field"><label>Phone *</label><input id="moPhone"></div>' +
-                '<div class="field"><label>City *</label><input id="moCity"></div><div class="field"><label>Payment</label><select id="moPay"><option>Cash on Delivery</option><option>Easypaisa</option><option>JazzCash</option><option>Bank Transfer</option></select></div>' +
+                '<div class="field"><label>Customer Email (optional)</label><input id="moEmail" type="email" placeholder="customer@example.com"></div><div class="field"><label>City *</label><input id="moCity"></div>' +
+                '<div class="field"><label>Payment</label><select id="moPay"><option>Cash on Delivery</option><option>Easypaisa</option><option>JazzCash</option><option>Bank Transfer</option></select></div>' +
                 '<div class="field full"><label>Address *</label><input id="moAddr"></div><div class="field full"><label>Products (up to 4 lines)</label>' + line(0) + line(1) + line(2) + line(3) + "</div></div>",
                 A.save(function () {
                     var lines = [0, 1, 2, 3].map(function (n) { return { id: A.val("moP" + n), qty: Math.max(1, Math.floor(A.num("moQ" + n))) }; }).filter(function (l) { return l.id; });
                     if (!A.val("moName") || !A.val("moPhone") || !A.val("moCity") || !A.val("moAddr")) throw new Error("Please fill all required fields.");
                     if (!lines.length) throw new Error("Select at least one product.");
-                    return SUB.placeOrder({ items: lines, customer: { name: A.val("moName"), phone: A.val("moPhone"), email: "", city: A.val("moCity"), province: "", area: "", postal: "", address: A.val("moAddr") }, paymentMethod: A.val("moPay"), source: "admin" })
+                    return SUB.placeOrder({ items: lines, customer: { name: A.val("moName"), phone: A.val("moPhone"), email: A.val("moEmail"), city: A.val("moCity"), province: "", area: "", postal: "", address: A.val("moAddr") }, paymentMethod: A.val("moPay"), source: "admin" })
                         .then(function (o) { A.toast("Order #" + o.orderNo + " created"); return load(); });
                 }), "Create Order");
         });

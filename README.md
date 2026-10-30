@@ -46,3 +46,7 @@ Already applied purchase par message: “This purchase has already been used.”
 Sare stamps complete hone par Reward Unlocked
 Reward claim karne ke baad naya loyalty card cycle start ho sakta hai
 Demo ke liye browser localStorage use hoga, isliye refresh ke baad bhi data rahega
+
+## Hostinger SMTP order notifications
+
+See [README-SETUP.md](README-SETUP.md) section 3 for deploying the Firebase Cloud Function that sends order emails through `info@subeesha.com`.

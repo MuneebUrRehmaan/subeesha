@@ -42,10 +42,10 @@ function renderStamps(){
         stamp.classList.add("stamp");
         if(i <= loyaltyData.stamps){
             stamp.classList.add("active");
-            stamp.innerHTML = `<span>✓</span><small>STAMPED</small>`;
+            stamp.innerHTML = `<span class="stamp-icon"><i class="fa-solid fa-check"></i></span><span class="stamp-number">STAMP ${i}</span><small class="stamp-status">COMPLETED</small>`;
         }else{
             if(i === loyaltyData.stamps + 1) stamp.classList.add("next");
-            stamp.innerHTML = `<span>★</span><small>STAMP ${i}</small>`;
+            stamp.innerHTML = `<span class="stamp-icon"><i class="fa-regular fa-star"></i></span><span class="stamp-number">STAMP ${i}</span><small class="stamp-status">AVAILABLE</small>`;
         }
         container.appendChild(stamp);
     }
@@ -65,7 +65,7 @@ function updateReward(){
     const claimBtn = document.getElementById("claimBtn");
     if(loyaltyData.stamps >= TOTAL_STAMPS){
         loyaltyData.rewardAvailable = true;
-        rewardTitle.textContent = "🎉 Reward Unlocked!";
+        rewardTitle.textContent = "Reward Unlocked!";
         rewardText.textContent = "Congratulations! Your loyalty reward is now available.";
         claimBtn.textContent = "Claim Your Reward";
         claimBtn.classList.add("active");
@@ -142,7 +142,7 @@ function renderActivity(){
         return `
         <div class="activity-item">
             <div class="activity-left">
-                <div class="activity-icon">${item.type === "success" ? "✓" : "!"}</div>
+                <div class="activity-icon"><i class="${item.type === "success" ? "fa-solid fa-circle-check" : "fa-solid fa-circle-exclamation"}"></i></div>
                 <div><h4>${esc(item.id)}</h4><p>${esc(item.date)}</p></div>
             </div>
             <span class="status ${esc(item.type)}">${esc(item.status)}</span>
@@ -168,12 +168,10 @@ function showToast(
     const toastIcon =
         document.getElementById("toastIcon");
     toast.classList.remove("error");
-    if(type === "error"){
-        toast.classList.add("error");
-        toastIcon.textContent = "!";
-    }else{
-        toastIcon.textContent = "✓";
-    }
+    toastIcon.innerHTML = type === "error"
+        ? '<i class="fa-solid fa-circle-exclamation"></i>'
+        : '<i class="fa-solid fa-circle-check"></i>';
+    if(type === "error") toast.classList.add("error");
     toastTitle.textContent = title;
     toastMessage.textContent = message;
     toast.classList.add("show");

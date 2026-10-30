@@ -816,3 +816,14 @@ body{
     }
 
 }
+
+/* Consistent, professional icon treatment across the rewards experience */
+.reward-icon,.scan-icon,.info-card .info-icon,.modal-icon,.toast-icon,.activity-icon{color:var(--primary)}
+.reward-icon{background:#edf3ef;border:1px solid #e0e9e3;color:var(--primary);font-size:20px}
+.scan-icon{background:#edf3ef;border:1px solid #e0e9e3;color:var(--primary);font-size:27px}
+.info-card .info-icon{width:44px;height:44px;border-radius:12px;background:#edf3ef;border:1px solid #e0e9e3;display:grid;place-items:center;color:var(--primary);font-size:18px}
+.modal-icon{color:#9b7841;background:#f8f2e7;border:1px solid #eadcc2;font-size:30px}
+.toast-icon{color:var(--success)}
+.activity-icon{color:var(--success);font-size:15px}
+.stamp .stamp-icon{font-size:16px}
+.stamp.active .stamp-icon{background:var(--primary);color:var(--accent)}

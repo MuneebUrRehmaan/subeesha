@@ -573,7 +573,9 @@
         orderPlaced: function (o) {
             return SUB.mail.cfg().then(function (c) {
                 if (!c.enabled) return;
-                var jobs = [], mine = SUB.user && SUB.user.email, to = c.provider === "firebase" ? mine : ((o.customer && o.customer.email) || mine);
+                var jobs = [], mine = SUB.user && SUB.user.email, to = c.provider === "firebase"
+                    ? (o.source === "admin" ? ((o.customer && o.customer.email) || "") : mine)
+                    : ((o.customer && o.customer.email) || mine);
                 if (c.toCustomer && to) jobs.push(SUB.mail._send(to, "Order #" + o.orderNo + " confirmed - " + (c.fromName || "Subeesha"), SUB.mail.html(o, "Thank you for your order!", "We have received your order and will keep you updated as it moves along."), c));
                 if (c.toAdmin && c.adminEmail) jobs.push(SUB.mail._send(c.adminEmail, "New order #" + o.orderNo + " - " + SUB.money(o.total), SUB.mail.html(o, "New order received", "A customer just placed a new order."), c));
                 return Promise.all(jobs.map(function (j) { return j.catch(function (e) { console.warn("[mail]", e); }); }));

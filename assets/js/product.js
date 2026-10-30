@@ -37,6 +37,48 @@
         render(p);
     }).catch(function () { message("Could not load this product", "Please check your connection and try again."); });
 
+    /* Product ratings are calculated from approved, verified-purchase reviews. */
+    function loadProductReviews(p) {
+        var section = d.createElement("section");
+        section.className = "pd-reviews";
+        section.id = "pdReviews";
+        section.innerHTML = '<div class="pd-reviews-head"><div><span class="pd-review-kicker">CUSTOMER FEEDBACK</span><h2>Customer Reviews</h2><p>Verified reviews from customers who received this product.</p></div><div class="pd-review-average" id="pdReviewAverage"><strong>0.0</strong><span>☆☆☆☆☆</span><small>0 reviews</small></div></div><div class="pd-review-list" id="pdReviewList"><div class="pd-review-empty">Loading customer reviews...</div></div>';
+        var pd = root.querySelector(".pd");
+        if (pd) pd.appendChild(section);
+
+        var summary = d.getElementById("pdReviewSummary");
+        if (summary) summary.innerHTML = '<span class="pd-review-loading">Loading reviews...</span>';
+
+        SUB.db.collection("reviews").where("productId", "==", p.id).where("status", "==", "approved").get().then(function (snapshot) {
+            var reviews = SUB.docs(snapshot).sort(function (a, b) { return SUB.ms(b.createdAt) - SUB.ms(a.createdAt); });
+            var total = reviews.length;
+            var average = total ? reviews.reduce(function (sum, review) { return sum + Number(review.rating || 0); }, 0) / total : 0;
+            var starText = SUB.stars(Math.round(average));
+
+            var avgBox = d.getElementById("pdReviewAverage");
+            if (avgBox) avgBox.innerHTML = '<strong>' + average.toFixed(1) + '</strong><span>' + starText + '</span><small>' + total + ' review' + (total === 1 ? '' : 's') + '</small>';
+            if (summary) summary.innerHTML = '<span class="pd-review-inline-stars">' + starText + '</span><strong>' + (total ? average.toFixed(1) : 'New') + '</strong><small>' + total + ' review' + (total === 1 ? '' : 's') + '</small><a href="#pdReviews">See reviews</a>';
+
+            var list = d.getElementById("pdReviewList");
+            if (!list) return;
+            if (!total) {
+                list.innerHTML = '<div class="pd-review-empty"><i class="fa-regular fa-comment-dots"></i><strong>No reviews yet</strong><p>Once a customer receives this product and submits an approved review, it will appear here.</p><a href="../page/customer-love.html">Review a delivered purchase</a></div>';
+                return;
+            }
+            list.innerHTML = reviews.slice(0, 15).map(function (review) {
+                return '<article class="pd-review-card"><div class="pd-review-card-top"><div><strong>' + esc(review.name || "Subeesha Customer") + '</strong><small>' + esc(SUB.date(review.createdAt)) + '</small></div><span class="pd-review-verified"><i class="fa-solid fa-circle-check"></i> Verified Purchase</span></div>' +
+                    '<div class="pd-review-stars">' + esc(SUB.stars(review.rating)) + '</div><p>' + esc(review.review || "") + '</p>' +
+                    (review.image ? '<a class="pd-review-photo-link" href="' + esc(SUB.img(review.image, 1000)) + '" target="_blank" rel="noopener"><img class="pd-review-photo" src="' + esc(SUB.img(review.image, 500)) + '" alt="Customer product review photo" loading="lazy"></a>' : '') +
+                    '</article>';
+            }).join("");
+        }).catch(function (error) {
+            console.warn("Product reviews unavailable", error);
+            var list = d.getElementById("pdReviewList");
+            if (list) list.innerHTML = '<div class="pd-review-empty">Customer reviews are temporarily unavailable. Please try again later.</div>';
+            if (summary) summary.innerHTML = '<small>Reviews unavailable</small>';
+        });
+    }
+
     /* related products (same category first, then others) */
     function loadRelated(p) {
         var box = d.createElement("section"); box.className = "pd-related";
@@ -60,7 +102,6 @@
         var imgs = (p.images && p.images.length ? p.images : [""]).slice(), cur = 0, qty = 1;
         var sizes = p.sizes || [], colors = p.colors || [], size = "", color = "", colorIdx = -1;
         var stock = p._stock, maxQty = Math.max(1, Math.min(10, stock));
-        var rate = Math.round(p.rating || 0);
         d.title = p.name + " | Subeesha";
 
         var stockHtml = stock <= 0 ? '<p class="pd-stock out">Out of stock</p>' : (stock <= 10 ? '<p class="pd-stock low">Only ' + stock + " left in stock</p>" : '<p class="pd-stock">In stock</p>');
@@ -75,7 +116,7 @@
             '<div class="pd-grid"><div class="pd-gallery' + (imgs.length > 1 ? "" : " single") + '">' + thumbs +
             '<div class="pd-main"><img id="pdMain" src="' + esc(SUB.img(imgs[0], 1000)) + '" alt="' + esc(p.name) + '" onerror="this.onerror=null;this.src=SUB.url(\'assets/images/logo.jpg\')"></div></div>' +
             '<div class="pd-info"><h1>' + esc(p.name) + "</h1>" +
-            (rate ? '<div class="pd-rate">' + SUB.stars(rate) + (p.reviewCount ? "<small>(" + esc(p.reviewCount) + ")</small>" : "") + "</div>" : "") +
+            '<div class="pd-review-summary" id="pdReviewSummary"><span class="pd-review-loading">Loading reviews...</span></div>' +
             '<div class="pd-price"><b>' + SUB.money(p._price) + "</b>" + (p._old ? "<s>" + SUB.money(p._old) + "</s><em>" + p._pct + "% OFF</em>" : "") + "</div>" +
             (p.description ? '<p class="pd-desc">' + esc(p.description) + "</p>" : "") + stockHtml +
             (colors.length ? '<p class="pd-label">Select Color</p><div class="pd-opts" id="pdColors">' + colors.map(function (c, i) { return '<button class="pd-opt" data-c="' + i + '">' + esc(c) + "</button>"; }).join("") + "</div>" : "") +
@@ -85,6 +126,7 @@
             '<button class="pd-fav' + (wished ? " on" : "") + '" id="pdFav" aria-label="Wishlist"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></button></div>' +
             "</div></div></div>";
 
+        loadProductReviews(p);
         loadRelated(p);
         var main = d.getElementById("pdMain");
         function show(i) {
