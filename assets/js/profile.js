@@ -29,6 +29,19 @@ function openSection(sectionId) {
         item.classList.toggle("active", item.dataset.target === sectionId);
     });
 
+    // Show the global heading + Edit Profile button only on Overview.
+    // All other sections already render their own .section-title.
+    // Use a descendant selector so this still works if the HTML wrapper changes.
+    const pageHeading = document.querySelector(".profile-content .page-heading")
+        || document.querySelector(".page-heading");
+
+    if (pageHeading) {
+        const showOverviewHeading = sectionId === "overview";
+        pageHeading.hidden = !showOverviewHeading;
+        pageHeading.style.display = showOverviewHeading ? "" : "none";
+        pageHeading.setAttribute("aria-hidden", String(!showOverviewHeading));
+    }
+
     const titles = {
         overview: ["Welcome back, " + ((me && me.name) || "").split(" ")[0], "Manage your profile, orders, rewards and wallet from one place."],
         personal: ["Personal Information", "Update the information connected to your Subeesha account."],
