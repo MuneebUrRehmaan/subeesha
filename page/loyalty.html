@@ -1,357 +1,392 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Subeesha Loyalty Rewards</title>
+    <title>Subeesha Loyalty Rewards</title>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<link rel="stylesheet" href="../assets/css/loyalty.css">
-<link rel="stylesheet" href="../assets/css/navbar.css">
-<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-<link rel="stylesheet" href="../assets/css/sub-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/loyalty.css">
+    <link rel="stylesheet" href="../assets/css/navbar.css">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <link rel="stylesheet" href="../assets/css/sub-ui.css">
 </head>
 
 <body data-page="loyalty">
 
-<!-- ===== TOP BAR ===== -->
-<div class="sb-top"><span><ion-icon name="shield-checkmark-outline"></ion-icon> Quality Products</span><span><ion-icon name="car-outline"></ion-icon> Fast Delivery Across Pakistan</span><span><ion-icon name="gift-outline"></ion-icon> Earn Rewards With Every Order</span></div>
-<!-- ===== NAVBAR (shared) ===== -->
-<div class="sb-header" id="sbHeader" role="banner"><div class="sb-nav"><a href="../index.html" class="sb-brand" aria-label="Subeesha Home"><span class="sb-logo"><img src="../assets/images/logo.jpg" alt="Subeesha - Shop More, Live Better"></span></a><ul class="sb-links" id="navLinks"><li><a href="../index.html">Home</a></li><li><a href="../page/Categories.html">Categories</a></li><li class="sb-has-submenu"><button class="sb-nav-trigger" type="button" aria-haspopup="true" aria-expanded="false">Products <ion-icon name="chevron-down-outline" aria-hidden="true"></ion-icon></button><div class="sb-submenu"><a href="../page/shop.html">All Products</a><a href="../page/new-arrivals.html">New Arrivals</a></div></li><li><a href="../page/flashsale.html">Flash Sale</a></li><li><a href="../page/loyalty.html">Rewards</a></li><li><a href="../page/customer-love.html">Reviews</a></li><li><a href="../page/becomeseller.html">Become Seller</a></li><li><a href="../index.html#footer">Contact</a></li></ul><div class="sb-tools"><div class="sb-sw"><form class="sb-search" id="sbSearch" autocomplete="off" role="search"><ion-icon name="search-outline"></ion-icon><input id="sbInput" type="search" placeholder="Search products, categories..." autocomplete="off" aria-label="Search products"><button type="submit" aria-label="Submit search"><ion-icon name="arrow-forward-outline"></ion-icon></button></form><div class="sb-suggest" id="sbSuggest"></div></div><div class="sb-actions"><button class="sb-icon sb-stoggle" id="sbSToggle" type="button" aria-label="Search"><ion-icon name="search-outline"></ion-icon></button><a class="sb-icon" href="../page/profile.html#wishlist" aria-label="Wishlist"><ion-icon name="heart-outline"></ion-icon></a><a class="sb-icon" id="sbUser" href="../account.html" aria-label="Account"><ion-icon name="person-outline"></ion-icon></a><button class="sb-icon" id="sbCart" type="button" aria-label="Cart"><ion-icon name="bag-handle-outline"></ion-icon><span class="sb-count" id="cartCount">0</span></button><button class="sb-icon sb-menu" id="sbMenu" type="button" aria-label="Menu"><ion-icon name="menu-outline"></ion-icon></button></div></div></div></div>
-<div class="sb-msearch" id="sbMSearch"><div class="sb-mtop"><button type="button" id="sbMBack" aria-label="Close search"><ion-icon name="arrow-back-outline"></ion-icon></button><form class="sb-search" id="sbMForm" autocomplete="off"><ion-icon name="search-outline"></ion-icon><input id="sbMInput" type="search" placeholder="Search products, categories..." autocomplete="off" aria-label="Search products"><button type="submit" aria-label="Search"><ion-icon name="arrow-forward-outline"></ion-icon></button></form></div><div class="sb-mlist" id="sbMList"></div></div>
-
-
-
-<section class="hero">
-
-    <div class="hero-inner">
-
-        <div class="badge">
-            <i class="fa-solid fa-medal"></i> SUBEESHA LOYALTY PROGRAM
+    <!-- ===== TOP BAR ===== -->
+    <div class="sb-top"><span><ion-icon name="shield-checkmark-outline"></ion-icon> Quality
+            Products</span><span><ion-icon name="car-outline"></ion-icon> Fast Delivery Across
+            Pakistan</span><span><ion-icon name="gift-outline"></ion-icon> Earn Rewards With Every Order</span></div>
+    <!-- ===== NAVBAR (shared) ===== -->
+    <div class="sb-header" id="sbHeader" role="banner">
+        <div class="sb-nav"><a href="../index.html" class="sb-brand" aria-label="Subeesha Home"><span
+                    class="sb-logo"><img src="../assets/images/logo.jpg"
+                        alt="Subeesha - Shop More, Live Better"></span></a>
+            <ul class="sb-links" id="navLinks">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../page/Categories.html">Categories</a></li>
+                <li class="sb-has-submenu"><button class="sb-nav-trigger" type="button" aria-haspopup="true"
+                        aria-expanded="false">Products <ion-icon name="chevron-down-outline"
+                            aria-hidden="true"></ion-icon></button>
+                    <div class="sb-submenu"><a href="../page/shop.html">All Products</a><a
+                            href="../page/new-arrivals.html">New Arrivals</a></div>
+                </li>
+                <li><a href="../page/flashsale.html">Flash Sale</a></li>
+                <li><a href="../page/loyalty.html">Rewards</a></li>
+                <li><a href="../page/customer-love.html">Reviews</a></li>
+                <li><a href="../page/becomeseller.html">Become Seller</a></li>
+            </ul>
+            <div class="sb-tools">
+                <div class="sb-sw">
+                    <form class="sb-search" id="sbSearch" autocomplete="off" role="search"><ion-icon
+                            name="search-outline"></ion-icon><input id="sbInput" type="search"
+                            placeholder="Search products, categories..." autocomplete="off"
+                            aria-label="Search products"><button type="submit" aria-label="Submit search"><ion-icon
+                                name="arrow-forward-outline"></ion-icon></button></form>
+                    <div class="sb-suggest" id="sbSuggest"></div>
+                </div>
+                <div class="sb-actions"><button class="sb-icon sb-stoggle" id="sbSToggle" type="button"
+                        aria-label="Search"><ion-icon name="search-outline"></ion-icon></button><a class="sb-icon"
+                        href="../page/profile.html#wishlist" aria-label="Wishlist"><ion-icon
+                            name="heart-outline"></ion-icon></a><a class="sb-icon" id="sbUser" href="../account.html"
+                        aria-label="Account"><ion-icon name="person-outline"></ion-icon></a><button class="sb-icon"
+                        id="sbCart" type="button" aria-label="Cart"><ion-icon name="bag-handle-outline"></ion-icon><span
+                            class="sb-count" id="cartCount">0</span></button><button class="sb-icon sb-menu" id="sbMenu"
+                        type="button" aria-label="Menu"><ion-icon name="menu-outline"></ion-icon></button></div>
+            </div>
         </div>
-
-        <h1>Shop More. Collect Stamps. Earn Rewards.</h1>
-
-        <p>
-            Every eligible purchase brings you one step closer to your reward.
-            Complete your digital stamp card and unlock exclusive benefits.
-        </p>
-
+    </div>
+    <div class="sb-msearch" id="sbMSearch">
+        <div class="sb-mtop"><button type="button" id="sbMBack" aria-label="Close search"><ion-icon
+                    name="arrow-back-outline"></ion-icon></button>
+            <form class="sb-search" id="sbMForm" autocomplete="off"><ion-icon name="search-outline"></ion-icon><input
+                    id="sbMInput" type="search" placeholder="Search products, categories..." autocomplete="off"
+                    aria-label="Search products"><button type="submit" aria-label="Search"><ion-icon
+                        name="arrow-forward-outline"></ion-icon></button></form>
+        </div>
+        <div class="sb-mlist" id="sbMList"></div>
     </div>
 
-</section>
 
 
-<main class="main">
+    <section class="hero">
 
-    <section class="loyalty-card">
+        <div class="hero-inner">
 
-        <div class="card-top">
-
-            <div class="member-info">
-
-                <div class="avatar">
-                    N
-                </div>
-
-                <div>
-
-                    <h3 id="customerName">
-                        Subeesha Customer
-                    </h3>
-
-                    <p>
-                        Loyalty Member
-                    </p>
-
-                </div>
-
+            <div class="badge">
+                <i class="fa-solid fa-medal"></i> SUBEESHA LOYALTY PROGRAM
             </div>
 
-            <div class="level">
-                DIGITAL LOYALTY CARD
-            </div>
+            <h1>Shop More. Collect Stamps. Earn Rewards.</h1>
+
+            <p>
+                Every eligible purchase brings you one step closer to your reward.
+                Complete your digital stamp card and unlock exclusive benefits.
+            </p>
 
         </div>
 
-
-        <div class="card-body">
-
-            <div class="reward-head">
-
-                <div>
-
-                    <h2>Complete 10 Purchases</h2>
-
-                    <p>
-                        Collect all stamps and unlock your special reward.
-                    </p>
-
-                </div>
-
-                <div class="stamp-count">
-
-                    <span id="stampCount">0</span> / 10 Stamps
-
-                </div>
-
-            </div>
+    </section>
 
 
-            <div class="stamps" id="stampsContainer">
-            </div>
+    <main class="main">
 
+        <section class="loyalty-card">
 
-            <div class="progress-area">
+            <div class="card-top">
 
-                <div class="progress-text">
+                <div class="member-info">
 
-                    <span>Your Progress</span>
-
-                    <span id="progressText">
-                        0% Complete
-                    </span>
-
-                </div>
-
-                <div class="progress">
-
-                    <div
-                        class="progress-bar"
-                        id="progressBar">
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="reward-box">
-
-                <div class="reward-left">
-
-                    <div class="reward-icon" aria-hidden="true">
-                        <i class="fa-solid fa-gift"></i>
+                    <div class="avatar">
+                        N
                     </div>
 
                     <div>
 
-                        <h3 id="rewardTitle">
-                            Reward Locked
+                        <h3 id="customerName">
+                            Subeesha Customer
                         </h3>
 
-                        <p id="rewardText">
-                            Complete all 10 stamps to unlock your reward.
+                        <p>
+                            Loyalty Member
                         </p>
 
                     </div>
 
                 </div>
 
-                <button
-                    class="claim-btn"
-                    id="claimBtn"
-                    onclick="claimReward()"
-                >
-                    Complete Stamps First
-                </button>
+                <div class="level">
+                    DIGITAL LOYALTY CARD
+                </div>
 
             </div>
 
-        </div>
 
-    </section>
+            <div class="card-body">
+
+                <div class="reward-head">
+
+                    <div>
+
+                        <h2>Complete 10 Purchases</h2>
+
+                        <p>
+                            Collect all stamps and unlock your special reward.
+                        </p>
+
+                    </div>
+
+                    <div class="stamp-count">
+
+                        <span id="stampCount">0</span> / 10 Stamps
+
+                    </div>
+
+                </div>
 
 
-    <section class="scanner-section">
-
-        <!-- SCANNER -->
-
-        <div class="scan-card">
-
-            <h3>Scan Purchase</h3>
-
-            <p>
-                Scan the eligible purchase QR code to receive your stamp.
-            </p>
+                <div class="stamps" id="stampsContainer">
+                </div>
 
 
-            <div class="scan-area">
+                <div class="progress-area">
 
-                <div class="scan-icon" aria-hidden="true">
+                    <div class="progress-text">
+
+                        <span>Your Progress</span>
+
+                        <span id="progressText">
+                            0% Complete
+                        </span>
+
+                    </div>
+
+                    <div class="progress">
+
+                        <div class="progress-bar" id="progressBar">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="reward-box">
+
+                    <div class="reward-left">
+
+                        <div class="reward-icon" aria-hidden="true">
+                            <i class="fa-solid fa-gift"></i>
+                        </div>
+
+                        <div>
+
+                            <h3 id="rewardTitle">
+                                Reward Locked
+                            </h3>
+
+                            <p id="rewardText">
+                                Complete all 10 stamps to unlock your reward.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <button class="claim-btn" id="claimBtn" onclick="claimReward()">
+                        Complete Stamps First
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="scanner-section">
+
+            <!-- SCANNER -->
+
+            <div class="scan-card">
+
+                <h3>Scan Purchase</h3>
+
+                <p>
+                    Scan the eligible purchase QR code to receive your stamp.
+                </p>
+
+
+                <div class="scan-area">
+
+                    <div class="scan-icon" aria-hidden="true">
+                        <i class="fa-solid fa-qrcode"></i>
+                    </div>
+
+                    <h4>Purchase Scanner</h4>
+
+                    <p>
+                        In this demo, use the Purchase ID below.
+                        In the real system, this can be connected
+                        with a QR scanner.
+                    </p>
+
+                    <button class="scan-btn" onclick="focusPurchaseInput()">
+                        Scan / Add Purchase
+                    </button>
+
+                </div>
+
+
+                <div class="manual">
+
+                    <input type="text" id="purchaseId" placeholder="Enter Purchase ID e.g. SUB-1001">
+
+                    <button onclick="applyStamp()">
+                        Apply
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIVITY -->
+
+            <div class="activity-card">
+
+                <h3>Recent Activity</h3>
+
+                <p>
+                    Your latest scanned purchases.
+                </p>
+
+                <div class="activity-list" id="activityList">
+
+                    <p style="color:#68736e;font-size:12px;margin-top:20px;">
+                        No purchases scanned yet.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="info-grid">
+
+            <div class="info-card">
+
+                <div class="info-icon" aria-hidden="true">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                </div>
+
+                <h3>Make a Purchase</h3>
+
+                <p>
+                    Shop eligible products and complete your purchase.
+                </p>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <div class="info-icon" aria-hidden="true">
                     <i class="fa-solid fa-qrcode"></i>
                 </div>
 
-                <h4>Purchase Scanner</h4>
+                <h3>Scan & Collect</h3>
 
                 <p>
-                    In this demo, use the Purchase ID below.
-                    In the real system, this can be connected
-                    with a QR scanner.
-                </p>
-
-                <button
-                    class="scan-btn"
-                    onclick="focusPurchaseInput()"
-                >
-                    Scan / Add Purchase
-                </button>
-
-            </div>
-
-
-            <div class="manual">
-
-                <input
-                    type="text"
-                    id="purchaseId"
-                    placeholder="Enter Purchase ID e.g. SUB-1001"
-                >
-
-                <button onclick="applyStamp()">
-                    Apply
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <!-- ACTIVITY -->
-
-        <div class="activity-card">
-
-            <h3>Recent Activity</h3>
-
-            <p>
-                Your latest scanned purchases.
-            </p>
-
-            <div
-                class="activity-list"
-                id="activityList">
-
-                <p style="color:#68736e;font-size:12px;margin-top:20px;">
-                    No purchases scanned yet.
+                    Scan your eligible purchase and automatically collect one stamp.
                 </p>
 
             </div>
 
-        </div>
 
-    </section>
+            <div class="info-card">
 
+                <div class="info-icon" aria-hidden="true">
+                    <i class="fa-solid fa-award"></i>
+                </div>
 
-    <section class="info-grid">
+                <h3>Unlock Reward</h3>
 
-        <div class="info-card">
+                <p>
+                    Complete your loyalty card and claim your available reward.
+                </p>
 
-            <div class="info-icon" aria-hidden="true">
-                <i class="fa-solid fa-bag-shopping"></i>
             </div>
 
-            <h3>Make a Purchase</h3>
+        </section>
 
-            <p>
-                Shop eligible products and complete your purchase.
+    </main>
+
+
+    <!-- TOAST -->
+
+    <div class="toast" id="toast">
+
+        <div class="toast-icon" id="toastIcon">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+
+        <div>
+
+            <h4 id="toastTitle">
+                Success
+            </h4>
+
+            <p id="toastMessage">
+                Purchase applied successfully.
             </p>
 
         </div>
 
-
-        <div class="info-card">
-
-            <div class="info-icon" aria-hidden="true">
-                <i class="fa-solid fa-qrcode"></i>
-            </div>
-
-            <h3>Scan & Collect</h3>
-
-            <p>
-                Scan your eligible purchase and automatically collect one stamp.
-            </p>
-
-        </div>
+    </div>
 
 
-        <div class="info-card">
+    <!-- REWARD MODAL -->
 
-            <div class="info-icon" aria-hidden="true">
+    <div class="modal" id="rewardModal">
+
+        <div class="modal-box">
+
+            <div class="modal-icon" aria-hidden="true">
                 <i class="fa-solid fa-award"></i>
             </div>
 
-            <h3>Unlock Reward</h3>
+            <h2>Congratulations!</h2>
 
             <p>
-                Complete your loyalty card and claim your available reward.
+                You successfully completed your digital loyalty card.
+                Your reward has been claimed.
             </p>
 
+            <button onclick="closeRewardModal()">
+                Continue
+            </button>
+
         </div>
 
-    </section>
-
-</main>
-
-
-<!-- TOAST -->
-
-<div class="toast" id="toast">
-
-    <div class="toast-icon" id="toastIcon">
-        <i class="fa-solid fa-circle-check"></i>
     </div>
 
-    <div>
 
-        <h4 id="toastTitle">
-            Success
-        </h4>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+    <script src="../assets/js/firebase-config.js"></script>
+    <script src="../assets/js/sub-core.js"></script>
+    <script src="../assets/js/navbar.js"></script>
+    <script src="../assets/js/loyalty.js"></script>
 
-        <p id="toastMessage">
-            Purchase applied successfully.
-        </p>
-
-    </div>
-
-</div>
-
-
-<!-- REWARD MODAL -->
-
-<div class="modal" id="rewardModal">
-
-    <div class="modal-box">
-
-        <div class="modal-icon" aria-hidden="true">
-            <i class="fa-solid fa-award"></i>
-        </div>
-
-        <h2>Congratulations!</h2>
-
-        <p>
-            You successfully completed your digital loyalty card.
-            Your reward has been claimed.
-        </p>
-
-        <button onclick="closeRewardModal()">
-            Continue
-        </button>
-
-    </div>
-
-</div>
-
-
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="../assets/js/firebase-config.js"></script>
-<script src="../assets/js/sub-core.js"></script>
-<script src="../assets/js/navbar.js"></script>
-<script src="../assets/js/loyalty.js"></script>
-
-<script src="../assets/js/store.js" defer></script>
+    <script src="../assets/js/store.js" defer></script>
 </body>
+
 </html>

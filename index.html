@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>window.__SUBEESHA_LOADER_STARTED_AT__ = Date.now()</script>
     <title>Subeesha | Shop More, Live Better</title>
     <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
     <!--
@@ -19,9 +20,128 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/sub-ui.css">
     <link rel="stylesheet" href="assets/css/navbar.css">
+    <style>
+        /* Remove shimmer/skeleton effects from the homepage hero carousel only. */
+        #home .shimmer,
+        #home .skeleton,
+        #home [class*="shimmer"],
+        #home [class*="skeleton"] {
+            display: none !important;
+            animation: none !important;
+        }
+
+        #home.hero-slider::before,
+        #home.hero-slider::after,
+        #home.hero-slider .slides::before,
+        #home.hero-slider .slides::after,
+        #home.hero-slider .hero-slide::before,
+        #home.hero-slider .hero-slide::after {
+            content: none !important;
+            display: none !important;
+            animation: none !important;
+            background-image: none !important;
+        }
+
+        /* Subeesha full-screen hero image loader */
+        body.sub-home-loading {
+            overflow: hidden !important;
+        }
+
+        #subeeshaPageLoader {
+            position: fixed;
+            inset: 0;
+            z-index: 2147483647;
+            display: grid;
+            place-items: center;
+            background: #fffdfb;
+            opacity: 1;
+            visibility: visible;
+            pointer-events: all;
+            transition: opacity .45s ease, visibility .45s ease;
+        }
+
+        #subeeshaPageLoader.is-hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        #subeeshaPageLoader .subeesha-loader-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        #subeeshaPageLoader .subeesha-loader-logo {
+            display: block;
+            width: 150px;
+            max-width: 42vw;
+            max-height: 110px;
+            object-fit: contain;
+            animation: subeeshaLogoFloat 1.8s ease-in-out infinite;
+        }
+
+        #subeeshaPageLoader .subeesha-loader-dots {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+        }
+
+        #subeeshaPageLoader .subeesha-loader-dots span {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #800000;
+            animation: subeeshaDotPulse .9s ease-in-out infinite;
+        }
+
+        #subeeshaPageLoader .subeesha-loader-dots span:nth-child(2) {
+            animation-delay: .15s;
+        }
+
+        #subeeshaPageLoader .subeesha-loader-dots span:nth-child(3) {
+            animation-delay: .3s;
+        }
+
+        @keyframes subeeshaDotPulse {
+            0%, 60%, 100% {
+                opacity: .4;
+                transform: scale(.72);
+            }
+            30% {
+                opacity: 1;
+                transform: scale(1.18);
+            }
+        }
+
+        @keyframes subeeshaLogoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            #subeeshaPageLoader .subeesha-loader-logo,
+            #subeeshaPageLoader .subeesha-loader-dots span {
+                animation: none;
+            }
+        }
+    </style>
 </head>
 
-<body data-page="index">
+<body data-page="index" class="sub-home-loading">
+
+    <!-- Full-screen loader: stays visible until all hero carousel images load. -->
+    <div id="subeeshaPageLoader" role="status" aria-label="Loading Subeesha">
+        <div class="subeesha-loader-content">
+            <img class="subeesha-loader-logo" src="assets/images/logo.jpg" alt="Subeesha">
+            <div class="subeesha-loader-dots" aria-hidden="true">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </div>
 
     <!-- ===== HEADER / NAVIGATION ===== -->
     <!-- ===== TOP BAR ===== -->
@@ -770,6 +890,99 @@
     <script src="assets/js/navbar.js"></script>
     <script src="assets/js/main.js" defer></script>
     <script src="assets/js/store.js" defer></script>
+    <script>
+        /* Preload only the three homepage hero carousel background images. */
+        (function () {
+            const loader = document.getElementById("subeeshaPageLoader")
+
+            let hideScheduled = false
+
+            function hideLoader() {
+                if (!loader || hideScheduled) return
+                hideScheduled = true
+
+                /* Keep the branded loader visible for at least 2 seconds. */
+                const startedAt = window.__SUBEESHA_LOADER_STARTED_AT__ || Date.now()
+                const elapsed = Date.now() - startedAt
+                const remaining = Math.max(0, 2000 - elapsed)
+
+                window.setTimeout(function () {
+                    loader.classList.add("is-hidden")
+                    document.body.classList.remove("sub-home-loading")
+
+                    window.setTimeout(function () {
+                        loader.remove()
+                    }, 500)
+                }, remaining)
+            }
+
+            function getBackgroundImageUrl(slide) {
+                const background = window.getComputedStyle(slide).backgroundImage || ""
+                const match = background.match(/url\((["']?)(.*?)\1\)/i)
+                return match ? match[2] : null
+            }
+
+            function preloadImage(url) {
+                return new Promise(function (resolve) {
+                    const image = new Image()
+                    let settled = false
+
+                    function finish(loaded) {
+                        if (settled) return
+                        settled = true
+                        resolve({ url: url, loaded: loaded })
+                    }
+
+                    image.onload = function () { finish(true) }
+                    image.onerror = function () { finish(false) }
+                    image.src = url
+
+                    if (image.complete) {
+                        finish(image.naturalWidth > 0)
+                    }
+                })
+            }
+
+            const slides = Array.from(
+                document.querySelectorAll("#home .hero-slide")
+            )
+
+            const imageUrls = Array.from(new Set(
+                slides.map(getBackgroundImageUrl).filter(Boolean)
+            ))
+
+            if (!imageUrls.length) {
+                hideLoader()
+                return
+            }
+
+            const allImagesLoaded = Promise.all(
+                imageUrls.map(preloadImage)
+            )
+
+            /* Failsafe: never leave the page covered indefinitely on a bad network. */
+            const failsafe = new Promise(function (resolve) {
+                window.setTimeout(resolve, 3000)
+            })
+
+            Promise.race([allImagesLoaded, failsafe]).then(function (results) {
+                if (Array.isArray(results)) {
+                    const failed = results.filter(function (item) {
+                        return !item.loaded
+                    })
+
+                    if (failed.length) {
+                        console.warn("Some hero images could not be loaded:", failed)
+                    }
+                }
+
+                hideLoader()
+            }).catch(function (error) {
+                console.error("Hero image preload error:", error)
+                hideLoader()
+            })
+        })()
+    </script>
 </body>
 
 </html>

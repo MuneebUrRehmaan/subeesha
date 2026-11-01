@@ -1,360 +1,557 @@
 
-/* ===============================
-   MOBILE MENU
-================================ */
+/* =========================================================
+   SUBEESHA - BECOME RESELLER
+   Fixed registration, Cloudinary uploads, Firebase save,
+   CNIC formatting, document previews, FAQ and modal.
+   ========================================================= */
 
-const mobileMenu =
-    document.getElementById("mobileMenu");
+(function () {
+    "use strict"
 
-const navLinks =
-    document.getElementById("navLinks");
+    /* =====================================================
+       GLOBAL HELPERS
+    ===================================================== */
 
-mobileMenu.addEventListener("click", function(){
+    const $ = (id) => document.getElementById(id)
 
-    navLinks.classList.toggle("show");
+    const SUB = window.SUB
 
-});
+    /* =====================================================
+       SCROLL TO REGISTRATION
+    ===================================================== */
 
+    window.scrollToRegister = function () {
+        const register = $("register")
 
-/* ===============================
-   CLOSE MOBILE MENU
-================================ */
+        if (register) {
+            register.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            })
+        }
+    }
 
-document.querySelectorAll(".nav-links a")
-.forEach(function(link){
+    /* =====================================================
+       FAQ
+    ===================================================== */
 
-    link.addEventListener("click", function(){
+    const faqItems = document.querySelectorAll(".faq-item")
 
-        navLinks.classList.remove("show");
+    faqItems.forEach((item) => {
+        const question = item.querySelector(".faq-question")
 
-    });
+        if (!question) return
 
-});
+        question.addEventListener("click", function () {
+            faqItems.forEach((otherItem) => {
+                if (otherItem !== item) {
+                    otherItem.classList.remove("active")
+                }
+            })
 
+            item.classList.toggle("active")
+        })
+    })
 
-/* ===============================
-   SCROLL TO REGISTRATION
-================================ */
+    /* =====================================================
+       CNIC FORMAT
+       Format: 12345-1234567-1
+    ===================================================== */
 
-function scrollToRegister(){
+    const cnicInput = $("cnic")
 
-    document
-    .getElementById("register")
-    .scrollIntoView({
-        behavior:"smooth"
-    });
+    function formatCNIC(value) {
+        const digits = value.replace(/\D/g, "").slice(0, 13)
 
-}
+        if (digits.length <= 5) {
+            return digits
+        }
 
+        if (digits.length <= 12) {
+            return digits.slice(0, 5) + "-" + digits.slice(5)
+        }
 
-/* ===============================
-   FAQ
-================================ */
+        return (
+            digits.slice(0, 5) +
+            "-" +
+            digits.slice(5, 12) +
+            "-" +
+            digits.slice(12, 13)
+        )
+    }
 
-const faqItems =
-    document.querySelectorAll(".faq-item");
+    if (cnicInput) {
+        cnicInput.addEventListener("input", function () {
+            this.value = formatCNIC(this.value)
+        })
+    }
 
-faqItems.forEach(function(item){
+    /* =====================================================
+       DOCUMENT PREVIEW
+    ===================================================== */
 
-    const question =
-        item.querySelector(".faq-question");
+    const previewFields = [
+        {
+            input: "profilePicture",
+            preview: "profilePreview"
+        },
+        {
+            input: "cnicFront",
+            preview: "cnicFrontPreview"
+        },
+        {
+            input: "cnicBack",
+            preview: "cnicBackPreview"
+        },
+        {
+            input: "chequePicture",
+            preview: "chequePreview"
+        },
+        {
+            input: "feeReceipt",
+            preview: "receiptPreview"
+        }
+    ]
 
-    question.addEventListener("click", function(){
+    const originalPreviews = new Map()
 
-        faqItems.forEach(function(otherItem){
+    function restorePreview(previewId) {
+        const preview = $(previewId)
 
-            if(otherItem !== item){
+        if (!preview) return
 
-                otherItem.classList.remove("active");
+        if (originalPreviews.has(previewId)) {
+            preview.innerHTML = originalPreviews.get(previewId)
+        }
+    }
 
+    function showPDFPreview(preview, file) {
+        preview.innerHTML = ""
+
+        const icon = document.createElement("ion-icon")
+        icon.setAttribute("name", "document-text-outline")
+
+        const name = document.createElement("span")
+        name.textContent = file.name
+
+        preview.appendChild(icon)
+        preview.appendChild(name)
+    }
+
+    function previewUpload(inputId, previewId) {
+        const input = $(inputId)
+        const preview = $(previewId)
+
+        if (!input || !preview) {
+            console.warn("Preview elements not found:", inputId, previewId)
+            return
+        }
+
+        originalPreviews.set(previewId, preview.innerHTML)
+
+        input.addEventListener("change", function () {
+            const file = this.files && this.files[0]
+
+            if (!file) {
+                restorePreview(previewId)
+                return
             }
 
-        });
+            if (file.type === "application/pdf") {
+                showPDFPreview(preview, file)
+                return
+            }
 
-        item.classList.toggle("active");
+            if (!file.type.startsWith("image/")) {
+                alert("Please select a valid image or PDF file.")
+                input.value = ""
+                restorePreview(previewId)
+                return
+            }
 
-    });
+            const reader = new FileReader()
 
-});
+            reader.onload = function (event) {
+                preview.innerHTML = ""
 
+                const img = document.createElement("img")
+                img.src = event.target.result
+                img.alt = "Document Preview"
 
-/* ===============================
-   CNIC FORMAT
-================================ */
+                preview.appendChild(img)
+            }
 
-const cnicInput =
-    document.getElementById("cnic");
+            reader.onerror = function () {
+                alert("Could not preview this image. Please select another file.")
+                input.value = ""
+                restorePreview(previewId)
+            }
 
-cnicInput.addEventListener("input", function(){
-
-    let value =
-        this.value.replace(/\D/g,"");
-
-    if(value.length > 13){
-        value = value.slice(0,13);
+            reader.readAsDataURL(file)
+        })
     }
 
-    if(value.length > 5){
-        value =
-        value.slice(0,5) +
-        "-" +
-        value.slice(5);
+    previewFields.forEach((field) => {
+        previewUpload(field.input, field.preview)
+    })
+
+    function resetDocumentPreviews() {
+        previewFields.forEach((field) => {
+            const input = $(field.input)
+
+            if (input) {
+                input.value = ""
+            }
+
+            restorePreview(field.preview)
+        })
     }
 
-    if(value.length > 13){
-        value =
-        value.slice(0,13) +
-        "-" +
-        value.slice(13);
+    /* =====================================================
+       SUCCESS MODAL
+    ===================================================== */
+
+    const successModal = $("successModal")
+
+    window.closeSuccessModal = function () {
+        if (successModal) {
+            successModal.classList.remove("show")
+        }
+
+        document.body.style.overflow = ""
     }
 
-    this.value = value;
+    if (successModal) {
+        successModal.addEventListener("click", function (event) {
+            if (event.target === successModal) {
+                window.closeSuccessModal()
+            }
+        })
+    }
 
-});
+    function showSuccessModal() {
+        if (successModal) {
+            successModal.classList.add("show")
+            document.body.style.overflow = "hidden"
+        } else {
+            alert("Your reseller application was submitted successfully.")
+        }
+    }
 
+    /* =====================================================
+       CLOUDINARY RESPONSE URL
+    ===================================================== */
 
-/* ===============================
-   RESELLER FORM
-================================ */
+    function getUploadedURL(response) {
+        if (typeof response === "string") {
+            return response
+        }
 
-const resellerForm =
-    document.getElementById("resellerForm");
+        if (!response) {
+            return null
+        }
 
-const successModal =
-    document.getElementById("successModal");
+        return (
+            response.url ||
+            response.secure_url ||
+            response.secureUrl ||
+            response.data?.secure_url ||
+            response.data?.url ||
+            null
+        )
+    }
 
+    /* =====================================================
+       RESELLER FORM SUBMISSION
+    ===================================================== */
 
-resellerForm.addEventListener(
-    "submit",
-    function(e){
+    const resellerForm = $("resellerForm")
 
-        e.preventDefault();
+    if (!resellerForm) {
+        console.error("Reseller form not found.")
+        return
+    }
 
+    let isSubmitting = false
 
-        const fullName =
-            document
-            .getElementById("fullName")
-            .value;
+    const documentLabels = {
+        profilePicture: "Profile Picture",
+        cnicFront: "CNIC Front",
+        cnicBack: "CNIC Back",
+        chequePicture: "Cheque Picture",
+        feeReceipt: "Processing Fee Receipt"
+    }
 
-        const phone =
-            document
-            .getElementById("phone")
-            .value;
+    const requiredDocumentIds = [
+        "profilePicture",
+        "cnicFront",
+        "cnicBack",
+        "chequePicture",
+        "feeReceipt"
+    ]
 
-        const email =
-            document
-            .getElementById("email")
-            .value;
+    resellerForm.addEventListener("submit", async function (event) {
+        event.preventDefault()
 
-        const city =
-            document
-            .getElementById("city")
-            .value;
+        if (isSubmitting) return
 
-        const cnic =
-            document
-            .getElementById("cnic")
-            .value;
+        /* ================================================
+           GET FORM VALUES
+        ================================================ */
 
-        const paymentMethod =
-            document
-            .getElementById("paymentMethod")
-            .value;
+        const fullName = $("fullName")?.value.trim() || ""
+        const phone = $("phone")?.value.trim() || ""
+        const email = $("email")?.value.trim() || ""
+        const city = $("city")?.value.trim() || ""
+        const cnic = $("cnic")?.value.trim() || ""
+        const paymentMethod = $("paymentMethod")?.value || ""
+        const accountNumber = $("accountNumber")?.value.trim() || ""
+        const terms = $("terms")
 
-        const accountNumber =
-            document
-            .getElementById("accountNumber")
-            .value;
+        /* ================================================
+           BASIC VALIDATION
+        ================================================ */
 
+        if (
+            !fullName ||
+            !phone ||
+            !email ||
+            !city ||
+            !cnic ||
+            !paymentMethod ||
+            !accountNumber
+        ) {
+            alert("Please complete all required fields.")
+            return
+        }
 
-        /* Basic Validation */
+        const cnicDigits = cnic.replace(/\D/g, "")
 
-        if(
-            fullName.trim() === "" ||
-            phone.trim() === "" ||
-            email.trim() === "" ||
-            city.trim() === "" ||
-            cnic.trim() === "" ||
-            paymentMethod === "" ||
-            accountNumber.trim() === ""
-        ){
+        if (cnicDigits.length !== 13) {
+            alert("Please enter a valid 13 digit CNIC number.")
+            return
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+        if (!emailRegex.test(email)) {
+            alert("Please enter a valid email address.")
+            return
+        }
+
+        if (terms && !terms.checked) {
+            alert("Please accept the terms and conditions.")
+            return
+        }
+
+        /* ================================================
+           CHECK FIREBASE AND CLOUDINARY INITIALIZATION
+        ================================================ */
+
+        if (!SUB || !SUB.configured) {
+            alert("The store is not connected to Firebase yet.")
+            console.error("SUB or Firebase configuration is missing.")
+            return
+        }
+
+        if (!SUB.db) {
+            alert("Firebase database is not initialized.")
+            console.error("SUB.db is missing.")
+            return
+        }
+
+        if (!SUB.cloud || typeof SUB.cloud.upload !== "function") {
+            alert("Cloudinary upload service is not initialized. Please check sub-core.js.")
+            console.error("SUB.cloud.upload is missing.")
+            return
+        }
+
+        if (typeof SUB.cloud.valid !== "function") {
+            alert("Document validation service is unavailable. Please check sub-core.js.")
+            console.error("SUB.cloud.valid is missing.")
+            return
+        }
+
+        /* ================================================
+           GET DOCUMENT FILES
+        ================================================ */
+
+        const files = {}
+
+        for (const id of requiredDocumentIds) {
+            const input = $(id)
+            const file = input?.files?.[0]
+
+            if (!file) {
+                alert(`Please upload ${documentLabels[id]}.`)
+                return
+            }
+
+            const allowPdf = id === "feeReceipt"
+
+            const validationError = SUB.cloud.valid(file, allowPdf)
+
+            if (validationError) {
+                alert(validationError)
+                return
+            }
+
+            files[id] = file
+        }
+
+        /* ================================================
+           BUTTON LOADING
+        ================================================ */
+
+        const submitButton = resellerForm.querySelector(
+            'button[type="submit"]'
+        )
+
+        const originalButtonHTML = submitButton
+            ? submitButton.innerHTML
+            : ""
+
+        isSubmitting = true
+
+        if (submitButton) {
+            submitButton.disabled = true
+            submitButton.textContent = "Preparing documents..."
+        }
+
+        try {
+            /* ============================================
+               UPLOAD DOCUMENTS TO CLOUDINARY
+            ============================================ */
+
+            const docs = {}
+
+            const totalFiles = requiredDocumentIds.length
+
+            for (let index = 0; index < totalFiles; index++) {
+                const id = requiredDocumentIds[index]
+                const file = files[id]
+
+                const allowPdf = id === "feeReceipt"
+
+                console.log(
+                    `Cloudinary upload ${index + 1}/${totalFiles}:`,
+                    id,
+                    file.name
+                )
+
+                if (submitButton) {
+                    submitButton.textContent =
+                        `Uploading ${index + 1}/${totalFiles}: ${documentLabels[id]}`
+                }
+
+                let response
+
+                try {
+                    response = await SUB.cloud.upload(file, {
+                        folder: "reseller-applications",
+                        allowPdf: allowPdf
+                    })
+                } catch (uploadError) {
+                    console.error(
+                        `Cloudinary upload failed for ${id}:`,
+                        uploadError
+                    )
+
+                    throw new Error(
+                        `${documentLabels[id]} upload failed: ` +
+                        (uploadError?.message || "Cloudinary rejected the upload.")
+                    )
+                }
+
+                const imageURL = getUploadedURL(response)
+
+                if (!imageURL) {
+                    console.error("Invalid Cloudinary response:", response)
+
+                    throw new Error(
+                        `Cloudinary did not return a URL for ${documentLabels[id]}.`
+                    )
+                }
+
+                docs[id] = imageURL
+
+                console.log(
+                    `Successfully uploaded ${id}:`,
+                    imageURL
+                )
+            }
+
+            /* ============================================
+               VALIDATE ALL CLOUDINARY URLS
+            ============================================ */
+
+            if (Object.keys(docs).length !== totalFiles) {
+                throw new Error("Some documents were not uploaded successfully.")
+            }
+
+            console.log("All Cloudinary uploads completed:", docs)
+
+            /* ============================================
+               SAVE APPLICATION TO FIRESTORE
+            ============================================ */
+
+            if (submitButton) {
+                submitButton.textContent = "Submitting application..."
+            }
+
+            const applicationData = {
+                fullName: fullName,
+                phone: phone,
+                email: email.toLowerCase(),
+                city: city,
+                cnic: cnic,
+                paymentMethod: paymentMethod,
+                accountNumber: accountNumber,
+                documents: docs,
+                status: "Pending",
+                createdAt:
+                    typeof SUB.now === "function"
+                        ? SUB.now()
+                        : firebase.firestore.FieldValue.serverTimestamp()
+            }
+
+            const result = await SUB.db
+                .collection("resellerApplications")
+                .add(applicationData)
+
+            console.log(
+                "Reseller application submitted successfully:",
+                result.id
+            )
+
+            /* ============================================
+               RESET FORM AND SHOW SUCCESS
+            ============================================ */
+
+            resellerForm.reset()
+
+            resetDocumentPreviews()
+
+            showSuccessModal()
+
+        } catch (error) {
+            console.error("RESELLER APPLICATION ERROR:", error)
 
             alert(
-                "Please complete all required fields."
-            );
+                error?.message ||
+                "Could not submit your application. Please try again."
+            )
 
-            return;
+        } finally {
+            isSubmitting = false
 
-        }
-
-
-        if(
-            cnic.replace(/\D/g,"").length !== 13
-        ){
-
-            alert(
-                "Please enter a valid 13 digit CNIC number."
-            );
-
-            return;
-
-        }
-
-
-        if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())){
-            alert("Please enter a valid email address.");
-            return;
-        }
-        if(!window.SUB || !SUB.configured){
-            alert("The store is not connected to Firebase yet.");
-            return;
-        }
-
-        const fileIds = ["profilePicture","cnicFront","cnicBack","chequePicture","feeReceipt"];
-        const files = {};
-        for(const id of fileIds){
-            const f = document.getElementById(id).files[0];
-            if(f){
-                const err = SUB.cloud.valid(f, true);
-                if(err){ alert(err); return; }
-                files[id] = f;
+            if (submitButton) {
+                submitButton.disabled = false
+                submitButton.innerHTML = originalButtonHTML
             }
         }
+    })
 
-        const btn = resellerForm.querySelector('button[type="submit"]');
-        const original = btn ? btn.innerHTML : "";
-        if(btn){ btn.disabled = true; btn.textContent = "Uploading documents..."; }
+    console.log("Subeesha Become Reseller JS initialized successfully.")
 
-        const docs = {};
-        (async function(){
-            for(const id of Object.keys(files)){
-                const r = await SUB.cloud.upload(files[id], { folder: "reseller-applications", allowPdf: true });
-                docs[id] = r.url;
-            }
-            if(btn) btn.textContent = "Submitting...";
-            await SUB.db.collection("resellerApplications").add({
-                fullName: fullName.trim(), phone: phone.trim(), email: email.trim().toLowerCase(),
-                city: city.trim(), cnic: cnic.trim(), paymentMethod: paymentMethod,
-                accountNumber: accountNumber.trim(), documents: docs,
-                status: "Pending", createdAt: SUB.now()
-            });
-            successModal.classList.add("show");
-            document.body.style.overflow = "hidden";
-            resellerForm.reset();
-            document.querySelectorAll(".upload-preview").forEach(function(p){
-                if(p.dataset.original) p.innerHTML = p.dataset.original;
-            });
-        })().catch(function(err){
-            alert((err && err.message) || "Could not submit your application. Please try again.");
-        }).finally(function(){
-            if(btn){ btn.disabled = false; btn.innerHTML = original; }
-        });
-    }
-);
-
-/* ===============================
-   CLOSE SUCCESS MODAL
-================================ */
-
-function closeSuccessModal(){
-
-    successModal.classList.remove("show");
-
-    document.body.style.overflow =
-        "auto";
-
-}
-
-
-successModal.addEventListener(
-    "click",
-    function(e){
-
-        if(e.target === successModal){
-
-            closeSuccessModal();
-
-        }
-
-    }
-);
-/* ===============================
-   IMAGE / DOCUMENT PREVIEW
-================================ */
-
-function previewUpload(inputId, previewId){
-
-    const input =
-        document.getElementById(inputId);
-
-    const preview =
-        document.getElementById(previewId);
-
-    input.addEventListener("change", function(){
-
-        const file = this.files[0];
-
-        if(!file) return;
-
-        /* PDF FILE */
-
-        if(file.type === "application/pdf"){
-
-            preview.innerHTML = `
-                <ion-icon name="document-text-outline"></ion-icon>
-                <span>${SUB.esc(file.name)}</span>
-            `;
-
-            return;
-
-        }
-
-        /* IMAGE FILE */
-
-        const reader = new FileReader();
-
-        reader.onload = function(e){
-
-            preview.innerHTML = `
-                <img src="${e.target.result}"
-                alt="Document Preview">
-            `;
-
-        };
-
-        reader.readAsDataURL(file);
-
-    });
-
-}
-
-
-/* ===============================
-   INITIALIZE PREVIEWS
-================================ */
-
-previewUpload(
-    "profilePicture",
-    "profilePreview"
-);
-
-previewUpload(
-    "cnicFront",
-    "cnicFrontPreview"
-);
-
-previewUpload(
-    "cnicBack",
-    "cnicBackPreview"
-);
-
-previewUpload(
-    "chequePicture",
-    "chequePreview"
-);
-
-previewUpload(
-    "feeReceipt",
-    "receiptPreview"
-);
-
+})()

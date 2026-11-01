@@ -1,742 +1,776 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>New Arrivals | Subeesha</title>
+    <title>New Arrivals | Subeesha</title>
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-<link rel="stylesheet" href="../assets/css/new-arrivals.css">
-<link rel="stylesheet" href="../assets/css/sub-ui.css">
-<link rel="stylesheet" href="../assets/css/navbar.css">
-<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <link rel="stylesheet" href="../assets/css/new-arrivals.css">
+    <link rel="stylesheet" href="../assets/css/sub-ui.css">
+    <link rel="stylesheet" href="../assets/css/navbar.css">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </head>
 
 <body data-page="new-arrivals">
 
-<!-- ===== TOP BAR ===== -->
-<div class="sb-top"><span><ion-icon name="shield-checkmark-outline"></ion-icon> Quality Products</span><span><ion-icon name="car-outline"></ion-icon> Fast Delivery Across Pakistan</span><span><ion-icon name="gift-outline"></ion-icon> Earn Rewards With Every Order</span></div>
-<!-- ===== NAVBAR (shared) ===== -->
-<div class="sb-header" id="sbHeader" role="banner"><div class="sb-nav"><a href="../index.html" class="sb-brand" aria-label="Subeesha Home"><span class="sb-logo"><img src="../assets/images/logo.jpg" alt="Subeesha - Shop More, Live Better"></span></a><ul class="sb-links" id="navLinks"><li><a href="../index.html">Home</a></li><li><a href="../page/Categories.html">Categories</a></li><li class="sb-has-submenu"><button class="sb-nav-trigger" type="button" aria-haspopup="true" aria-expanded="false">Products <ion-icon name="chevron-down-outline" aria-hidden="true"></ion-icon></button><div class="sb-submenu"><a href="../page/shop.html">All Products</a><a href="../page/new-arrivals.html">New Arrivals</a></div></li><li><a href="../page/flashsale.html">Flash Sale</a></li><li><a href="../page/loyalty.html">Rewards</a></li><li><a href="../page/customer-love.html">Reviews</a></li><li><a href="../page/becomeseller.html">Become Seller</a></li><li><a href="../index.html#footer">Contact</a></li></ul><div class="sb-tools"><div class="sb-sw"><form class="sb-search" id="sbSearch" autocomplete="off" role="search"><ion-icon name="search-outline"></ion-icon><input id="sbInput" type="search" placeholder="Search products, categories..." autocomplete="off" aria-label="Search products"><button type="submit" aria-label="Submit search"><ion-icon name="arrow-forward-outline"></ion-icon></button></form><div class="sb-suggest" id="sbSuggest"></div></div><div class="sb-actions"><button class="sb-icon sb-stoggle" id="sbSToggle" type="button" aria-label="Search"><ion-icon name="search-outline"></ion-icon></button><a class="sb-icon" href="../page/profile.html#wishlist" aria-label="Wishlist"><ion-icon name="heart-outline"></ion-icon></a><a class="sb-icon" id="sbUser" href="../account.html" aria-label="Account"><ion-icon name="person-outline"></ion-icon></a><button class="sb-icon" id="sbCart" type="button" aria-label="Cart"><ion-icon name="bag-handle-outline"></ion-icon><span class="sb-count" id="cartCount">0</span></button><button class="sb-icon sb-menu" id="sbMenu" type="button" aria-label="Menu"><ion-icon name="menu-outline"></ion-icon></button></div></div></div></div>
-<div class="sb-msearch" id="sbMSearch"><div class="sb-mtop"><button type="button" id="sbMBack" aria-label="Close search"><ion-icon name="arrow-back-outline"></ion-icon></button><form class="sb-search" id="sbMForm" autocomplete="off"><ion-icon name="search-outline"></ion-icon><input id="sbMInput" type="search" placeholder="Search products, categories..." autocomplete="off" aria-label="Search products"><button type="submit" aria-label="Search"><ion-icon name="arrow-forward-outline"></ion-icon></button></form></div><div class="sb-mlist" id="sbMList"></div></div>
-
-
-
-<section class="arrival-hero">
-
-<div class="container">
-
-    <span class="hero-label">
-        <i class="fa-solid fa-sparkles"></i>
-        JUST ARRIVED
-    </span>
-
-    <h1>New <span>Arrivals</span></h1>
-
-    <p>
-        Fresh products added to Subeesha.
-        Discover the latest products before everyone else.
-    </p>
-
-</div>
-
-</section>
-
-
-<section class="section">
-
-<div class="container">
-
-<div class="section-head">
-
-    <span class="eyebrow">Fresh Collection</span>
-
-    <h2>Discover What's New</h2>
-
-    <p>
-        Explore the latest additions to the Subeesha collection.
-    </p>
-
-</div>
-
-
-<div class="arrival-toolbar">
-
-    <div class="arrival-info">
-
-        <div class="arrival-icon">
-            <i class="fa-solid fa-box-open"></i>
+    <!-- ===== TOP BAR ===== -->
+    <div class="sb-top"><span><ion-icon name="shield-checkmark-outline"></ion-icon> Quality
+            Products</span><span><ion-icon name="car-outline"></ion-icon> Fast Delivery Across
+            Pakistan</span><span><ion-icon name="gift-outline"></ion-icon> Earn Rewards With Every Order</span></div>
+    <!-- ===== NAVBAR (shared) ===== -->
+    <div class="sb-header" id="sbHeader" role="banner">
+        <div class="sb-nav"><a href="../index.html" class="sb-brand" aria-label="Subeesha Home"><span
+                    class="sb-logo"><img src="../assets/images/logo.jpg"
+                        alt="Subeesha - Shop More, Live Better"></span></a>
+            <ul class="sb-links" id="navLinks">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../page/Categories.html">Categories</a></li>
+                <li class="sb-has-submenu"><button class="sb-nav-trigger" type="button" aria-haspopup="true"
+                        aria-expanded="false">Products <ion-icon name="chevron-down-outline"
+                            aria-hidden="true"></ion-icon></button>
+                    <div class="sb-submenu"><a href="../page/shop.html">All Products</a><a
+                            href="../page/new-arrivals.html">New Arrivals</a></div>
+                </li>
+                <li><a href="../page/flashsale.html">Flash Sale</a></li>
+                <li><a href="../page/loyalty.html">Rewards</a></li>
+                <li><a href="../page/customer-love.html">Reviews</a></li>
+                <li><a href="../page/becomeseller.html">Become Seller</a></li>
+            </ul>
+            <div class="sb-tools">
+                <div class="sb-sw">
+                    <form class="sb-search" id="sbSearch" autocomplete="off" role="search"><ion-icon
+                            name="search-outline"></ion-icon><input id="sbInput" type="search"
+                            placeholder="Search products, categories..." autocomplete="off"
+                            aria-label="Search products"><button type="submit" aria-label="Submit search"><ion-icon
+                                name="arrow-forward-outline"></ion-icon></button></form>
+                    <div class="sb-suggest" id="sbSuggest"></div>
+                </div>
+                <div class="sb-actions"><button class="sb-icon sb-stoggle" id="sbSToggle" type="button"
+                        aria-label="Search"><ion-icon name="search-outline"></ion-icon></button><a class="sb-icon"
+                        href="../page/profile.html#wishlist" aria-label="Wishlist"><ion-icon
+                            name="heart-outline"></ion-icon></a><a class="sb-icon" id="sbUser" href="../account.html"
+                        aria-label="Account"><ion-icon name="person-outline"></ion-icon></a><button class="sb-icon"
+                        id="sbCart" type="button" aria-label="Cart"><ion-icon name="bag-handle-outline"></ion-icon><span
+                            class="sb-count" id="cartCount">0</span></button><button class="sb-icon sb-menu" id="sbMenu"
+                        type="button" aria-label="Menu"><ion-icon name="menu-outline"></ion-icon></button></div>
+            </div>
         </div>
-
-        <div>
-            <h3>Fresh Products</h3>
-            <p>Newly added products selected especially for you.</p>
+    </div>
+    <div class="sb-msearch" id="sbMSearch">
+        <div class="sb-mtop"><button type="button" id="sbMBack" aria-label="Close search"><ion-icon
+                    name="arrow-back-outline"></ion-icon></button>
+            <form class="sb-search" id="sbMForm" autocomplete="off"><ion-icon name="search-outline"></ion-icon><input
+                    id="sbMInput" type="search" placeholder="Search products, categories..." autocomplete="off"
+                    aria-label="Search products"><button type="submit" aria-label="Search"><ion-icon
+                        name="arrow-forward-outline"></ion-icon></button></form>
         </div>
-
+        <div class="sb-mlist" id="sbMList"></div>
     </div>
 
-    <div class="filter-buttons">
-
-        <button class="filter-btn active"
-        onclick="filterProducts('all',this)">All</button>
-
-        <button class="filter-btn"
-        onclick="filterProducts('fashion',this)">Fashion</button>
-
-        <button class="filter-btn"
-        onclick="filterProducts('beauty',this)">Beauty</button>
-
-        <button class="filter-btn"
-        onclick="filterProducts('electronics',this)">Electronics</button>
-
-        <button class="filter-btn"
-        onclick="filterProducts('home',this)">Home</button>
-
-    </div>
-
-</div>
 
 
-<div class="products-grid">
+    <section class="arrival-hero">
 
-<!-- PRODUCT 1 -->
+        <div class="container">
 
-<div class="product-card" data-category="fashion">
+            <span class="hero-label">
+                <i class="fa-solid fa-sparkles"></i>
+                JUST ARRIVED
+            </span>
 
-<div class="product-image">
+            <h1>New <span>Arrivals</span></h1>
 
-<img src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=700&q=80">
+            <p>
+                Fresh products added to Subeesha.
+                Discover the latest products before everyone else.
+            </p>
 
-<span class="product-badge">NEW</span>
+        </div>
 
-<button class="wishlist-btn" onclick="toggleWishlist(this)">
-<i class="fa-regular fa-heart"></i>
-</button>
+    </section>
 
-</div>
 
-<div class="product-info">
+    <section class="section">
 
-<span class="product-category">Fashion</span>
+        <div class="container">
 
-<h3>Elegant Summer Dress</h3>
+            <div class="section-head">
 
-<div class="rating">
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<span>(28)</span>
-</div>
+                <span class="eyebrow">Fresh Collection</span>
 
-<div class="price-row">
-<span class="price">Rs. 3,999</span>
-</div>
+                <h2>Discover What's New</h2>
 
-<div class="product-actions">
+                <p>
+                    Explore the latest additions to the Subeesha collection.
+                </p>
 
-<button class="add-cart"
-onclick="addToCart('Elegant Summer Dress')">
-Add to Cart
-</button>
+            </div>
 
-<button class="quick-view"
-onclick="quickView(
+
+            <div class="arrival-toolbar">
+
+                <div class="arrival-info">
+
+                    <div class="arrival-icon">
+                        <i class="fa-solid fa-box-open"></i>
+                    </div>
+
+                    <div>
+                        <h3>Fresh Products</h3>
+                        <p>Newly added products selected especially for you.</p>
+                    </div>
+
+                </div>
+
+                <div class="filter-buttons">
+
+                    <button class="filter-btn active" onclick="filterProducts('all',this)">All</button>
+
+                    <button class="filter-btn" onclick="filterProducts('fashion',this)">Fashion</button>
+
+                    <button class="filter-btn" onclick="filterProducts('beauty',this)">Beauty</button>
+
+                    <button class="filter-btn" onclick="filterProducts('electronics',this)">Electronics</button>
+
+                    <button class="filter-btn" onclick="filterProducts('home',this)">Home</button>
+
+                </div>
+
+            </div>
+
+
+            <div class="products-grid">
+
+                <!-- PRODUCT 1 -->
+
+                <div class="product-card" data-category="fashion">
+
+                    <div class="product-image">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=700&q=80">
+
+                        <span class="product-badge">NEW</span>
+
+                        <button class="wishlist-btn" onclick="toggleWishlist(this)">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+
+                    </div>
+
+                    <div class="product-info">
+
+                        <span class="product-category">Fashion</span>
+
+                        <h3>Elegant Summer Dress</h3>
+
+                        <div class="rating">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <span>(28)</span>
+                        </div>
+
+                        <div class="price-row">
+                            <span class="price">Rs. 3,999</span>
+                        </div>
+
+                        <div class="product-actions">
+
+                            <button class="add-cart" onclick="addToCart('Elegant Summer Dress')">
+                                Add to Cart
+                            </button>
+
+                            <button class="quick-view" onclick="quickView(
 'Elegant Summer Dress',
 'Fashion',
 'Rs. 3,999',
 'A stylish and elegant dress from our newest collection.',
 'https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=700&q=80'
 )">
-<i class="fa-regular fa-eye"></i>
-</button>
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
 
-</div>
+                        </div>
 
-</div>
-</div>
+                    </div>
+                </div>
 
 
-<!-- PRODUCT 2 -->
+                <!-- PRODUCT 2 -->
 
-<div class="product-card" data-category="electronics">
+                <div class="product-card" data-category="electronics">
 
-<div class="product-image">
+                    <div class="product-image">
 
-<img src="https://images.unsplash.com/photo-1541807084-5c52b6b3adef?auto=format&fit=crop&w=700&q=80">
+                        <img
+                            src="https://images.unsplash.com/photo-1541807084-5c52b6b3adef?auto=format&fit=crop&w=700&q=80">
 
-<span class="product-badge">JUST IN</span>
+                        <span class="product-badge">JUST IN</span>
 
-<button class="wishlist-btn" onclick="toggleWishlist(this)">
-<i class="fa-regular fa-heart"></i>
-</button>
+                        <button class="wishlist-btn" onclick="toggleWishlist(this)">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
 
-</div>
+                    </div>
 
-<div class="product-info">
+                    <div class="product-info">
 
-<span class="product-category">Electronics</span>
+                        <span class="product-category">Electronics</span>
 
-<h3>Ultra Slim Laptop</h3>
+                        <h3>Ultra Slim Laptop</h3>
 
-<div class="rating">
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-regular fa-star"></i>
-<span>(19)</span>
-</div>
+                        <div class="rating">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <span>(19)</span>
+                        </div>
 
-<div class="price-row">
-<span class="price">Rs. 89,999</span>
-</div>
+                        <div class="price-row">
+                            <span class="price">Rs. 89,999</span>
+                        </div>
 
-<div class="product-actions">
+                        <div class="product-actions">
 
-<button class="add-cart"
-onclick="addToCart('Ultra Slim Laptop')">
-Add to Cart
-</button>
+                            <button class="add-cart" onclick="addToCart('Ultra Slim Laptop')">
+                                Add to Cart
+                            </button>
 
-<button class="quick-view"
-onclick="quickView(
+                            <button class="quick-view" onclick="quickView(
 'Ultra Slim Laptop',
 'Electronics',
 'Rs. 89,999',
 'A modern slim laptop designed for work, study and creativity.',
 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?auto=format&fit=crop&w=700&q=80'
 )">
-<i class="fa-regular fa-eye"></i>
-</button>
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
 
-</div>
+                        </div>
 
-</div>
-</div>
+                    </div>
+                </div>
 
 
-<!-- PRODUCT 3 -->
+                <!-- PRODUCT 3 -->
 
-<div class="product-card" data-category="beauty">
+                <div class="product-card" data-category="beauty">
 
-<div class="product-image">
+                    <div class="product-image">
 
-<img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=700&q=80">
+                        <img
+                            src="https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=700&q=80">
 
-<span class="product-badge">NEW</span>
+                        <span class="product-badge">NEW</span>
 
-<button class="wishlist-btn" onclick="toggleWishlist(this)">
-<i class="fa-regular fa-heart"></i>
-</button>
+                        <button class="wishlist-btn" onclick="toggleWishlist(this)">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
 
-</div>
+                    </div>
 
-<div class="product-info">
+                    <div class="product-info">
 
-<span class="product-category">Beauty</span>
+                        <span class="product-category">Beauty</span>
 
-<h3>Glow Skincare Collection</h3>
+                        <h3>Glow Skincare Collection</h3>
 
-<div class="rating">
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<span>(34)</span>
-</div>
+                        <div class="rating">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <span>(34)</span>
+                        </div>
 
-<div class="price-row">
-<span class="price">Rs. 2,899</span>
-</div>
+                        <div class="price-row">
+                            <span class="price">Rs. 2,899</span>
+                        </div>
 
-<div class="product-actions">
+                        <div class="product-actions">
 
-<button class="add-cart"
-onclick="addToCart('Glow Skincare Collection')">
-Add to Cart
-</button>
+                            <button class="add-cart" onclick="addToCart('Glow Skincare Collection')">
+                                Add to Cart
+                            </button>
 
-<button class="quick-view"
-onclick="quickView(
+                            <button class="quick-view" onclick="quickView(
 'Glow Skincare Collection',
 'Beauty',
 'Rs. 2,899',
 'A fresh skincare collection created for your everyday routine.',
 'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=700&q=80'
 )">
-<i class="fa-regular fa-eye"></i>
-</button>
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
 
-</div>
+                        </div>
 
-</div>
-</div>
+                    </div>
+                </div>
 
 
-<!-- PRODUCT 4 -->
+                <!-- PRODUCT 4 -->
 
-<div class="product-card" data-category="home">
+                <div class="product-card" data-category="home">
 
-<div class="product-image">
+                    <div class="product-image">
 
-<img src="https://images.unsplash.com/photo-1583845112203-454cfd4d6d99?auto=format&fit=crop&w=700&q=80">
+                        <img
+                            src="https://images.unsplash.com/photo-1583845112203-454cfd4d6d99?auto=format&fit=crop&w=700&q=80">
 
-<span class="product-badge">FRESH</span>
+                        <span class="product-badge">FRESH</span>
 
-<button class="wishlist-btn" onclick="toggleWishlist(this)">
-<i class="fa-regular fa-heart"></i>
-</button>
+                        <button class="wishlist-btn" onclick="toggleWishlist(this)">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
 
-</div>
+                    </div>
 
-<div class="product-info">
+                    <div class="product-info">
 
-<span class="product-category">Home</span>
+                        <span class="product-category">Home</span>
 
-<h3>Modern Home Decor Set</h3>
+                        <h3>Modern Home Decor Set</h3>
 
-<div class="rating">
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star-half-stroke"></i>
-<span>(21)</span>
-</div>
+                        <div class="rating">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star-half-stroke"></i>
+                            <span>(21)</span>
+                        </div>
 
-<div class="price-row">
-<span class="price">Rs. 5,499</span>
-</div>
+                        <div class="price-row">
+                            <span class="price">Rs. 5,499</span>
+                        </div>
 
-<div class="product-actions">
+                        <div class="product-actions">
 
-<button class="add-cart"
-onclick="addToCart('Modern Home Decor Set')">
-Add to Cart
-</button>
+                            <button class="add-cart" onclick="addToCart('Modern Home Decor Set')">
+                                Add to Cart
+                            </button>
 
-<button class="quick-view"
-onclick="quickView(
+                            <button class="quick-view" onclick="quickView(
 'Modern Home Decor Set',
 'Home',
 'Rs. 5,499',
 'Beautiful modern decor items for refreshing your living space.',
 'https://images.unsplash.com/photo-1583845112203-454cfd4d6d99?auto=format&fit=crop&w=700&q=80'
 )">
-<i class="fa-regular fa-eye"></i>
-</button>
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
 
-</div>
+                        </div>
 
-</div>
-</div>
+                    </div>
+                </div>
 
 
-<!-- PRODUCT 5 -->
+                <!-- PRODUCT 5 -->
 
-<div class="product-card" data-category="fashion">
+                <div class="product-card" data-category="fashion">
 
-<div class="product-image">
+                    <div class="product-image">
 
-<img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=700&q=80">
+                        <img
+                            src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=700&q=80">
 
-<span class="product-badge">NEW</span>
+                        <span class="product-badge">NEW</span>
 
-<button class="wishlist-btn" onclick="toggleWishlist(this)">
-<i class="fa-regular fa-heart"></i>
-</button>
+                        <button class="wishlist-btn" onclick="toggleWishlist(this)">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
 
-</div>
+                    </div>
 
-<div class="product-info">
+                    <div class="product-info">
 
-<span class="product-category">Fashion</span>
+                        <span class="product-category">Fashion</span>
 
-<h3>Premium Denim Jacket</h3>
+                        <h3>Premium Denim Jacket</h3>
 
-<div class="rating">
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-regular fa-star"></i>
-<span>(17)</span>
-</div>
+                        <div class="rating">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <span>(17)</span>
+                        </div>
 
-<div class="price-row">
-<span class="price">Rs. 4,799</span>
-</div>
+                        <div class="price-row">
+                            <span class="price">Rs. 4,799</span>
+                        </div>
 
-<div class="product-actions">
+                        <div class="product-actions">
 
-<button class="add-cart"
-onclick="addToCart('Premium Denim Jacket')">
-Add to Cart
-</button>
+                            <button class="add-cart" onclick="addToCart('Premium Denim Jacket')">
+                                Add to Cart
+                            </button>
 
-<button class="quick-view"
-onclick="quickView(
+                            <button class="quick-view" onclick="quickView(
 'Premium Denim Jacket',
 'Fashion',
 'Rs. 4,799',
 'A fresh premium denim jacket from our newest fashion collection.',
 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=700&q=80'
 )">
-<i class="fa-regular fa-eye"></i>
-</button>
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
 
-</div>
+                        </div>
 
-</div>
-</div>
+                    </div>
+                </div>
 
 
-<!-- PRODUCT 6 -->
+                <!-- PRODUCT 6 -->
 
-<div class="product-card" data-category="electronics">
+                <div class="product-card" data-category="electronics">
 
-<div class="product-image">
+                    <div class="product-image">
 
-<img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=700&q=80">
+                        <img
+                            src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=700&q=80">
 
-<span class="product-badge">JUST IN</span>
+                        <span class="product-badge">JUST IN</span>
 
-<button class="wishlist-btn" onclick="toggleWishlist(this)">
-<i class="fa-regular fa-heart"></i>
-</button>
+                        <button class="wishlist-btn" onclick="toggleWishlist(this)">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
 
-</div>
+                    </div>
 
-<div class="product-info">
+                    <div class="product-info">
 
-<span class="product-category">Electronics</span>
+                        <span class="product-category">Electronics</span>
 
-<h3>Premium Laptop</h3>
+                        <h3>Premium Laptop</h3>
 
-<div class="rating">
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<span>(12)</span>
-</div>
+                        <div class="rating">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <span>(12)</span>
+                        </div>
 
-<div class="price-row">
-<span class="price">Rs. 125,000</span>
-</div>
+                        <div class="price-row">
+                            <span class="price">Rs. 125,000</span>
+                        </div>
 
-<div class="product-actions">
+                        <div class="product-actions">
 
-<button class="add-cart"
-onclick="addToCart('Premium Laptop')">
-Add to Cart
-</button>
+                            <button class="add-cart" onclick="addToCart('Premium Laptop')">
+                                Add to Cart
+                            </button>
 
-<button class="quick-view"
-onclick="quickView(
+                            <button class="quick-view" onclick="quickView(
 'Premium Laptop',
 'Electronics',
 'Rs. 125,000',
 'A newly added high performance laptop for professionals and students.',
 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=700&q=80'
 )">
-<i class="fa-regular fa-eye"></i>
-</button>
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
 
-</div>
+                        </div>
 
-</div>
-</div>
+                    </div>
+                </div>
 
 
-<!-- PRODUCT 7 -->
+                <!-- PRODUCT 7 -->
 
-<div class="product-card" data-category="beauty">
+                <div class="product-card" data-category="beauty">
 
-<div class="product-image">
+                    <div class="product-image">
 
-<img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=700&q=80">
+                        <img
+                            src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=700&q=80">
 
-<span class="product-badge">FRESH</span>
+                        <span class="product-badge">FRESH</span>
 
-<button class="wishlist-btn" onclick="toggleWishlist(this)">
-<i class="fa-regular fa-heart"></i>
-</button>
+                        <button class="wishlist-btn" onclick="toggleWishlist(this)">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
 
-</div>
+                    </div>
 
-<div class="product-info">
+                    <div class="product-info">
 
-<span class="product-category">Beauty</span>
+                        <span class="product-category">Beauty</span>
 
-<h3>Luxury Makeup Kit</h3>
+                        <h3>Luxury Makeup Kit</h3>
 
-<div class="rating">
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star-half-stroke"></i>
-<span>(25)</span>
-</div>
+                        <div class="rating">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star-half-stroke"></i>
+                            <span>(25)</span>
+                        </div>
 
-<div class="price-row">
-<span class="price">Rs. 4,499</span>
-</div>
+                        <div class="price-row">
+                            <span class="price">Rs. 4,499</span>
+                        </div>
 
-<div class="product-actions">
+                        <div class="product-actions">
 
-<button class="add-cart"
-onclick="addToCart('Luxury Makeup Kit')">
-Add to Cart
-</button>
+                            <button class="add-cart" onclick="addToCart('Luxury Makeup Kit')">
+                                Add to Cart
+                            </button>
 
-<button class="quick-view"
-onclick="quickView(
+                            <button class="quick-view" onclick="quickView(
 'Luxury Makeup Kit',
 'Beauty',
 'Rs. 4,499',
 'A premium makeup collection recently added to Subeesha.',
 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=700&q=80'
 )">
-<i class="fa-regular fa-eye"></i>
-</button>
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
 
-</div>
+                        </div>
 
-</div>
-</div>
+                    </div>
+                </div>
 
 
-<!-- PRODUCT 8 -->
+                <!-- PRODUCT 8 -->
 
-<div class="product-card" data-category="home">
+                <div class="product-card" data-category="home">
 
-<div class="product-image">
+                    <div class="product-image">
 
-<img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=700&q=80">
+                        <img
+                            src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=700&q=80">
 
-<span class="product-badge">NEW</span>
+                        <span class="product-badge">NEW</span>
 
-<button class="wishlist-btn" onclick="toggleWishlist(this)">
-<i class="fa-regular fa-heart"></i>
-</button>
+                        <button class="wishlist-btn" onclick="toggleWishlist(this)">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
 
-</div>
+                    </div>
 
-<div class="product-info">
+                    <div class="product-info">
 
-<span class="product-category">Home</span>
+                        <span class="product-category">Home</span>
 
-<h3>Comfort Lounge Chair</h3>
+                        <h3>Comfort Lounge Chair</h3>
 
-<div class="rating">
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-regular fa-star"></i>
-<span>(15)</span>
-</div>
+                        <div class="rating">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <span>(15)</span>
+                        </div>
 
-<div class="price-row">
-<span class="price">Rs. 13,999</span>
-</div>
+                        <div class="price-row">
+                            <span class="price">Rs. 13,999</span>
+                        </div>
 
-<div class="product-actions">
+                        <div class="product-actions">
 
-<button class="add-cart"
-onclick="addToCart('Comfort Lounge Chair')">
-Add to Cart
-</button>
+                            <button class="add-cart" onclick="addToCart('Comfort Lounge Chair')">
+                                Add to Cart
+                            </button>
 
-<button class="quick-view"
-onclick="quickView(
+                            <button class="quick-view" onclick="quickView(
 'Comfort Lounge Chair',
 'Home',
 'Rs. 13,999',
 'A stylish and comfortable chair for your modern home.',
 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=700&q=80'
 )">
-<i class="fa-regular fa-eye"></i>
-</button>
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
 
-</div>
+                        </div>
 
-</div>
-</div>
+                    </div>
+                </div>
 
-</div>
+            </div>
 
-<div class="load-area">
+            <div class="load-area">
 
-<button class="load-btn" onclick="showToast('More new arrivals coming soon!')">
-<i class="fa-solid fa-plus"></i>
-Load More
-</button>
+                <button class="load-btn" onclick="showToast('More new arrivals coming soon!')">
+                    <i class="fa-solid fa-plus"></i>
+                    Load More
+                </button>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
-</section>
+    </section>
 
 
-<section class="newsletter">
+    <section class="newsletter">
 
-<i class="fa-regular fa-envelope"></i>
+        <i class="fa-regular fa-envelope"></i>
 
-<h2>Never Miss a New Arrival</h2>
+        <h2>Never Miss a New Arrival</h2>
 
-<p>
-Subscribe and get updates when fresh products arrive at Subeesha.
-</p>
+        <p>
+            Subscribe and get updates when fresh products arrive at Subeesha.
+        </p>
 
-<form class="newsletter-form" onsubmit="subscribe(event)">
+        <form class="newsletter-form" onsubmit="subscribe(event)">
 
-<input type="email"
-placeholder="Enter your email address"
-required>
+            <input type="email" placeholder="Enter your email address" required>
 
-<button type="submit">
-Subscribe
-</button>
+            <button type="submit">
+                Subscribe
+            </button>
 
-</form>
+        </form>
 
-</section>
+    </section>
 
 
-<footer id="footer">
+    <footer id="footer">
 
-<div class="footer">
+        <div class="footer">
 
-<div class="footer-brand">
+            <div class="footer-brand">
 
-<span class="footer-logo-circle">
-<img src="../assets/images/logo.jpg" alt="Subeesha">
-</span>
+                <span class="footer-logo-circle">
+                    <img src="../assets/images/logo.jpg" alt="Subeesha">
+                </span>
 
-<p>
-E-commerce • E-business • Everyday Essentials.
-Shop more, live better with Subeesha.
-</p>
+                <p>
+                    E-commerce • E-business • Everyday Essentials.
+                    Shop more, live better with Subeesha.
+                </p>
 
-<div class="socials">
-<a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-<a href="#"><i class="fa-brands fa-instagram"></i></a>
-<a href="#"><i class="fa-brands fa-tiktok"></i></a>
-<a href="#"><i class="fa-brands fa-youtube"></i></a>
-</div>
+                <div class="socials">
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
 
-</div>
+            </div>
 
-<div>
+            <div>
 
-<h3>Shop</h3>
+                <h3>Shop</h3>
 
-<a href="../page/shop.html">All Products</a>
-<a href="../page/new-arrivals.html">New Arrivals</a>
-<a href="../page/flashsale.html">Flash Sale</a>
-<a href="../page/Categories.html">Categories</a>
+                <a href="../page/shop.html">All Products</a>
+                <a href="../page/new-arrivals.html">New Arrivals</a>
+                <a href="../page/flashsale.html">Flash Sale</a>
+                <a href="../page/Categories.html">Categories</a>
 
-</div>
+            </div>
 
-<div>
+            <div>
 
-<h3>Customer Care</h3>
+                <h3>Customer Care</h3>
 
-<a href="#">Contact Us</a>
-<a href="#">FAQs</a>
-<a href="#">Shipping Policy</a>
-<a href="#">Return Policy</a>
+                <a href="#">Contact Us</a>
+                <a href="#">FAQs</a>
+                <a href="#">Shipping Policy</a>
+                <a href="#">Return Policy</a>
 
-</div>
+            </div>
 
-<div>
+            <div>
 
-<h3>Subeesha</h3>
+                <h3>Subeesha</h3>
 
-<a href="#">About Us</a>
-<a href="../panel/reseller/index.html">Become a Reseller</a>
-<a href="../page/loyalty.html">Loyalty Rewards</a>
-<a href="#">Privacy Policy</a>
-<a href="#">Terms & Conditions</a>
+                <a href="#">About Us</a>
+                <a href="../panel/reseller/index.html">Become a Reseller</a>
+                <a href="../page/loyalty.html">Loyalty Rewards</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms & Conditions</a>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
-<div class="footer-bottom">
-© 2026 Subeesha. All Rights Reserved.
-</div>
+        <div class="footer-bottom">
+            © 2026 Subeesha. All Rights Reserved.
+        </div>
 
-</footer>
+    </footer>
 
 
-<!-- QUICK VIEW MODAL -->
+    <!-- QUICK VIEW MODAL -->
 
-<div class="modal" id="productModal">
+    <div class="modal" id="productModal">
 
-<div class="modal-box">
+        <div class="modal-box">
 
-<button class="close-modal" onclick="closeModal()">
-<i class="fa-solid fa-xmark"></i>
-</button>
+            <button class="close-modal" onclick="closeModal()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
 
-<div class="modal-image">
-<img id="modalImage" src="" alt="Product">
-</div>
+            <div class="modal-image">
+                <img id="modalImage" src="" alt="Product">
+            </div>
 
-<div class="modal-content">
+            <div class="modal-content">
 
-<span class="modal-category" id="modalCategory"></span>
+                <span class="modal-category" id="modalCategory"></span>
 
-<h2 id="modalTitle"></h2>
+                <h2 id="modalTitle"></h2>
 
-<p id="modalDescription"></p>
+                <p id="modalDescription"></p>
 
-<span class="modal-price" id="modalPrice"></span>
+                <span class="modal-price" id="modalPrice"></span>
 
-<button class="modal-cart-btn" onclick="addModalProductToCart()">
-<i class="fa-solid fa-bag-shopping"></i>
-Add to Cart
-</button>
+                <button class="modal-cart-btn" onclick="addModalProductToCart()">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    Add to Cart
+                </button>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
-</div>
+    </div>
 
 
-<!-- TOAST -->
+    <!-- TOAST -->
 
-<div class="toast" id="toast">
+    <div class="toast" id="toast">
 
-<i class="fa-solid fa-circle-check" style="color:#2f8a64;"></i>
+        <i class="fa-solid fa-circle-check" style="color:#2f8a64;"></i>
 
-<span id="toastText">Success</span>
+        <span id="toastText">Success</span>
 
-</div>
+    </div>
 
 
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="../assets/js/firebase-config.js"></script>
-<script src="../assets/js/sub-core.js"></script>
-<script src="../assets/js/navbar.js"></script>
-<script src="../assets/js/new-arrivals.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+    <script src="../assets/js/firebase-config.js"></script>
+    <script src="../assets/js/sub-core.js"></script>
+    <script src="../assets/js/navbar.js"></script>
+    <script src="../assets/js/new-arrivals.js"></script>
 
-<script src="../assets/js/store.js" defer></script>
+    <script src="../assets/js/store.js" defer></script>
 </body>
+
 </html>
