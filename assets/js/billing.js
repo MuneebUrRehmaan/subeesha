@@ -298,8 +298,8 @@ function setupPayments(pay) {
         const name = el.querySelector(".payment-info strong").textContent.trim();
         let allowed = true;
         if (name === "Cash on Delivery") allowed = pay.cod !== false;
-        else if (name === "Easypaisa") allowed = pay.easypaisa !== false;
-        else if (name === "JazzCash") allowed = pay.jazzcash !== false;
+        else if (name === "Easypaisa") allowed = false;
+        else if (name === "JazzCash") allowed = false;
         else allowed = !!pay.online;       // card gateway is not integrated - hidden unless enabled
         if (!allowed) { el.remove(); return; }
         const num = name === "Easypaisa" ? pay.easypaisaNumber : name === "JazzCash" ? pay.jazzcashNumber : "";

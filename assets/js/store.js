@@ -13,12 +13,22 @@
     /* ---------- notification adapters (each page has its own toast) ---------- */
     var cap = function (t) { return t === "error" ? "Error" : t === "warning" ? "Warning" : t === "info" ? "Info" : "Success"; };
     SUB.notifyImpl = function (msg, type, title) {
-        if (typeof w.showToast !== "function") return;
-        if (["index", "giveaway"].indexOf(page) > -1) return w.showToast(msg, type, title || cap(type));
-        if (["billing", "profile", "loyalty"].indexOf(page) > -1) return w.showToast(title || cap(type), msg, type);
-        if (page === "becomeseller") return w.showToast(msg, type, title || cap(type));
-        return w.showToast(msg);
-    };
+    if (typeof w.showToast !== "function") return;
+
+    if (["index", "giveaway", "product"].indexOf(page) > -1) {
+        return w.showToast(msg, type, title || cap(type));
+    }
+
+    if (["billing", "profile", "loyalty"].indexOf(page) > -1) {
+        return w.showToast(title || cap(type), msg, type);
+    }
+
+    if (page === "becomeseller") {
+        return w.showToast(msg, type, title || cap(type));
+    }
+
+    return w.showToast(msg);
+};
 
     /* ---------- shared behaviour for every storefront page ---------- */
     function wireHeader() {

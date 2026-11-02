@@ -9,8 +9,11 @@ A.ready(function () {
         grid.innerHTML = list.length ? list.map(function (p) {
             var img = (p.images || [])[0];
             var stock = p.stock == null ? "-" : p.stock;
-            return '<div class="product-card"><div class="product-img" style="overflow:hidden;position:relative">' +
-                (img ? '<img src="' + esc(SUB.img(img, 400)) + '" alt="" style="width:100%;height:100%;object-fit:cover">' : '<i class="fa-solid fa-image" style="color:#c5cec9"></i>') +
+           return '<div class="product-card">' +
+    '<div class="product-img" style="width:100%;height:160px;max-height:160px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;background:#f8f8f8;border-radius:6px">' +
+    (img
+        ? '<img src="' + esc(SUB.img(img, 400)) + '" alt="' + esc(p.name) + '" style="width:100%;height:100%;max-height:160px;object-fit:contain;object-position:center;display:block">'
+        : '<i class="fa-solid fa-image" style="color:#c5cec9"></i>') +
                 (p.active === false ? '<span class="status danger" style="position:absolute;top:8px;left:8px">Hidden</span>' : "") + "</div>" +
                 '<div class="product-info"><h4>' + esc(p.name) + "</h4><p>" + esc(p.category || "No category") + " · Stock " + stock + (p.stock != null && p.stock <= 0 ? " (out)" : "") + "</p>" +
                 "<b>" + A.money(p.price) + "</b>" + (p.oldPrice ? ' <s style="color:#88938f;font-size:11px">' + A.money(p.oldPrice) + "</s>" : "") +

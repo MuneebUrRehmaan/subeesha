@@ -848,3 +848,169 @@ textarea:focus{
 .table select{min-height:32px;padding:6px 30px 6px 10px;border-radius:7px;font-size:11px;background-position:right 9px center}
 .section-toolbar select,.toolbar-actions select,.filters select{min-width:145px}
 @media(max-width:600px){.section-toolbar select,.toolbar-actions select,.filters select{width:100%;min-width:0}}
+
+/* ==============================
+   PRODUCT IMAGE IMPROVEMENTS
+============================== */
+
+.products-grid img {
+    width: 100%;
+    height: 220px;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    padding: 14px;
+    background: #faf9f9;
+    border-radius: 6px;
+    transition: transform 0.3s ease;
+}
+
+/* Product image wrapper */
+.products-grid .product-image,
+.products-grid .product-img,
+.products-grid .product-image-wrapper,
+.products-grid .product-img-wrap {
+    width: 100%;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #faf9f9;
+    border-radius: 6px;
+}
+
+/* Keep images properly contained */
+.products-grid .product-image img,
+.products-grid .product-img img,
+.products-grid .product-image-wrapper img,
+.products-grid .product-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    padding: 12px;
+    background: transparent;
+}
+
+/* Subtle hover effect */
+.products-grid .product-card:hover img {
+    transform: scale(1.035);
+}
+
+/* Product image preview inside modal */
+#modalBody .image-preview img,
+#modalBody .preview-image,
+#modalBody .product-preview img {
+    width: 100%;
+    max-width: 220px;
+    height: 180px;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    padding: 10px;
+    background: #faf9f9;
+    border: 1px solid #eee;
+    border-radius: 6px;
+}
+
+/* ==============================
+   PRODUCT FORM CHECKBOXES
+============================== */
+
+#modalBody input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    margin: 0 9px 0 0;
+
+    border: 1.5px solid #c9c9c9;
+    border-radius: 4px;
+    background: #fff;
+
+    display: inline-grid;
+    place-content: center;
+    vertical-align: middle;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#modalBody input[type="checkbox"]::before {
+    content: "";
+    width: 9px;
+    height: 5px;
+    border-left: 2px solid white;
+    border-bottom: 2px solid white;
+    transform: rotate(-45deg) scale(0);
+    margin-top: -2px;
+    transition: transform 0.15s ease;
+}
+
+#modalBody input[type="checkbox"]:checked {
+    background: #800000;
+    border-color: #800000;
+}
+
+#modalBody input[type="checkbox"]:checked::before {
+    transform: rotate(-45deg) scale(1);
+}
+
+#modalBody input[type="checkbox"]:focus-visible {
+    outline: 3px solid rgba(128, 0, 0, 0.15);
+    outline-offset: 2px;
+}
+
+/* Checkbox labels */
+#modalBody label:has(input[type="checkbox"]) {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: #444;
+    line-height: 1.5;
+}
+
+/* Checkbox groups */
+#modalBody .form-check,
+#modalBody .checkbox-group,
+#modalBody .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 0;
+}
+
+/* Product Images */
+.products-grid .product-card img {
+    width: 100%;
+    height: 150px;
+    max-height: 150px;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    padding: 0;
+    border-radius: 6px;
+}
+
+/* Image container */
+.products-grid .product-image,
+.products-grid .product-img,
+.products-grid .product-image-wrapper,
+.products-grid .product-img-wrap {
+    width: 100%;
+    height: 150px;
+    max-height: 150px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background: #f8f8f8;
+}

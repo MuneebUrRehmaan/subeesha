@@ -1001,3 +1001,69 @@
 .pd-review-empty p{max-width:480px;margin:4px auto 12px}
 .pd-review-empty a{display:inline-flex;padding:9px 13px;border-radius:8px;background:#0e3d34;color:#fff;font-size:10px;font-weight:700}
 @media(max-width:700px){.pd-review-list{grid-template-columns:1fr}.pd-reviews-head{align-items:flex-start;flex-direction:column}.pd-review-average{width:100%}}
+
+/* =====================================
+   PRODUCT DETAIL PURCHASE BUTTONS
+===================================== */
+
+.pd-buy {
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+}
+
+.pd-buy .pd-add,
+.pd-buy .pd-buy-now {
+    flex: 1;
+    min-width: 0;
+    min-height: 50px;
+    padding: 0 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background .2s ease, border-color .2s ease;
+}
+
+.pd-buy .pd-add {
+    border: 1px solid #126a52;
+}
+
+.pd-buy .pd-buy-now {
+    background: #126a52;
+    color: #fff;
+    border: 1px solid #126a52;
+}
+
+.pd-buy .pd-buy-now:hover:not(:disabled) {
+    background: #0c4d3c;
+    border-color: #0c4d3c;
+}
+
+.pd-buy .pd-add:disabled,
+.pd-buy .pd-buy-now:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+}
+
+.pd-buy .pd-fav {
+    flex: 0 0 48px;
+}
+
+@media(max-width:480px) {
+    .pd-buy {
+        gap: 7px;
+    }
+
+    .pd-buy .pd-add,
+    .pd-buy .pd-buy-now {
+        padding: 0 7px;
+        font-size: 11px;
+        gap: 5px;
+    }
+}
