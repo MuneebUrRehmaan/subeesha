@@ -12,7 +12,102 @@
     <link rel="stylesheet" href="../assets/css/navbar.css">
 </head>
 
-<body data-page="categories">
+<body data-page="categories" class="categories-loading">
+
+    <!-- ================= PAGE SHIMMER LOADER ================= -->
+
+<div class="categories-loader" id="categoriesLoader">
+
+    <!-- Topbar -->
+    <div class="loader-topbar"></div>
+
+    <!-- Navbar -->
+    <div class="loader-navbar">
+        <div class="loader-logo shimmer"></div>
+
+        <div class="loader-nav-links">
+            <span class="shimmer"></span>
+            <span class="shimmer"></span>
+            <span class="shimmer"></span>
+            <span class="shimmer"></span>
+            <span class="shimmer"></span>
+        </div>
+
+        <div class="loader-actions">
+            <span class="shimmer"></span>
+            <span class="shimmer"></span>
+            <span class="shimmer"></span>
+        </div>
+    </div>
+
+    <!-- Hero -->
+    <div class="loader-hero">
+        <div class="loader-hero-inner">
+            <div class="shimmer loader-short"></div>
+            <div class="shimmer loader-title"></div>
+            <div class="shimmer loader-description"></div>
+            <div class="shimmer loader-description small"></div>
+        </div>
+    </div>
+
+    <!-- Categories -->
+    <div class="loader-content">
+
+        <div class="shimmer loader-kicker"></div>
+        <div class="shimmer loader-heading"></div>
+        <div class="shimmer loader-subheading"></div>
+
+        <!-- Filters -->
+        <div class="loader-filters">
+            <span class="shimmer"></span>
+            <span class="shimmer"></span>
+            <span class="shimmer"></span>
+            <span class="shimmer"></span>
+            <span class="shimmer"></span>
+        </div>
+
+        <!-- Category Cards -->
+        <div class="loader-grid">
+
+            <div class="loader-card">
+                <div class="shimmer loader-card-image"></div>
+                <div class="loader-card-content">
+                    <div class="shimmer loader-card-title"></div>
+                    <div class="shimmer loader-card-text"></div>
+                    <div class="shimmer loader-card-text short"></div>
+                </div>
+            </div>
+
+            <div class="loader-card">
+                <div class="shimmer loader-card-image"></div>
+                <div class="loader-card-content">
+                    <div class="shimmer loader-card-title"></div>
+                    <div class="shimmer loader-card-text"></div>
+                    <div class="shimmer loader-card-text short"></div>
+                </div>
+            </div>
+
+            <div class="loader-card">
+                <div class="shimmer loader-card-image"></div>
+                <div class="loader-card-content">
+                    <div class="shimmer loader-card-title"></div>
+                    <div class="shimmer loader-card-text"></div>
+                    <div class="shimmer loader-card-text short"></div>
+                </div>
+            </div>
+
+            <div class="loader-card">
+                <div class="shimmer loader-card-image"></div>
+                <div class="loader-card-content">
+                    <div class="shimmer loader-card-title"></div>
+                    <div class="shimmer loader-card-text"></div>
+                    <div class="shimmer loader-card-text short"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
 
     <!-- ================= HEADER ================= -->
 
@@ -150,11 +245,11 @@
 
                 <div class="category-tools">
 
-                    <button class="filter-btn active" onclick="filterCategories('all',this)">
+                    <button class="filter-btn " onclick="filterCategories('all',this)">
                         All
                     </button>
 
-                    <button class="filter-btn" onclick="filterCategories('fashion',this)">
+                    <!-- <button class="filter-btn" onclick="filterCategories('fashion',this)">
                         Fashion
                     </button>
 
@@ -168,7 +263,7 @@
 
                     <button class="filter-btn" onclick="filterCategories('tech',this)">
                         Electronics
-                    </button>
+                    </button> -->
 
                 </div>
 
