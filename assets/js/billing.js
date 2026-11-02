@@ -1,488 +1,1004 @@
 /* =========================================================
-   SUBEESHA - CHECKOUT (billing.html)
+   SUBEESHA - MULTI-STEP CHECKOUT (billing.html)
    ?product=<id>  -> buy a single product
    ?cart=1        -> checkout everything in the cart
+
+   FLOW:
+   1. Product selection
+   2. Customer + delivery location (map pin OR exact written address)
+   3. Cash on Delivery + wallet
+   4. Order review modal -> Confirm & Place Order
    ========================================================= */
-const $ = id => document.getElementById(id);
-const money = n => "Rs. " + Math.round(Number(n) || 0).toLocaleString("en-US");
 
-let items = [];               // checkout lines
-let cartMode = false;
-let couponCode = "";
-let couponDiscount = 0;
-let walletDiscount = 0;
-let shippingCfg = { charge: 250, freeAbove: 5000 };
-let placing = false;
-let loc = null;        // pinned delivery location {lat,lng,address,city,province}
-let cityLoc = null;    // coordinates of the chosen city (fallback for map zones)
+const $ = id => document.getElementById(id)
+const money = n => "Rs. " + Math.round(Number(n) || 0).toLocaleString("en-US")
 
-/* ---------- TOAST (escaped) ---------- */
-function esc(v){ return SUB.esc(v); }
-function showToast(title, message, type) {
-    const container = $("toastContainer");
-    if (!container) return;
-    let icon = "checkmark-circle-outline";
-    if (type === "error") icon = "close-circle-outline";
-    if (type === "warning") icon = "warning-outline";
-    const toast = document.createElement("div");
-    toast.className = "toast " + type;
+let items = []
+let cartMode = false
+let couponCode = ""
+let couponDiscount = 0
+let walletDiscount = 0
+let shippingCfg = { charge: 250, freeAbove: 5000 }
+let placing = false
+let loc = null                 // Exact pinned location: { lat, lng, address, city, province }
+let cityLoc = null             // City center fallback for delivery-zone calculation only
+let currentStep = 1
+
+/* ---------- TOAST ---------- */
+function esc(value) {
+    return SUB.esc(value == null ? "" : String(value))
+}
+
+function showToast(title, message, type = "success") {
+    const container = $("toastContainer")
+    if (!container) return
+
+    let icon = "checkmark-circle-outline"
+    if (type === "error") icon = "close-circle-outline"
+    if (type === "warning") icon = "warning-outline"
+
+    const toast = document.createElement("div")
+    toast.className = "toast " + type
     toast.innerHTML = `
         <ion-icon class="toast-icon" name="${icon}"></ion-icon>
-        <div class="toast-content"><strong>${esc(title)}</strong><span>${esc(message)}</span></div>
-        <button class="toast-close" onclick="removeToast(this)">×</button>`;
-    container.appendChild(toast);
-    setTimeout(() => { toast.classList.add("hide"); setTimeout(() => toast.remove(), 350); }, 3500);
-}
-function removeToast(button) {
-    const toast = button.closest(".toast");
-    toast.classList.add("hide");
-    setTimeout(() => toast.remove(), 350);
+        <div class="toast-content">
+            <strong>${esc(title)}</strong>
+            <span>${esc(message)}</span>
+        </div>
+        <button class="toast-close" type="button" aria-label="Close notification">×</button>`
+
+    toast.querySelector(".toast-close").addEventListener("click", () => removeToast(toast))
+    container.appendChild(toast)
+
+    setTimeout(() => {
+        toast.classList.add("hide")
+        setTimeout(() => toast.remove(), 350)
+    }, 3500)
 }
 
-/* ---------- HEADER ---------- */
-function handleHeaderSearch(event) {
-    event.preventDefault();
-    const search = $("headerSearchInput").value.trim();
-    if (!search) return showToast("Warning", "Please enter something to search.", "warning");
-    location.href = SUB.url("page/shop.html?search=" + encodeURIComponent(search));
+function removeToast(toast) {
+    if (!toast) return
+    toast.classList.add("hide")
+    setTimeout(() => toast.remove(), 350)
 }
-function showCart() {
-    if (!SUB.cart.count()) return showToast("Cart", "Your cart is empty.", "warning");
-    location.href = SUB.url("page/billing.html?cart=1");
+
+/* ---------- HELPERS ---------- */
+function subtotal() {
+    return items.reduce((sum, item) => sum + (Number(item.price) || 0) * (Number(item.qty) || 0), 0)
 }
-function toggleMenu() {
-    const menu = $("navLinks");
-    menu.classList.toggle("mobile-open");
-    if (menu.classList.contains("mobile-open")) {
-        menu.style.display = "flex"; menu.style.position = "absolute"; menu.style.top = "78px";
-        menu.style.left = "0"; menu.style.width = "100%"; menu.style.padding = "20px";
-        menu.style.background = "#fff"; menu.style.flexDirection = "column";
-        menu.style.alignItems = "flex-start"; menu.style.boxShadow = "0 10px 25px rgba(0,0,0,.08)";
-    } else {
-        menu.removeAttribute("style");
+
+function pinnedLocation() {
+    if (!loc || !Number.isFinite(Number(loc.lat)) || !Number.isFinite(Number(loc.lng))) return null
+    return {
+        lat: Number(loc.lat),
+        lng: Number(loc.lng),
+        address: String(loc.address || "")
     }
 }
 
-/* ---------- helpers ---------- */
-function subtotal() { return items.reduce((s, i) => s + i.price * i.qty, 0); }
-function currentLoc() { const l = loc || cityLoc; return l && isFinite(l.lat) && isFinite(l.lng) ? { lat: l.lat, lng: l.lng } : null; }
-function deliveryInfo() { const l = currentLoc(); return SUB.deliveryInfo(subtotal(), shippingCfg, { city: $("city") ? $("city").value : "", lat: l && l.lat, lng: l && l.lng }); }
-function shippingCost() { return deliveryInfo().charge; }
-function cssColor(name) {
-    const n = String(name).trim().toLowerCase();
-    return (window.CSS && CSS.supports("color", n)) ? n : "#c9c9c9";
+function currentLoc() {
+    const location = pinnedLocation() || cityLoc
+    return location && Number.isFinite(Number(location.lat)) && Number.isFinite(Number(location.lng))
+        ? { lat: Number(location.lat), lng: Number(location.lng) }
+        : null
 }
-function setText(id, v) { const e = $(id); if (e) e.textContent = v; }
+
+function deliveryInfo() {
+    const location = currentLoc()
+    return SUB.deliveryInfo(subtotal(), shippingCfg, {
+        city: $("city") ? $("city").value : "",
+        lat: location && location.lat,
+        lng: location && location.lng
+    })
+}
+
+function shippingCost() {
+    return Number(deliveryInfo().charge) || 0
+}
+
+function setText(id, value) {
+    const element = $(id)
+    if (element) element.textContent = value == null ? "" : String(value)
+}
+
+function cssColor(name) {
+    const value = String(name || "").trim().toLowerCase()
+    return window.CSS && CSS.supports("color", value) ? value : "#c9c9c9"
+}
+
+function getAmounts() {
+    const sub = subtotal()
+    const ship = shippingCost()
+    const discount = Math.max(0, Math.min(Number(couponDiscount) || 0, sub + ship))
+    const wallet = $("useWallet") && $("useWallet").checked
+        ? Math.min(walletBalance(), Math.max(0, sub + ship - discount))
+        : 0
+
+    walletDiscount = wallet
+
+    return {
+        subtotal: sub,
+        shipping: ship,
+        discount,
+        wallet,
+        total: Math.max(0, sub + ship - discount - wallet)
+    }
+}
+
+/* ---------- CHECKOUT STEP NAVIGATION ---------- */
+function updateStepProgress(step) {
+    document.querySelectorAll(".steps .step").forEach(stepElement => {
+        const number = Number(stepElement.dataset.step)
+        stepElement.classList.toggle("active", number === step)
+        stepElement.classList.toggle("completed", number < step)
+    })
+
+    document.querySelectorAll(".steps .step-line").forEach((line, index) => {
+        line.classList.toggle("active", index < step - 1)
+    })
+}
+
+function goToStep(step) {
+    const nextStep = Math.max(1, Math.min(3, Number(step) || 1))
+    currentStep = nextStep
+
+    document.querySelectorAll(".checkout-stage").forEach(stage => stage.classList.remove("active"))
+    const stageId = nextStep === 1 ? "stageProduct" : nextStep === 2 ? "stageLocation" : "stagePayment"
+    const stage = $(stageId)
+    if (stage) stage.classList.add("active")
+
+    updateStepProgress(nextStep)
+
+    if (nextStep === 3) calculateTotal()
+    window.scrollTo({ top: 0, behavior: "smooth" })
+}
+
+function nextToLocation() {
+    if (!items.length) return showToast("No product", "Please select a product before continuing.", "error")
+    if (items.some(item => Number(item.stock) <= 0)) return showToast("Out of stock", "One or more products are unavailable.", "error")
+    goToStep(2)
+}
+
+function validateCustomerInformation() {
+    const firstName = $("firstName").value.trim()
+    const lastName = $("lastName").value.trim()
+    const email = $("email").value.trim()
+    const mobile = $("mobile").value.trim()
+
+    if (!firstName || !lastName || !email || !mobile) {
+        showToast("Required information", "Please complete your name, email and mobile number.", "error")
+        return false
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showToast("Invalid email", "Please enter a valid email address.", "error")
+        $("email").focus()
+        return false
+    }
+
+    if (!/^[+\d][\d\s-]{8,}$/.test(mobile)) {
+        showToast("Invalid mobile", "Please enter a valid mobile number.", "error")
+        $("mobile").focus()
+        return false
+    }
+
+    return true
+}
+
+function validateDeliveryLocation() {
+    const province = $("province").value.trim()
+    const city = $("city").value.trim()
+    const address = $("address").value.trim()
+    const pin = pinnedLocation()
+
+    if (!province || !city) {
+        showToast("Delivery location required", "Please select your province and city.", "error")
+        return false
+    }
+
+    // A precise map pin OR a sufficiently complete manually entered address is mandatory.
+    if (!pin && address.length < 10) {
+        showToast("Exact location required", "Pin your exact location on the map OR enter your complete address (at least 10 characters).", "error")
+        $("address").focus()
+        return false
+    }
+
+    if (!$("area").value.trim() && !pin) {
+        showToast("Area required", "Please enter your area, locality or sector for delivery.", "error")
+        $("area").focus()
+        return false
+    }
+
+    return true
+}
+
+function nextToPayment() {
+    if (!validateCustomerInformation()) return
+    if (!validateDeliveryLocation()) return
+    goToStep(3)
+}
 
 /* ---------- SINGLE PRODUCT VIEW ---------- */
 function renderSingle() {
-    const it = items[0], p = it.product;
-    $("mainProductImage").src = SUB.img(it.image, 900);
-    $("summaryImage").src = SUB.img(it.image, 300);
-    setText("productName", it.name);
-    setText("summaryName", it.name);
-    setText("productPrice", money(it.price));
-    const priceBox = document.querySelector(".product-info .price");
+    const item = items[0]
+    const product = item.product || {}
+
+    $("mainProductImage").src = SUB.img(item.image, 900)
+    $("summaryImage").src = SUB.img(item.image, 300)
+    setText("productName", item.name)
+    setText("summaryName", item.name)
+    setText("productPrice", money(item.price))
+
+    const priceBox = document.querySelector(".product-info .price")
     if (priceBox) {
-        const old = priceBox.querySelector(".old-price"), badge = priceBox.querySelector(".sale-badge");
-        if (old) { old.textContent = money(it.old); old.style.display = it.old ? "" : "none"; }
-        if (badge) { badge.textContent = it.pct + "% OFF"; badge.style.display = it.old ? "" : "none"; }
+        const old = priceBox.querySelector(".old-price")
+        const badge = priceBox.querySelector(".sale-badge")
+        if (old) {
+            old.textContent = money(item.old)
+            old.style.display = item.old ? "" : "none"
+        }
+        if (badge) {
+            badge.textContent = item.pct + "% OFF"
+            badge.style.display = item.old ? "" : "none"
+        }
     }
-    const rating = document.querySelector(".product-info .rating");
+
+    const rating = document.querySelector(".product-info .rating")
     if (rating) {
-        if (p && p.rating > 0) {
-            rating.querySelector(".stars").textContent = SUB.stars(p.rating);
-            rating.querySelector("span:not(.stars)").textContent = p.rating + (p.reviewCount ? " (" + p.reviewCount + " Reviews)" : "");
-        } else rating.style.display = "none";
+        if (product.rating > 0) {
+            rating.querySelector(".stars").textContent = SUB.stars(product.rating)
+            rating.querySelector("span:not(.stars)").textContent = product.rating + (product.reviewCount ? " (" + product.reviewCount + " Reviews)" : "")
+        } else {
+            rating.style.display = "none"
+        }
     }
-    const stock = document.querySelector(".product-info .stock");
+
+    const stock = document.querySelector(".product-info .stock")
     if (stock) {
-        const s = it.stock;
-        stock.innerHTML = s <= 0
+        const amount = Number(item.stock)
+        stock.innerHTML = amount <= 0
             ? '<ion-icon name="close-circle"></ion-icon> Out of Stock'
-            : '<ion-icon name="checkmark-circle"></ion-icon> ' + (s < 999 && s <= 10 ? "Only " + s + " left" : "In Stock");
-        if (s <= 0) stock.style.color = "#c62828";
+            : '<ion-icon name="checkmark-circle"></ion-icon> ' + (amount < 999 && amount <= 10 ? "Only " + amount + " left" : "In Stock")
+        if (amount <= 0) stock.style.color = "#c62828"
     }
-    // colors
-    const colors = (p && p.colors) || [];
-    const titles = document.querySelectorAll(".option-title");
-    const colorTitle = titles[0], colorBox = document.querySelector(".colors");
+
+    // Product colors
+    const colors = product.colors || []
+    const optionTitles = document.querySelectorAll("#stageProduct .option-title")
+    const colorTitle = optionTitles[0]
+    const colorBox = document.querySelector("#stageProduct .colors")
+
     if (colors.length) {
-        colorBox.innerHTML = colors.map((c, i) =>
-            `<button class="color-option${i === 0 ? " active" : ""}" onclick="selectColor('${esc(c).replace(/'/g, "")}','${esc(SUB.img((p.images || [])[i] || it.image, 900))}',this)" title="${esc(c)}"><span class="color-inner" style="background:${esc(cssColor(c))}"></span></button>`).join("");
-        it.color = colors[0];
-        setText("selectedColor", colors[0]); setText("summaryColor", colors[0]);
+        colorBox.innerHTML = colors.map((color, index) => {
+            const image = SUB.img((product.images || [])[index] || item.image, 900)
+            return `<button class="color-option${index === 0 ? " active" : ""}" onclick="selectColor('${esc(color).replace(/'/g, "")}','${esc(image)}',this)" title="${esc(color)}" aria-label="${esc(color)}"><span class="color-inner" style="background:${esc(cssColor(color))}"></span></button>`
+        }).join("")
+        item.color = colors[0]
+        setText("selectedColor", colors[0])
+        setText("summaryColor", colors[0])
     } else {
-        colorTitle.style.display = "none"; colorBox.style.display = "none";
-        const sc = $("summaryColor"); if (sc) sc.parentElement.style.display = "none";
+        if (colorTitle) colorTitle.style.display = "none"
+        if (colorBox) colorBox.style.display = "none"
+        const summaryColor = $("summaryColor")
+        if (summaryColor) summaryColor.parentElement.style.display = "none"
     }
-    // sizes
-    const sizes = (p && p.sizes) || [];
-    const sizeTitle = titles[1], sizeBox = document.querySelector(".sizes");
+
+    // Product sizes
+    const sizes = product.sizes || []
+    const sizeTitle = optionTitles[1]
+    const sizeBox = document.querySelector("#stageProduct .sizes")
+
     if (sizes.length) {
-        sizeBox.innerHTML = sizes.map((s, i) =>
-            `<button class="size${i === 0 ? " active" : ""}" onclick="selectSize('${esc(s).replace(/'/g, "")}',this)">${esc(s)}</button>`).join("");
-        it.size = sizes[0];
-        setText("selectedSize", sizes[0]); setText("summarySize", sizes[0]);
+        sizeBox.innerHTML = sizes.map((size, index) =>
+            `<button class="size${index === 0 ? " active" : ""}" onclick="selectSize('${esc(size).replace(/'/g, "")}',this)">${esc(size)}</button>`
+        ).join("")
+        item.size = sizes[0]
+        setText("selectedSize", sizes[0])
+        setText("summarySize", sizes[0])
     } else {
-        sizeTitle.style.display = "none"; sizeBox.style.display = "none";
-        const ss = $("summarySize"); if (ss) ss.parentElement.style.display = "none";
+        if (sizeTitle) sizeTitle.style.display = "none"
+        if (sizeBox) sizeBox.style.display = "none"
+        const summarySize = $("summarySize")
+        if (summarySize) summarySize.parentElement.style.display = "none"
     }
-    setText("quantity", it.qty); setText("summaryQty", it.qty);
-    setText("summaryPrice", money(it.price * it.qty));
+
+    setText("quantity", item.qty)
+    setText("summaryQty", item.qty)
+    setText("summaryPrice", money(item.price * item.qty))
 }
 
 function selectColor(color, image, button) {
-    items[0].color = color;
-    setText("selectedColor", color); setText("summaryColor", color);
-    document.querySelectorAll(".color-option").forEach(x => x.classList.remove("active"));
-    button.classList.add("active");
-    const main = $("mainProductImage");
-    main.classList.add("change");
-    setTimeout(() => { main.src = image; main.classList.remove("change"); }, 180);
-    $("summaryImage").src = image;
-    renderSummaryProducts();
-    showToast("Success", color + " color selected.", "success");
-}
-function selectSize(size, button) {
-    items[0].size = size;
-    setText("selectedSize", size); setText("summarySize", size);
-    document.querySelectorAll(".size").forEach(x => x.classList.remove("active"));
-    button.classList.add("active");
-    renderSummaryProducts();
-    showToast("Success", "Size " + size + " selected.", "success");
-}
-function changeQuantity(value) {
-    const it = items[0];
-    let q = it.qty + value;
-    if (q < 1) q = 1;
-    if (q > 10) { q = 10; showToast("Warning", "Maximum 10 items can be purchased.", "warning"); }
-    if (q > it.stock) { q = Math.max(1, it.stock); showToast("Warning", "Only " + it.stock + " item(s) in stock.", "warning"); }
-    it.qty = q;
-    setText("quantity", q); setText("summaryQty", q);
-    setText("summaryPrice", money(it.price * q));
-    renderSummaryProducts();
-    refreshCoupon().then(calculateTotal);
+    if (!items[0]) return
+
+    items[0].color = color
+    setText("selectedColor", color)
+    setText("summaryColor", color)
+
+    document.querySelectorAll("#stageProduct .color-option").forEach(element => element.classList.remove("active"))
+    if (button) button.classList.add("active")
+
+    const mainImage = $("mainProductImage")
+    mainImage.classList.add("change")
+    setTimeout(() => {
+        mainImage.src = image
+        mainImage.classList.remove("change")
+    }, 180)
+
+    $("summaryImage").src = image
+    renderSummaryProducts()
+    showToast("Color selected", color + " color selected.", "success")
 }
 
-/* ---------- CART VIEW (many products) ---------- */
+function selectSize(size, button) {
+    if (!items[0]) return
+
+    items[0].size = size
+    setText("selectedSize", size)
+    setText("summarySize", size)
+
+    document.querySelectorAll("#stageProduct .size").forEach(element => element.classList.remove("active"))
+    if (button) button.classList.add("active")
+
+    renderSummaryProducts()
+    showToast("Size selected", "Size " + size + " selected.", "success")
+}
+
+function changeQuantity(change) {
+    const item = items[0]
+    if (!item) return
+
+    let quantity = item.qty + change
+    if (quantity < 1) quantity = 1
+    if (quantity > 10) {
+        quantity = 10
+        showToast("Quantity limit", "Maximum 10 items can be purchased.", "warning")
+    }
+    if (quantity > item.stock) {
+        quantity = Math.max(1, item.stock)
+        showToast("Stock limit", "Only " + item.stock + " item(s) are available.", "warning")
+    }
+
+    item.qty = quantity
+    setText("quantity", quantity)
+    setText("summaryQty", quantity)
+    setText("summaryPrice", money(item.price * quantity))
+    renderSummaryProducts()
+    refreshCoupon().then(calculateTotal)
+}
+
+/* ---------- CART VIEW ---------- */
 function renderCartLines() {
-    const area = document.querySelector(".product-area");
-    area.innerHTML = '<div id="cartLines" style="width:100%">' + items.map((it, i) => `
+    const area = document.querySelector("#stageProduct .product-area")
+    if (!area) return
+
+    area.innerHTML = '<div id="cartLines" style="width:100%">' + items.map((item, index) => `
         <div class="cart-line" style="display:flex;gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid #eee;flex-wrap:wrap">
-            <img src="${esc(SUB.img(it.image, 200))}" alt="" style="width:78px;height:78px;border-radius:4px;object-fit:cover">
+            <img src="${esc(SUB.img(item.image, 200))}" alt="${esc(item.name)}" style="width:78px;height:78px;border-radius:4px;object-fit:cover">
             <div style="flex:1;min-width:140px">
-                <strong style="display:block">${esc(it.name)}</strong>
-                <span style="color:#68736e;font-size:13px">${money(it.price)} each${it.stock < 999 && it.stock <= 10 ? " · only " + it.stock + " left" : ""}</span>
+                <strong style="display:block">${esc(item.name)}</strong>
+                <span style="color:#68736e;font-size:13px">${money(item.price)} each${item.stock < 999 && item.stock <= 10 ? " · only " + item.stock + " left" : ""}</span>
+                ${item.color ? `<span style="display:block;color:#68736e;font-size:12px">Color: ${esc(item.color)}</span>` : ""}
+                ${item.size ? `<span style="display:block;color:#68736e;font-size:12px">Size: ${esc(item.size)}</span>` : ""}
             </div>
             <div class="quantity-box" style="margin:0">
-                <button class="qty-btn" onclick="cartQty(${i},-1)">−</button>
-                <span class="qty-number">${it.qty}</span>
-                <button class="qty-btn" onclick="cartQty(${i},1)">+</button>
+                <button class="qty-btn" type="button" onclick="cartQty(${index},-1)">−</button>
+                <span class="qty-number">${item.qty}</span>
+                <button class="qty-btn" type="button" onclick="cartQty(${index},1)">+</button>
             </div>
-            <strong style="min-width:90px;text-align:right">${money(it.price * it.qty)}</strong>
-            <button class="toast-close" style="color:#c62828" onclick="cartRemove(${i})" aria-label="Remove">×</button>
-        </div>`).join("") + "</div>";
-    const h = document.querySelector(".card-heading h2"), pp = document.querySelector(".card-heading p");
-    if (h) h.textContent = "Your Cart";
-    if (pp) pp.textContent = items.length + " item(s) ready for checkout";
-}
-function cartQty(i, delta) {
-    const it = items[i];
-    const q = it.qty + delta;
-    if (q > 10) return showToast("Warning", "Maximum 10 items per product.", "warning");
-    if (q > it.stock) return showToast("Warning", "Only " + it.stock + " item(s) in stock.", "warning");
-    if (q < 1) return cartRemove(i);
-    it.qty = q; syncCart(); renderCartLines(); renderSummaryProducts();
-    refreshCoupon().then(calculateTotal);
-}
-function cartRemove(i) {
-    items.splice(i, 1); syncCart();
-    if (!items.length) { location.href = SUB.url("page/shop.html"); return; }
-    renderCartLines(); renderSummaryProducts(); refreshCoupon().then(calculateTotal);
-}
-function syncCart() {
-    SUB.cart.save(items.map(x => ({ id: x.id, name: x.name, price: x.price, image: x.image, qty: x.qty, color: x.color || "", size: x.size || "" })));
+            <strong style="min-width:90px;text-align:right">${money(item.price * item.qty)}</strong>
+            <button class="toast-close" type="button" style="color:#c62828" onclick="cartRemove(${index})" aria-label="Remove">×</button>
+        </div>`).join("") + "</div>"
+
+    const heading = document.querySelector("#stageProduct .card-heading h2")
+    const description = document.querySelector("#stageProduct .card-heading p")
+    if (heading) heading.textContent = "Your Cart"
+    if (description) description.textContent = items.length + " item(s) ready for checkout"
 }
 
-/* right-hand order summary lines */
-function renderSummaryProducts() {
-    const first = document.querySelector(".summary-product");
-    if (!first) return;
-    let box = $("summaryList");
-    if (!box) {
-        box = document.createElement("div"); box.id = "summaryList";
-        first.parentNode.insertBefore(box, first); first.style.display = "none";
+function cartQty(index, delta) {
+    const item = items[index]
+    if (!item) return
+
+    const quantity = item.qty + delta
+    if (quantity > 10) return showToast("Quantity limit", "Maximum 10 items per product.", "warning")
+    if (quantity > item.stock) return showToast("Stock limit", "Only " + item.stock + " item(s) are available.", "warning")
+    if (quantity < 1) return cartRemove(index)
+
+    item.qty = quantity
+    syncCart()
+    renderCartLines()
+    renderSummaryProducts()
+    refreshCoupon().then(calculateTotal)
+}
+
+function cartRemove(index) {
+    items.splice(index, 1)
+    syncCart()
+
+    if (!items.length) {
+        location.href = SUB.url("page/shop.html")
+        return
     }
-    box.innerHTML = items.map(it => `
+
+    renderCartLines()
+    renderSummaryProducts()
+    refreshCoupon().then(calculateTotal)
+}
+
+function syncCart() {
+    SUB.cart.save(items.map(item => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        image: item.image,
+        qty: item.qty,
+        color: item.color || "",
+        size: item.size || ""
+    })))
+}
+
+/* ---------- SUMMARY ---------- */
+function renderSummaryProducts() {
+    const first = document.querySelector(".summary-product")
+    if (!first) return
+
+    let box = $("summaryList")
+    if (!box) {
+        box = document.createElement("div")
+        box.id = "summaryList"
+        first.parentNode.insertBefore(box, first)
+        first.style.display = "none"
+    }
+
+    box.innerHTML = items.map(item => `
         <div class="summary-product">
-            <img src="${esc(SUB.img(it.image, 300))}" alt="">
+            <img src="${esc(SUB.img(item.image, 300))}" alt="${esc(item.name)}">
             <div class="summary-product-info">
-                <strong>${esc(it.name)}</strong>
-                ${it.color ? "<span>Color: <b>" + esc(it.color) + "</b></span>" : ""}
-                ${it.size ? "<span>Size: <b>" + esc(it.size) + "</b></span>" : ""}
-                <span>Qty: <b>${it.qty}</b></span>
+                <strong>${esc(item.name)}</strong>
+                ${item.color ? `<span>Color: <b>${esc(item.color)}</b></span>` : ""}
+                ${item.size ? `<span>Size: <b>${esc(item.size)}</b></span>` : ""}
+                <span>Qty: <b>${item.qty}</b></span>
             </div>
-            <div class="summary-price">${money(it.price * it.qty)}</div>
-        </div>`).join("");
+            <div class="summary-price">${money(item.price * item.qty)}</div>
+        </div>`).join("")
 }
 
 /* ---------- COUPON ---------- */
 function refreshCoupon() {
-    if (!couponCode) { couponDiscount = 0; return Promise.resolve(); }
-    return SUB.checkCoupon(couponCode, subtotal()).then(c => { couponDiscount = c.amount; })
-        .catch(() => { couponDiscount = 0; couponCode = ""; $("coupon").value = ""; });
+    if (!couponCode) {
+        couponDiscount = 0
+        return Promise.resolve()
+    }
+
+    return SUB.checkCoupon(couponCode, subtotal())
+        .then(result => { couponDiscount = Number(result.amount) || 0 })
+        .catch(() => {
+            couponDiscount = 0
+            couponCode = ""
+            if ($("coupon")) $("coupon").value = ""
+        })
 }
+
 function applyCoupon() {
-    const code = $("coupon").value.trim().toUpperCase();
-    if (!code) return showToast("Warning", "Please enter a promo code.", "warning");
-    if (!SUB.configured) return showToast("Error", "Store is not connected yet.", "error");
-    if (!SUB.user) return showToast("Warning", "Please login to use a promo code.", "warning");
-    SUB.checkCoupon(code, subtotal()).then(c => {
-        couponCode = c.code; couponDiscount = c.amount;
-        showToast("Success", c.label + " applied successfully.", "success");
-        calculateTotal();
-    }).catch(e => {
-        couponCode = ""; couponDiscount = 0; calculateTotal();
-        showToast("Error", e.message || "Invalid promo code.", "error");
-    });
+    const code = $("coupon").value.trim().toUpperCase()
+    if (!code) return showToast("Promo code", "Please enter a promo code.", "warning")
+    if (!SUB.configured) return showToast("Store unavailable", "Store is not connected yet.", "error")
+    if (!SUB.user) return showToast("Login required", "Please login to use a promo code.", "warning")
+
+    SUB.checkCoupon(code, subtotal()).then(result => {
+        couponCode = result.code
+        couponDiscount = Number(result.amount) || 0
+        showToast("Coupon applied", result.label + " applied successfully.", "success")
+        calculateTotal()
+    }).catch(error => {
+        couponCode = ""
+        couponDiscount = 0
+        calculateTotal()
+        showToast("Invalid coupon", error.message || "Invalid promo code.", "error")
+    })
 }
 
 /* ---------- WALLET ---------- */
-function walletBalance() { return SUB.profile ? Number(SUB.profile.wallet) || 0 : 0; }
+function walletBalance() {
+    return SUB.profile ? Number(SUB.profile.wallet) || 0 : 0
+}
+
 function toggleWallet() {
-    const checkbox = $("useWallet");
-    if (checkbox.checked) {
-        if (walletBalance() <= 0) {
-            checkbox.checked = false;
-            return showToast("Warning", "You have no wallet balance.", "warning");
-        }
-        showToast("Success", "Wallet balance applied.", "success");
-    } else {
-        showToast("Warning", "Wallet balance removed.", "warning");
+    const checkbox = $("useWallet")
+    if (checkbox.checked && walletBalance() <= 0) {
+        checkbox.checked = false
+        return showToast("Wallet unavailable", "You have no wallet balance.", "warning")
     }
-    calculateTotal();
+
+    showToast(
+        checkbox.checked ? "Wallet applied" : "Wallet removed",
+        checkbox.checked ? "Wallet balance applied to this order." : "Wallet balance removed.",
+        checkbox.checked ? "success" : "warning"
+    )
+    calculateTotal()
 }
 
-/* ---------- TOTAL ---------- */
+/* ---------- TOTALS ---------- */
 function calculateTotal() {
-    const sub = subtotal(), ship = shippingCost();
-    walletDiscount = $("useWallet") && $("useWallet").checked
-        ? Math.min(walletBalance(), Math.max(0, sub + ship - couponDiscount)) : 0;
-    const total = Math.max(0, sub + ship - couponDiscount - walletDiscount);
-    if (!cartMode && items[0]) setText("productPrice", money(items[0].price));
-    setText("summaryPrice", money(sub));
-    setText("subtotal", money(sub));
-    setText("shipping", ship === 0 ? "Free" : money(ship));
-    setText("discount", "- " + money(couponDiscount));
-    setText("walletDiscount", "- " + money(walletDiscount));
-    setText("total", money(total));
-    updateLocText();
+    const amounts = getAmounts()
+
+    if (!cartMode && items[0]) setText("productPrice", money(items[0].price))
+    setText("summaryPrice", money(amounts.subtotal))
+    setText("subtotal", money(amounts.subtotal))
+    setText("shipping", amounts.shipping === 0 ? "Free" : money(amounts.shipping))
+    setText("discount", "- " + money(amounts.discount))
+    setText("walletDiscount", "- " + money(amounts.wallet))
+    setText("total", money(amounts.total))
+    updateLocText()
 }
 
-/* ---------- PAYMENT ---------- */
+/* ---------- PAYMENT (COD ONLY FOR NOW) ---------- */
 function selectPayment(element) {
-    document.querySelectorAll(".payment").forEach(item => {
-        item.classList.remove("selected");
-        item.querySelector(".payment-radio").checked = false;
-    });
-    element.classList.add("selected");
-    element.querySelector(".payment-radio").checked = true;
+    document.querySelectorAll(".payment").forEach(payment => {
+        payment.classList.remove("selected")
+        const radio = payment.querySelector(".payment-radio")
+        if (radio) radio.checked = false
+    })
+
+    if (!element) return
+    element.classList.add("selected")
+    const radio = element.querySelector(".payment-radio")
+    if (radio) radio.checked = true
 }
+
 function currentPayment() {
-    const sel = document.querySelector(".payment.selected");
-    return sel ? sel.querySelector(".payment-info strong").textContent.trim() : "Cash on Delivery";
-}
-function setupPayments(pay) {
-    document.querySelectorAll(".payment").forEach(el => {
-        const name = el.querySelector(".payment-info strong").textContent.trim();
-        let allowed = true;
-        if (name === "Cash on Delivery") allowed = pay.cod !== false;
-        else if (name === "Easypaisa") allowed = false;
-        else if (name === "JazzCash") allowed = false;
-        else allowed = !!pay.online;       // card gateway is not integrated - hidden unless enabled
-        if (!allowed) { el.remove(); return; }
-        const num = name === "Easypaisa" ? pay.easypaisaNumber : name === "JazzCash" ? pay.jazzcashNumber : "";
-        const inp = el.querySelector(".payment-body input");
-        if (num && inp) {
-            inp.placeholder = "Your " + name + " number / transaction ID";
-            inp.insertAdjacentHTML("beforebegin", `<small style="display:block;margin-bottom:8px">Send payment to <b>${esc(num)}</b> and enter your number or transaction ID below.</small>`);
-        }
-        if (name.indexOf("Card") > -1 && inp) {
-            // never collect raw card numbers on this site
-            inp.outerHTML = "<small>Card payment is processed by our payment gateway after you place the order.</small>";
-        }
-    });
-    const first = document.querySelector(".payment");
-    if (first) selectPayment(first);
+    return "Cash on Delivery"
 }
 
-/* ---------- PLACE ORDER ---------- */
-function placeOrder() {
-    if (placing) return;
-    const firstName = $("firstName").value.trim(), lastName = $("lastName").value.trim();
-    const email = $("email").value.trim(), mobile = $("mobile").value.trim();
-    const province = $("province").value, city = $("city").value, address = $("address").value.trim();
+function setupPayments() {
+    // Only COD is intentionally enabled in this checkout version.
+    document.querySelectorAll(".payment").forEach(payment => {
+        const name = payment.querySelector(".payment-info strong")?.textContent.trim()
+        if (name !== "Cash on Delivery") payment.remove()
+    })
 
-    if (!firstName || !lastName || !email || !mobile || !province || !city || !address)
-        return showToast("Error", "Please complete all required fields.", "error");
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-        return showToast("Error", "Please enter a valid email address.", "error");
-    if (!/^[+\d][\d\s-]{8,}$/.test(mobile))
-        return showToast("Error", "Please enter a valid mobile number.", "error");
-    if (!SUB.configured) return showToast("Error", "Store is not connected to Firebase yet.", "error");
-    if (!items.length) return showToast("Error", "No product selected.", "error");
-    if (!SUB.user) {
-        showToast("Login required", "Please login to place your order.", "warning");
-        setTimeout(() => location.href = SUB.url("account.html?next=" + encodeURIComponent("page/billing.html" + location.search)), 1200);
-        return;
-    }
-    const pm = currentPayment();
-    let ref = "";
-    const sel = document.querySelector(".payment.selected .payment-body input");
-    if (sel) ref = sel.value.trim();
-    if ((pm === "Easypaisa" || pm === "JazzCash") && !ref)
-        return showToast("Error", "Please enter your " + pm + " number or transaction ID.", "error");
-
-    placing = true;
-    const btn = document.querySelector(".place-order");
-    btn.disabled = true; btn.style.opacity = ".7";
-    SUB.placeOrder({
-        items: items.map(i => ({ id: i.id, qty: i.qty, color: i.color, size: i.size })),
-        customer: { name: firstName + " " + lastName, email, phone: mobile, province, city, area: $("area").value.trim(), postal: $("postal").value.trim(), address },
-        paymentMethod: pm, paymentRef: ref, coupon: couponCode,
-        useWallet: $("useWallet").checked, source: "web", resellerCode: SUB.refCode(), location: currentLoc()
-    }).then(order => {
-        if (cartMode) SUB.cart.clear();
-        showToast("Order placed", "Your order " + order.orderNo + " has been placed successfully.", "success");
-        setTimeout(() => location.href = SUB.url("page/profile.html#orders"), 1800);
-    }).catch(e => {
-        placing = false; btn.disabled = false; btn.style.opacity = "";
-        showToast("Error", (e && e.message) || "Could not place the order.", "error");
-    });
+    const cod = document.querySelector(".payment")
+    if (cod) selectPayment(cod)
 }
 
-/* ---------- INIT ---------- */
-function emptyState(msg) {
-    document.querySelector(".product-area").innerHTML =
-        `<div style="text-align:center;width:100%;padding:40px 10px"><ion-icon name="bag-handle-outline" style="font-size:54px;color:var(--primary)"></ion-icon><h3 style="margin:10px 0">${esc(msg)}</h3><a href="${SUB.url("page/shop.html")}" class="place-order" style="display:inline-flex;text-decoration:none;width:auto;padding:12px 26px">Continue Shopping</a></div>`;
-    document.querySelector(".place-order").disabled = true;
-    calculateTotal();
-}
-
+/* ---------- CUSTOMER + ADDRESS ---------- */
 function prefill(profile) {
-    if (!profile) return;
-    const parts = (profile.name || "").split(" ");
-    if (!$("firstName").value) $("firstName").value = parts.shift() || "";
-    if (!$("lastName").value) $("lastName").value = parts.join(" ");
-    if (!$("email").value) $("email").value = profile.email || "";
-    if (!$("mobile").value) $("mobile").value = (profile.whatsapp || "").replace(/^\+92\s?/, "0");
-    if (profile.location && !loc && isFinite(profile.location.lat)) { loc = profile.location; }
-    const a = (profile.addresses || [])[0];
-    if (a) {
-        if (a.province) $("province").value = a.province;
-        if (a.city) $("city").value = a.city;
-        if (a.area && !$("area").value) $("area").value = a.area;
-        if (a.postal && !$("postal").value) $("postal").value = a.postal;
-        if (a.address && !$("address").value) $("address").value = a.address;
+    if (!profile) return
+
+    const nameParts = String(profile.name || "").trim().split(/\s+/).filter(Boolean)
+    if (!$ ("firstName").value) $("firstName").value = nameParts.shift() || ""
+    if (!$ ("lastName").value) $("lastName").value = nameParts.join(" ")
+    if (!$ ("email").value) $("email").value = profile.email || ""
+    if (!$ ("mobile").value) $("mobile").value = String(profile.whatsapp || "").replace(/^\+92\s?/, "0")
+
+    if (profile.location && Number.isFinite(Number(profile.location.lat)) && Number.isFinite(Number(profile.location.lng))) {
+        loc = profile.location
+    }
+
+    const savedAddress = (profile.addresses || [])[0]
+    if (savedAddress) {
+        if (savedAddress.province) pickOption($("province"), savedAddress.province)
+        if (savedAddress.city) pickOption($("city"), savedAddress.city)
+        if (savedAddress.area && !$ ("area").value) $("area").value = savedAddress.area
+        if (savedAddress.postal && !$ ("postal").value) $("postal").value = savedAddress.postal
+        if (savedAddress.address && !$ ("address").value) $("address").value = savedAddress.address
+    }
+
+    updateLocText()
+}
+
+function pickOption(select, value) {
+    if (!select || !value) return false
+
+    const target = String(value).toLowerCase().trim()
+    const option = Array.from(select.options).find(item => {
+        if (!item.value) return false
+        const label = item.text.toLowerCase().trim()
+        return label === target || target.includes(label) || label.includes(target)
+    })
+
+    if (option) {
+        select.value = option.value
+        return true
+    }
+    return false
+}
+
+/* ---------- DELIVERY LOCATION / LEAFLET MAP ---------- */
+function updateLocText() {
+    const text = $("locText")
+    if (!text) return
+
+    const pin = pinnedLocation()
+    const info = deliveryInfo()
+
+    if (pin) {
+        text.classList.remove("location-required")
+        text.classList.add("pinned")
+        text.textContent = "Location pinned: " + (pin.address || (pin.lat.toFixed(5) + ", " + pin.lng.toFixed(5))) + ". You can still edit the written address above."
+    } else {
+        text.classList.remove("pinned")
+        text.classList.add("location-required")
+        text.textContent = "Required: pin your exact location on the map OR enter your complete address manually (at least 10 characters)."
+    }
+
+    if (info.label && shippingCfg.mode !== "flat" && subtotal() > 0 && info.label !== "Free delivery") {
+        text.textContent += " Delivery estimate: " + info.label + " — " + (info.charge ? money(info.charge) : "Free") + "."
     }
 }
 
-/* ---------- delivery location (Leaflet map) ---------- */
-function pickOption(sel, text) {
-    if (!sel || !text) return false;
-    const t = String(text).toLowerCase();
-    const o = Array.from(sel.options).find(x => x.value && (x.text.toLowerCase() === t || t.includes(x.text.toLowerCase()) || x.text.toLowerCase().includes(t)));
-    if (o) { sel.value = o.value; return true; }
-    return false;
-}
-function updateLocText() {
-    const t = $("locText"); if (!t) return;
-    const info = deliveryInfo();
-    const where = loc ? (loc.address || (loc.lat.toFixed(4) + ", " + loc.lng.toFixed(4))) : "";
-    let msg = where ? "<b>Pinned:</b> " + SUB.esc(where) : "Optional - pin your location for accurate delivery charges.";
-    if (info.label && shippingCfg.mode !== "flat" && subtotal() > 0 && info.label !== "Free delivery") msg += "<br><b>Delivery:</b> " + SUB.esc(info.label) + " - " + (info.charge ? money(info.charge) : "Free");
-    t.innerHTML = msg;
-}
 function setupLocation() {
-    const addr = $("address"); if (!addr || $("locBox")) return;
-    const host = addr.closest(".field, .form-group, .input-group") || addr.parentElement;
-    const box = document.createElement("div");
-    box.className = "loc-box"; box.id = "locBox";
-    box.innerHTML = '<button type="button" class="loc-btn" id="locBtn"><ion-icon name="location-outline"></ion-icon> Pin location on map</button><span class="loc-text" id="locText"></span>';
-    host.insertAdjacentElement("afterend", box);
-    $("locBtn").addEventListener("click", () => {
-        SUB.map.pick(loc).then(r => {
-            if (!r) return;
-            loc = r;
-            pickOption($("province"), r.province);
-            pickOption($("city"), r.city);
-            if (!$("address").value.trim() && r.address) $("address").value = r.address;
-            calculateTotal();
-        }).catch(e => showToast("Error", e.message, "error"));
-    });
-    $("city").addEventListener("change", () => {
-        cityLoc = null; calculateTotal();
-        if (shippingCfg.mode === "zones" && !loc && $("city").value) {
-            const c = $("city").value;
-            SUB.map.geocodeCity(c).then(r => { if (r && $("city").value === c) { cityLoc = r; calculateTotal(); } });
-        }
-    });
-    updateLocText();
+    const pinButton = $("locBtn")
+    const address = $("address")
+    const city = $("city")
+
+    if (pinButton && !pinButton.dataset.bound) {
+        pinButton.dataset.bound = "1"
+        pinButton.addEventListener("click", () => {
+            if (!SUB.map || typeof SUB.map.pick !== "function") {
+                showToast("Map unavailable", "The location map could not be loaded. Please enter your complete address manually.", "error")
+                return
+            }
+
+            pinButton.disabled = true
+            SUB.map.pick(loc).then(result => {
+                if (!result) return
+                if (!Number.isFinite(Number(result.lat)) || !Number.isFinite(Number(result.lng))) {
+                    throw new Error("The selected map location is not valid. Please select the pin again.")
+                }
+
+                loc = result
+                pickOption($("province"), result.province)
+                pickOption($("city"), result.city)
+                if (!address.value.trim() && result.address) address.value = result.address
+                if (result.area && !$ ("area").value) $("area").value = result.area
+                cityLoc = null
+                calculateTotal()
+                showToast("Location pinned", "Your delivery location has been selected.", "success")
+            }).catch(error => {
+                showToast("Location error", error.message || "Could not select your location.", "error")
+            }).finally(() => {
+                pinButton.disabled = false
+            })
+        })
+    }
+
+    if (city && !city.dataset.bound) {
+        city.dataset.bound = "1"
+        city.addEventListener("change", () => {
+            cityLoc = null
+            calculateTotal()
+
+            // City coordinates are only a shipping-zone fallback, never saved as an exact pin.
+            if (shippingCfg.mode === "zones" && !pinnedLocation() && city.value && SUB.map?.geocodeCity) {
+                const selectedCity = city.value
+                SUB.map.geocodeCity(selectedCity).then(result => {
+                    if (result && city.value === selectedCity) {
+                        cityLoc = result
+                        calculateTotal()
+                    }
+                }).catch(() => {})
+            }
+        })
+    }
+
+    if (address && !address.dataset.bound) {
+        address.dataset.bound = "1"
+        address.addEventListener("input", updateLocText)
+    }
+
+    updateLocText()
 }
 
-function lineFrom(p, qty, extra) {
-    return Object.assign({ id: p.id, name: p.name, price: p._price, old: p._old, pct: p._pct, image: p._img,
-        qty: qty || 1, stock: p._stock, color: "", size: "", product: p }, extra || {});
+/* ---------- ORDER REVIEW MODAL ---------- */
+function reviewField(label, value, full = false) {
+    return `<div class="review-field${full ? " full" : ""}"><small>${esc(label)}</small><strong>${esc(value || "—")}</strong></div>`
+}
+
+function renderOrderReview() {
+    const container = $("orderReviewContent")
+    if (!container) return
+
+    const amounts = getAmounts()
+    const address = $("address").value.trim() || (loc && loc.address) || "Exact map pin selected"
+    const deliveryType = pinnedLocation() ? "Exact map location pinned" : "Manually entered address"
+    const itemMarkup = items.map(item => `
+        <div class="review-item">
+            <img src="${esc(SUB.img(item.image, 200))}" alt="${esc(item.name)}">
+            <div class="review-item-info">
+                <strong>${esc(item.name)}</strong>
+                <span>${item.color ? "Color: " + esc(item.color) + " · " : ""}${item.size ? "Size: " + esc(item.size) + " · " : ""}Qty: ${item.qty}</span>
+            </div>
+            <div class="review-item-price">${money(item.price * item.qty)}</div>
+        </div>`).join("")
+
+    const pin = pinnedLocation()
+    const pinText = pin
+        ? (pin.address || (pin.lat.toFixed(6) + ", " + pin.lng.toFixed(6)))
+        : "No map pin — manual address will be used"
+
+    container.innerHTML = `
+        <section class="review-block">
+            <h3 class="review-block-title"><ion-icon name="bag-handle-outline"></ion-icon> Products</h3>
+            <div class="review-items">${itemMarkup}</div>
+        </section>
+
+        <section class="review-block">
+            <h3 class="review-block-title"><ion-icon name="person-outline"></ion-icon> Customer Information</h3>
+            <div class="review-grid">
+                ${reviewField("Customer name", $("firstName").value.trim() + " " + $("lastName").value.trim())}
+                ${reviewField("Mobile number", $("mobile").value.trim())}
+                ${reviewField("Email address", $("email").value.trim(), true)}
+            </div>
+        </section>
+
+        <section class="review-block">
+            <h3 class="review-block-title"><ion-icon name="location-outline"></ion-icon> Delivery Address</h3>
+            <div class="review-grid">
+                ${reviewField("Province", $("province").value)}
+                ${reviewField("City", $("city").value)}
+                ${reviewField("Area / Zone", $("area").value.trim())}
+                ${reviewField("Postal code", $("postal").value.trim())}
+                ${reviewField("Complete address", address, true)}
+                ${reviewField("Location method", deliveryType)}
+                ${reviewField("Map pin", pinText, true)}
+            </div>
+        </section>
+
+        <section class="review-block">
+            <h3 class="review-block-title"><ion-icon name="card-outline"></ion-icon> Payment Method</h3>
+            <div class="review-grid">${reviewField("Payment", currentPayment())}</div>
+        </section>
+
+        <section class="review-block">
+            <h3 class="review-block-title"><ion-icon name="receipt-outline"></ion-icon> Price Details</h3>
+            <div class="review-total-row"><span>Subtotal</span><strong>${money(amounts.subtotal)}</strong></div>
+            <div class="review-total-row"><span>Shipping</span><strong>${amounts.shipping === 0 ? "Free" : money(amounts.shipping)}</strong></div>
+            <div class="review-total-row"><span>Coupon discount${couponCode ? " (" + esc(couponCode) + ")" : ""}</span><strong class="negative">- ${money(amounts.discount)}</strong></div>
+            <div class="review-total-row"><span>Wallet discount</span><strong class="negative">- ${money(amounts.wallet)}</strong></div>
+            <div class="review-total-row final"><span>Grand Total</span><strong>${money(amounts.total)}</strong></div>
+        </section>`
+}
+
+function openReviewModal() {
+    renderOrderReview()
+    const modal = $("orderReviewModal")
+    if (!modal) return
+
+    modal.classList.add("open")
+    modal.setAttribute("aria-hidden", "false")
+    document.body.classList.add("review-open")
+    updateStepProgress(4)
+    const closeButton = modal.querySelector(".review-close")
+    if (closeButton) closeButton.focus()
+}
+
+function closeReviewModal() {
+    if (placing) return
+    const modal = $("orderReviewModal")
+    if (!modal) return
+
+    modal.classList.remove("open")
+    modal.setAttribute("aria-hidden", "true")
+    document.body.classList.remove("review-open")
+    updateStepProgress(currentStep)
+}
+
+/* ---------- REVIEW ORDER (DOES NOT SUBMIT) ---------- */
+function placeOrder() {
+    if (placing) return
+    if (!items.length) return showToast("No product", "No product selected.", "error")
+    if (!validateCustomerInformation() || !validateDeliveryLocation()) {
+        goToStep(2)
+        return
+    }
+    if (!SUB.configured) return showToast("Store unavailable", "Store is not connected to Firebase yet.", "error")
+    if (!SUB.user) {
+        showToast("Login required", "Please login to review and place your order.", "warning")
+        setTimeout(() => {
+            location.href = SUB.url("account.html?next=" + encodeURIComponent("page/billing.html" + location.search))
+        }, 900)
+        return
+    }
+
+    openReviewModal()
+}
+
+/* ---------- FINAL CONFIRMATION (ACTUALLY SUBMITS) ---------- */
+function confirmPlaceOrder() {
+    if (placing) return
+    if (!items.length) return showToast("No product", "No product selected.", "error")
+    if (!validateCustomerInformation() || !validateDeliveryLocation()) {
+        closeReviewModal()
+        goToStep(2)
+        return
+    }
+    if (!SUB.configured) return showToast("Store unavailable", "Store is not connected to Firebase yet.", "error")
+    if (!SUB.user) {
+        closeReviewModal()
+        showToast("Login required", "Please login to place your order.", "warning")
+        setTimeout(() => {
+            location.href = SUB.url("account.html?next=" + encodeURIComponent("page/billing.html" + location.search))
+        }, 900)
+        return
+    }
+
+    const button = $("confirmOrderBtn")
+    placing = true
+    if (button) {
+        button.disabled = true
+        button.innerHTML = '<ion-icon name="sync-outline"></ion-icon> Placing Order...'
+    }
+
+    const customerAddress = $("address").value.trim() || (loc && loc.address) || "Exact map location selected"
+    const mapPin = pinnedLocation()
+
+    SUB.placeOrder({
+        items: items.map(item => ({
+            id: item.id,
+            qty: item.qty,
+            color: item.color || "",
+            size: item.size || ""
+        })),
+        customer: {
+            name: $("firstName").value.trim() + " " + $("lastName").value.trim(),
+            email: $("email").value.trim(),
+            phone: $("mobile").value.trim(),
+            province: $("province").value,
+            city: $("city").value,
+            area: $("area").value.trim(),
+            postal: $("postal").value.trim(),
+            address: customerAddress
+        },
+        paymentMethod: "Cash on Delivery",
+        paymentRef: "",
+        coupon: couponCode,
+        useWallet: $("useWallet").checked,
+        source: "web",
+        resellerCode: SUB.refCode(),
+        location: mapPin ? { lat: mapPin.lat, lng: mapPin.lng } : null
+    }).then(order => {
+        if (cartMode) SUB.cart.clear()
+
+        if (button) button.innerHTML = '<ion-icon name="checkmark-circle-outline"></ion-icon> Order Placed'
+        showToast("Order placed", "Your order " + order.orderNo + " has been placed successfully.", "success")
+
+        setTimeout(() => {
+            location.href = SUB.url("page/profile.html#orders")
+        }, 1400)
+    }).catch(error => {
+        placing = false
+        if (button) {
+            button.disabled = false
+            button.innerHTML = '<ion-icon name="checkmark-circle-outline"></ion-icon> Confirm &amp; Place Order'
+        }
+        showToast("Order failed", (error && error.message) || "Could not place the order. Please try again.", "error")
+    })
+}
+
+/* ---------- INIT HELPERS ---------- */
+function emptyState(message) {
+    const area = document.querySelector("#stageProduct .product-area")
+    if (area) {
+        area.innerHTML = `
+            <div style="text-align:center;width:100%;padding:40px 10px">
+                <ion-icon name="bag-handle-outline" style="font-size:54px;color:var(--primary)"></ion-icon>
+                <h3 style="margin:10px 0">${esc(message)}</h3>
+                <a href="${SUB.url("page/shop.html")}" class="place-order" style="display:inline-flex;text-decoration:none;width:auto;padding:12px 26px">Continue Shopping</a>
+            </div>`
+    }
+
+    const actions = document.querySelector("#stageProduct .checkout-actions")
+    if (actions) actions.style.display = "none"
+    calculateTotal()
+}
+
+function lineFrom(product, quantity, extra) {
+    return Object.assign({
+        id: product.id,
+        name: product.name,
+        price: product._price,
+        old: product._old,
+        pct: product._pct,
+        image: product._img,
+        qty: quantity || 1,
+        stock: product._stock,
+        color: "",
+        size: "",
+        product
+    }, extra || {})
 }
 
 async function initCheckout() {
-    if (!SUB.configured) { calculateTotal(); return; }   // static demo layout stays as-is
-    cartMode = SUB.qs("cart") === "1";
-    $("useWallet").checked = false;
+    cartMode = SUB.qs("cart") === "1"
+    if ($("useWallet")) $("useWallet").checked = false
+    setupPayments()
+    setupLocation()
 
-    const [cat, ship, pay] = await Promise.all([SUB.catalog(), SUB.settings("shipping"), SUB.settings("payments")]);
-    shippingCfg = ship;
-    setupPayments(pay);
-    setupLocation();
+    if (!SUB.configured) {
+        calculateTotal()
+        return
+    }
+
+    const [catalog, shipping] = await Promise.all([
+        SUB.catalog(),
+        SUB.settings("shipping")
+    ])
+
+    shippingCfg = shipping || shippingCfg
 
     if (cartMode) {
-        const saved = SUB.cart.get();
-        items = [];
-        saved.forEach(s => {
-            const p = cat.products.find(x => x.id === s.id);
-            if (p && p._stock > 0) items.push(lineFrom(p, Math.min(s.qty, p._stock, 10), { color: s.color, size: s.size }));
-        });
-        if (!items.length) return emptyState("Your cart is empty");
-        syncCart();
-        renderCartLines();
+        const saved = SUB.cart.get()
+        items = []
+
+        saved.forEach(savedItem => {
+            const product = catalog.products.find(item => item.id === savedItem.id)
+            if (product && product._stock > 0) {
+                items.push(lineFrom(product, Math.min(savedItem.qty, product._stock, 10), {
+                    color: savedItem.color,
+                    size: savedItem.size
+                }))
+            }
+        })
+
+        if (!items.length) return emptyState("Your cart is empty")
+        syncCart()
+        renderCartLines()
     } else {
-        const id = SUB.qs("product");
-        let p = id ? cat.products.find(x => x.id === id) : null;
-        if (id && !p) p = await SUB.getProduct(id).catch(() => null);
-        if (!p) return emptyState("Product not found");
-        const q = Math.max(1, Math.min(10, parseInt(SUB.qs("qty"), 10) || 1));
-        items = [lineFrom(p, Math.min(q, Math.max(1, p._stock)))];
-        renderSingle();
-        if (p._stock <= 0) { document.querySelector(".place-order").disabled = true; showToast("Out of stock", p.name + " is currently unavailable.", "warning"); }
+        const productId = SUB.qs("product")
+        let product = productId ? catalog.products.find(item => item.id === productId) : null
+        if (productId && !product) product = await SUB.getProduct(productId).catch(() => null)
+        if (!product) return emptyState("Product not found")
+
+        const quantity = Math.max(1, Math.min(10, parseInt(SUB.qs("qty"), 10) || 1))
+        items = [lineFrom(product, Math.min(quantity, Math.max(1, product._stock)))]
+        renderSingle()
+
+        if (product._stock <= 0) {
+            const nextButton = document.querySelector("#stageProduct .checkout-btn")
+            if (nextButton) nextButton.disabled = true
+            showToast("Out of stock", product.name + " is currently unavailable.", "warning")
+        }
     }
-    renderSummaryProducts();
+
+    renderSummaryProducts()
 
     SUB.onAuth((user, profile) => {
-        prefill(profile);
-        const bal = walletBalance();
-        const wp = document.querySelector(".wallet-price");
-        if (wp) wp.textContent = money(bal);
-        const wu = document.querySelector(".wallet-use");
-        if (wu) wu.style.opacity = bal > 0 ? "" : ".55";
-        calculateTotal();
-    });
-    calculateTotal();
+        prefill(profile)
+        const balance = walletBalance()
+        const walletPrice = document.querySelector(".wallet-price")
+        if (walletPrice) walletPrice.textContent = money(balance)
+        const walletLabel = document.querySelector(".wallet-use")
+        if (walletLabel) walletLabel.style.opacity = balance > 0 ? "" : ".55"
+        calculateTotal()
+    })
+
+    calculateTotal()
+    goToStep(1)
 }
 
 function runInit() {
-    initCheckout().catch(e => console.error(e)).then(() => document.body.classList.remove("bk-loading"));
-    setTimeout(() => document.body.classList.remove("bk-loading"), 10000);
+    initCheckout()
+        .catch(error => {
+            console.error("Checkout initialization failed:", error)
+            showToast("Checkout error", error.message || "Could not load checkout details.", "error")
+        })
+        .finally(() => document.body.classList.remove("bk-loading"))
+
+    setTimeout(() => document.body.classList.remove("bk-loading"), 10000)
 }
-if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", runInit);
-else runInit();
+
+// Close the confirmation modal when the backdrop or Escape key is used.
+document.addEventListener("click", event => {
+    if (event.target === $("orderReviewModal")) closeReviewModal()
+})
+
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && $("orderReviewModal")?.classList.contains("open")) closeReviewModal()
+})
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", runInit)
+} else {
+    runInit()
+}

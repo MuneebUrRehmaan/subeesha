@@ -1,50 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Buy Now | Subeesha</title>
 
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js">
-    </script>
-
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js">
-    </script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
     <link rel="stylesheet" href="../assets/css/billing.css">
     <link rel="stylesheet" href="../assets/css/navbar.css">
     <link rel="stylesheet" href="../assets/css/billing-ui.css">
     <link rel="stylesheet" href="../assets/css/sub-ui.css">
+
+    <style>
+        /* Multi-step checkout */
+        .steps { display:flex; align-items:center; justify-content:center; gap:12px; max-width:760px; margin:28px auto 20px; padding:0 18px; }
+        .steps .step { display:flex; flex-direction:column; align-items:center; gap:7px; min-width:65px; color:#8b9290; font-size:12px; font-weight:600; }
+        .steps .step-circle { width:34px; height:34px; display:grid; place-items:center; border:1px solid #d9dfdc; border-radius:50%; background:#fff; color:#7a827e; font-weight:700; }
+        .steps .step.active, .steps .step.completed { color:var(--primary,#800000); }
+        .steps .step.active .step-circle, .steps .step.completed .step-circle { color:#fff; border-color:var(--primary,#800000); background:var(--primary,#800000); }
+        .steps .step-line { height:2px; flex:1; max-width:105px; background:#e3e7e5; margin-top:-20px; }
+        .steps .step-line.active { background:var(--primary,#800000); }
+        .checkout-stage { display:none; }
+        .checkout-stage.active { display:block; animation:checkoutFade .22s ease; }
+        @keyframes checkoutFade { from { opacity:.45; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+        .checkout-actions { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:18px 0 4px; }
+        .checkout-hint { color:#78817d; font-size:13px; }
+        .checkout-btn { min-height:46px; border:0; border-radius:5px; padding:0 20px; display:inline-flex; align-items:center; justify-content:center; gap:9px; background:var(--primary,#800000); color:#fff; font:inherit; font-size:14px; font-weight:600; cursor:pointer; transition:opacity .2s,transform .2s; }
+        .checkout-btn:hover { opacity:.92; transform:translateY(-1px); }
+        .checkout-btn:disabled { opacity:.55; cursor:not-allowed; transform:none; }
+        .checkout-btn.secondary { color:#303a35; background:#f0f2f1; border:1px solid #e0e5e2; }
+        .checkout-btn ion-icon { font-size:18px; }
+        .loc-box { margin-top:12px; padding:14px; border:1px solid #e2e7e4; border-radius:6px; background:#fafcfb; }
+        .loc-box-head { display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
+        .loc-btn { min-height:40px; display:inline-flex; align-items:center; gap:8px; padding:0 14px; border:1px solid var(--primary,#800000); border-radius:4px; background:#fff; color:var(--primary,#800000); font-weight:600; cursor:pointer; }
+        .loc-btn ion-icon { font-size:18px; }
+        .loc-text { display:block; margin-top:9px; color:#68736e; font-size:12px; line-height:1.6; }
+        .loc-text.pinned { color:#18794e; }
+        .location-required { color:#8b5a00; }
+        .order-review-overlay { position:fixed; inset:0; z-index:9999; display:none; align-items:center; justify-content:center; padding:18px; background:rgba(15,22,18,.58); }
+        .order-review-overlay.open { display:flex; }
+        .order-review-modal { width:min(760px,100%); max-height:min(90vh,900px); display:flex; flex-direction:column; overflow:hidden; border-radius:8px; background:#fff; box-shadow:0 24px 80px rgba(0,0,0,.24); }
+        .review-modal-header { display:flex; align-items:flex-start; justify-content:space-between; gap:15px; padding:22px 24px 17px; border-bottom:1px solid #edf0ee; }
+        .review-eyebrow { color:var(--primary,#800000); font-size:10px; font-weight:800; letter-spacing:1.5px; }
+        .review-modal-header h2 { margin:5px 0; color:#202923; font-size:22px; }
+        .review-modal-header p { margin:0; color:#78817d; font-size:13px; }
+        .review-close { width:34px; height:34px; display:grid; place-items:center; border:0; border-radius:50%; background:#f2f4f3; color:#39433e; font-size:21px; cursor:pointer; }
+        .review-modal-content { padding:18px 24px; overflow:auto; }
+        .review-block { padding:15px 0; border-bottom:1px solid #edf0ee; }
+        .review-block:first-child { padding-top:0; }
+        .review-block:last-child { border-bottom:0; }
+        .review-block-title { display:flex; align-items:center; gap:8px; margin:0 0 12px; color:#29332e; font-size:14px; font-weight:700; }
+        .review-block-title ion-icon { color:var(--primary,#800000); font-size:18px; }
+        .review-items { display:flex; flex-direction:column; gap:12px; }
+        .review-item { display:flex; align-items:center; gap:12px; }
+        .review-item img { width:58px; height:58px; flex:0 0 58px; object-fit:cover; border-radius:4px; background:#f1f2f1; }
+        .review-item-info { min-width:0; flex:1; }
+        .review-item-info strong { display:block; color:#29332e; font-size:13px; }
+        .review-item-info span { display:block; margin-top:3px; color:#7a837f; font-size:11px; }
+        .review-item-price { color:#29332e; font-size:13px; font-weight:700; white-space:nowrap; }
+        .review-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px 18px; }
+        .review-field { min-width:0; }
+        .review-field.full { grid-column:1/-1; }
+        .review-field small { display:block; margin-bottom:3px; color:#8a938f; font-size:10px; }
+        .review-field strong { display:block; overflow-wrap:anywhere; color:#303a35; font-size:12px; font-weight:600; line-height:1.5; }
+        .review-total-row { display:flex; justify-content:space-between; gap:15px; padding:5px 0; color:#68736e; font-size:12px; }
+        .review-total-row.final { margin-top:8px; padding-top:12px; border-top:1px solid #e7ebe8; color:#202923; font-size:16px; font-weight:800; }
+        .review-total-row .negative { color:#188451; }
+        .review-modal-footer { display:flex; justify-content:flex-end; gap:10px; padding:16px 24px; border-top:1px solid #edf0ee; background:#fff; }
+        body.review-open { overflow:hidden; }
+        @media(max-width:600px) {
+            .steps { gap:5px; padding:0 8px; }
+            .steps .step { min-width:48px; font-size:10px; }
+            .steps .step-circle { width:30px; height:30px; }
+            .steps .step-line { margin-top:-17px; }
+            .checkout-actions { align-items:stretch; flex-wrap:wrap; }
+            .checkout-actions .checkout-btn { flex:1; }
+            .checkout-hint { width:100%; }
+            .review-grid { grid-template-columns:1fr; }
+            .review-field.full { grid-column:auto; }
+            .review-modal-header, .review-modal-content { padding-left:17px; padding-right:17px; }
+            .review-modal-footer { padding:13px 17px; flex-direction:column-reverse; }
+            .review-modal-footer .checkout-btn { width:100%; }
+        }
+    </style>
 </head>
 
 <body data-page="billing" class="bk-loading">
-
     <div class="toast-container" id="toastContainer"></div>
 
+    <!-- TOP BAR -->
+    <div class="sb-top">
+        <span><ion-icon name="shield-checkmark-outline"></ion-icon> Quality Products</span>
+        <span><ion-icon name="car-outline"></ion-icon> Fast Delivery Across Pakistan</span>
+        <span><ion-icon name="gift-outline"></ion-icon> Earn Rewards With Every Order</span>
+    </div>
 
-    <!-- ================================
-         SAME INDEX.HTML HEADER
-    ================================= -->
-
-    <!-- ===== TOP BAR ===== -->
-    <div class="sb-top"><span><ion-icon name="shield-checkmark-outline"></ion-icon> Quality
-            Products</span><span><ion-icon name="car-outline"></ion-icon> Fast Delivery Across
-            Pakistan</span><span><ion-icon name="gift-outline"></ion-icon> Earn Rewards With Every Order</span></div>
-    <!-- ===== NAVBAR (shared) ===== -->
+    <!-- NAVBAR -->
     <div class="sb-header" id="sbHeader" role="banner">
-        <div class="sb-nav"><a href="../index.html" class="sb-brand" aria-label="Subeesha Home"><span
-                    class="sb-logo"><img src="../assets/images/logo.jpg"
-                        alt="Subeesha - Shop More, Live Better"></span></a>
+        <div class="sb-nav">
+            <a href="../index.html" class="sb-brand" aria-label="Subeesha Home">
+                <span class="sb-logo"><img src="../assets/images/logo.jpg" alt="Subeesha - Shop More, Live Better"></span>
+            </a>
             <ul class="sb-links" id="navLinks">
                 <li><a href="../index.html">Home</a></li>
                 <li><a href="../page/Categories.html">Categories</a></li>
-                <li class="sb-has-submenu"><button class="sb-nav-trigger" type="button" aria-haspopup="true"
-                        aria-expanded="false">Products <ion-icon name="chevron-down-outline"
-                            aria-hidden="true"></ion-icon></button>
-                    <div class="sb-submenu"><a href="../page/shop.html">All Products</a><a
-                            href="../page/new-arrivals.html">New Arrivals</a></div>
+                <li class="sb-has-submenu">
+                    <button class="sb-nav-trigger" type="button" aria-haspopup="true" aria-expanded="false">Products <ion-icon name="chevron-down-outline" aria-hidden="true"></ion-icon></button>
+                    <div class="sb-submenu"><a href="../page/shop.html">All Products</a><a href="../page/new-arrivals.html">New Arrivals</a></div>
                 </li>
                 <li><a href="../page/flashsale.html">Flash Sale</a></li>
                 <li><a href="../page/loyalty.html">Rewards</a></li>
@@ -53,980 +117,328 @@
             </ul>
             <div class="sb-tools">
                 <div class="sb-sw">
-                    <form class="sb-search" id="sbSearch" autocomplete="off" role="search"><ion-icon
-                            name="search-outline"></ion-icon><input id="sbInput" type="search"
-                            placeholder="Search products, categories..." autocomplete="off"
-                            aria-label="Search products"><button type="submit" aria-label="Submit search"><ion-icon
-                                name="arrow-forward-outline"></ion-icon></button></form>
+                    <form class="sb-search" id="sbSearch" autocomplete="off" role="search">
+                        <ion-icon name="search-outline"></ion-icon>
+                        <input id="sbInput" type="search" placeholder="Search products, categories..." autocomplete="off" aria-label="Search products">
+                        <button type="submit" aria-label="Submit search"><ion-icon name="arrow-forward-outline"></ion-icon></button>
+                    </form>
                     <div class="sb-suggest" id="sbSuggest"></div>
                 </div>
-                <div class="sb-actions"><button class="sb-icon sb-stoggle" id="sbSToggle" type="button"
-                        aria-label="Search"><ion-icon name="search-outline"></ion-icon></button><a class="sb-icon"
-                        href="../page/profile.html#wishlist" aria-label="Wishlist"><ion-icon
-                            name="heart-outline"></ion-icon></a><a class="sb-icon" id="sbUser" href="../account.html"
-                        aria-label="Account"><ion-icon name="person-outline"></ion-icon></a><button class="sb-icon"
-                        id="sbCart" type="button" aria-label="Cart"><ion-icon name="bag-handle-outline"></ion-icon><span
-                            class="sb-count" id="cartCount">0</span></button><button class="sb-icon sb-menu" id="sbMenu"
-                        type="button" aria-label="Menu"><ion-icon name="menu-outline"></ion-icon></button></div>
+                <div class="sb-actions">
+                    <button class="sb-icon sb-stoggle" id="sbSToggle" type="button" aria-label="Search"><ion-icon name="search-outline"></ion-icon></button>
+                    <a class="sb-icon" href="../page/profile.html#wishlist" aria-label="Wishlist"><ion-icon name="heart-outline"></ion-icon></a>
+                    <a class="sb-icon" id="sbUser" href="../account.html" aria-label="Account"><ion-icon name="person-outline"></ion-icon></a>
+                    <button class="sb-icon" id="sbCart" type="button" aria-label="Cart"><ion-icon name="bag-handle-outline"></ion-icon><span class="sb-count" id="cartCount">0</span></button>
+                    <button class="sb-icon sb-menu" id="sbMenu" type="button" aria-label="Menu"><ion-icon name="menu-outline"></ion-icon></button>
+                </div>
             </div>
         </div>
     </div>
+
     <div class="sb-msearch" id="sbMSearch">
-        <div class="sb-mtop"><button type="button" id="sbMBack" aria-label="Close search"><ion-icon
-                    name="arrow-back-outline"></ion-icon></button>
-            <form class="sb-search" id="sbMForm" autocomplete="off"><ion-icon name="search-outline"></ion-icon><input
-                    id="sbMInput" type="search" placeholder="Search products, categories..." autocomplete="off"
-                    aria-label="Search products"><button type="submit" aria-label="Search"><ion-icon
-                        name="arrow-forward-outline"></ion-icon></button></form>
+        <div class="sb-mtop">
+            <button type="button" id="sbMBack" aria-label="Close search"><ion-icon name="arrow-back-outline"></ion-icon></button>
+            <form class="sb-search" id="sbMForm" autocomplete="off">
+                <ion-icon name="search-outline"></ion-icon>
+                <input id="sbMInput" type="search" placeholder="Search products, categories..." autocomplete="off" aria-label="Search products">
+                <button type="submit" aria-label="Search"><ion-icon name="arrow-forward-outline"></ion-icon></button>
+            </form>
         </div>
         <div class="sb-mlist" id="sbMList"></div>
     </div>
 
-
-
-    <!-- CHECKOUT STEPS -->
-
-    <div class="steps">
-
-        <div class="step active">
-            <div class="step-circle">1</div>
-            <span>Product</span>
-        </div>
-
+    <!-- FOUR CHECKOUT STEPS -->
+    <div class="steps" aria-label="Checkout progress">
+        <div class="step active" data-step="1"><div class="step-circle">1</div><span>Product</span></div>
         <div class="step-line"></div>
-
-        <div class="step active">
-            <div class="step-circle">2</div>
-            <span>Billing</span>
-        </div>
-
+        <div class="step" data-step="2"><div class="step-circle">2</div><span>Location</span></div>
         <div class="step-line"></div>
-
-        <div class="step">
-            <div class="step-circle">3</div>
-            <span>Complete</span>
-        </div>
-
+        <div class="step" data-step="3"><div class="step-circle">3</div><span>Billing</span></div>
+        <div class="step-line"></div>
+        <div class="step" data-step="4"><div class="step-circle">4</div><span>Confirm</span></div>
     </div>
 
-
     <section class="page-title">
-
         <h1>Complete Your Purchase</h1>
-
-        <p>
-            Review your product, choose your preferred options and complete your order.
-        </p>
-
+        <p>Review your product, add your delivery location and confirm your order.</p>
     </section>
 
-
     <main class="container">
-
         <div class="left">
 
-
-            <!-- PRODUCT SUMMARY -->
-
-            <section class="card">
-
-                <div class="card-heading">
-
-                    <ion-icon name="bag-handle-outline"></ion-icon>
-
-                    <div>
-                        <h2>Product Summary</h2>
-                        <p>Select your preferred product options</p>
+            <!-- STEP 1: PRODUCT -->
+            <div class="checkout-stage active" id="stageProduct">
+                <section class="card">
+                    <div class="card-heading">
+                        <ion-icon name="bag-handle-outline"></ion-icon>
+                        <div><h2>Product Summary</h2><p>Select your preferred product options</p></div>
                     </div>
-
-                </div>
-
-
-                <div class="product-area">
-
-
-                    <div class="product-gallery">
-
-                        <img id="mainProductImage" class="main-image"
-                            src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85"
-                            alt="Product">
-
-                        <div class="image-note">
-
-                            <ion-icon name="images-outline"></ion-icon>
-
-                            Product image preview
-
+                    <div class="product-area">
+                        <div class="product-gallery">
+                            <img id="mainProductImage" class="main-image" src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85" alt="Product">
+                            <div class="image-note"><ion-icon name="images-outline"></ion-icon> Product image preview</div>
                         </div>
-
-                    </div>
-
-
-                    <div class="product-info">
-
-                        <h2 id="productName">
-                            Premium Cotton T-Shirt
-                        </h2>
-
-
-                        <div class="rating">
-
-                            <span class="stars">★★★★★</span>
-
-                            <span>4.8 (126 Reviews)</span>
-
-                        </div>
-
-
-                        <div class="price">
-
-                            <span class="current-price" id="productPrice">
-                                Rs. 1,499
-                            </span>
-
-                            <span class="old-price">
-                                Rs. 1,999
-                            </span>
-
-                            <span class="sale-badge">
-                                25% OFF
-                            </span>
-
-                        </div>
-
-
-                        <div class="stock">
-
-                            <ion-icon name="checkmark-circle"></ion-icon>
-
-                            In Stock
-
-                        </div>
-
-
-                        <div class="option-title">
-
-                            <span>Select Color</span>
-
-                            <span class="selected-value" id="selectedColor">
-                                Black
-                            </span>
-
-                        </div>
-
-
-                        <div class="colors">
-
-                            <button class="color-option active"
-                                onclick="selectColor('Black','https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85',this)">
-                                <span class="color-inner black"></span>
-                            </button>
-
-                            <button class="color-option"
-                                onclick="selectColor('White','https://images.unsplash.com/photo-1603252110481-7ba873bf42ab?auto=format&fit=crop&w=900&q=85',this)">
-                                <span class="color-inner white"></span>
-                            </button>
-
-                            <button class="color-option"
-                                onclick="selectColor('Red','https://images.unsplash.com/photo-1562157873-818bc0726f68?auto=format&fit=crop&w=900&q=85',this)">
-                                <span class="color-inner red"></span>
-                            </button>
-
-                            <button class="color-option"
-                                onclick="selectColor('Blue','https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=900&q=85',this)">
-                                <span class="color-inner blue"></span>
-                            </button>
-
-                            <button class="color-option"
-                                onclick="selectColor('Green','https://images.unsplash.com/photo-1503341504253-dff4815485f1?auto=format&fit=crop&w=900&q=85',this)">
-                                <span class="color-inner green"></span>
-                            </button>
-
-                            <button class="color-option"
-                                onclick="selectColor('Brown','https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=900&q=85',this)">
-                                <span class="color-inner brown"></span>
-                            </button>
-
-                        </div>
-
-
-                        <div class="option-title">
-
-                            <span>Select Size</span>
-
-                            <span class="selected-value" id="selectedSize">
-                                L
-                            </span>
-
-                        </div>
-
-
-                        <div class="sizes">
-
-                            <button class="size" onclick="selectSize('S',this)">S</button>
-
-                            <button class="size" onclick="selectSize('M',this)">M</button>
-
-                            <button class="size active" onclick="selectSize('L',this)">L</button>
-
-                            <button class="size" onclick="selectSize('XL',this)">XL</button>
-
-                            <button class="size" onclick="selectSize('XXL',this)">XXL</button>
-
-                        </div>
-
-
-                        <div class="option-title">
-                            <span>Quantity</span>
-                        </div>
-
-
-                        <div class="quantity-box">
-
-                            <button class="qty-btn" onclick="changeQuantity(-1)">
-                                −
-                            </button>
-
-                            <span class="qty-number" id="quantity">
-                                1
-                            </span>
-
-                            <button class="qty-btn" onclick="changeQuantity(1)">
-                                +
-                            </button>
-
-                        </div>
-
-
-                        <div class="features">
-
-                            <div class="feature">
-                                <ion-icon name="shield-checkmark-outline"></ion-icon>
-                                Secure Payment
+                        <div class="product-info">
+                            <h2 id="productName">Premium Cotton T-Shirt</h2>
+                            <div class="rating"><span class="stars">★★★★★</span><span>4.8 (126 Reviews)</span></div>
+                            <div class="price">
+                                <span class="current-price" id="productPrice">Rs. 1,499</span>
+                                <span class="old-price">Rs. 1,999</span>
+                                <span class="sale-badge">25% OFF</span>
                             </div>
-
-                            <div class="feature">
-                                <ion-icon name="car-outline"></ion-icon>
-                                Fast Delivery
+                            <div class="stock"><ion-icon name="checkmark-circle"></ion-icon> In Stock</div>
+                            <div class="option-title"><span>Select Color</span><span class="selected-value" id="selectedColor">Black</span></div>
+                            <div class="colors">
+                                <button class="color-option active" onclick="selectColor('Black','https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85',this)" aria-label="Black"><span class="color-inner black"></span></button>
+                                <button class="color-option" onclick="selectColor('White','https://images.unsplash.com/photo-1603252110481-7ba873bf42ab?auto=format&fit=crop&w=900&q=85',this)" aria-label="White"><span class="color-inner white"></span></button>
+                                <button class="color-option" onclick="selectColor('Red','https://images.unsplash.com/photo-1562157873-818bc0726f68?auto=format&fit=crop&w=900&q=85',this)" aria-label="Red"><span class="color-inner red"></span></button>
+                                <button class="color-option" onclick="selectColor('Blue','https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=900&q=85',this)" aria-label="Blue"><span class="color-inner blue"></span></button>
+                                <button class="color-option" onclick="selectColor('Green','https://images.unsplash.com/photo-1503341504253-dff4815485f1?auto=format&fit=crop&w=900&q=85',this)" aria-label="Green"><span class="color-inner green"></span></button>
+                                <button class="color-option" onclick="selectColor('Brown','https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=900&q=85',this)" aria-label="Brown"><span class="color-inner brown"></span></button>
                             </div>
-
-                            <div class="feature">
-                                <ion-icon name="refresh-outline"></ion-icon>
-                                Easy Returns
+                            <div class="option-title"><span>Select Size</span><span class="selected-value" id="selectedSize">L</span></div>
+                            <div class="sizes">
+                                <button class="size" onclick="selectSize('S',this)">S</button>
+                                <button class="size" onclick="selectSize('M',this)">M</button>
+                                <button class="size active" onclick="selectSize('L',this)">L</button>
+                                <button class="size" onclick="selectSize('XL',this)">XL</button>
+                                <button class="size" onclick="selectSize('XXL',this)">XXL</button>
                             </div>
-
-                            <div class="feature">
-                                <ion-icon name="gift-outline"></ion-icon>
-                                Earn Rewards
+                            <div class="option-title"><span>Quantity</span></div>
+                            <div class="quantity-box">
+                                <button class="qty-btn" onclick="changeQuantity(-1)">−</button>
+                                <span class="qty-number" id="quantity">1</span>
+                                <button class="qty-btn" onclick="changeQuantity(1)">+</button>
                             </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- CUSTOMER INFORMATION -->
-
-            <section class="card">
-
-                <div class="card-heading">
-
-                    <ion-icon name="person-outline"></ion-icon>
-
-                    <div>
-                        <h2>Customer Information</h2>
-                        <p>Enter your contact information</p>
-                    </div>
-
-                </div>
-
-
-                <div class="form-grid">
-
-                    <div class="form-group">
-
-                        <label>
-                            First Name <span class="required">*</span>
-                        </label>
-
-                        <div class="input-wrap">
-
-                            <ion-icon name="person-outline"></ion-icon>
-
-                            <input type="text" id="firstName" placeholder="First name">
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label>
-                            Last Name <span class="required">*</span>
-                        </label>
-
-                        <div class="input-wrap">
-
-                            <ion-icon name="person-outline"></ion-icon>
-
-                            <input type="text" id="lastName" placeholder="Last name">
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label>
-                            Email Address <span class="required">*</span>
-                        </label>
-
-                        <div class="input-wrap">
-
-                            <ion-icon name="mail-outline"></ion-icon>
-
-                            <input type="email" id="email" placeholder="example@email.com">
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label>
-                            Mobile Number <span class="required">*</span>
-                        </label>
-
-                        <div class="input-wrap">
-
-                            <ion-icon name="call-outline"></ion-icon>
-
-                            <input type="tel" id="mobile" placeholder="03XX XXXXXXX">
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- SHIPPING ADDRESS -->
-
-            <section class="card">
-
-                <div class="card-heading">
-
-                    <ion-icon name="location-outline"></ion-icon>
-
-                    <div>
-                        <h2>Shipping Address</h2>
-                        <p>Enter your delivery address</p>
-                    </div>
-
-                </div>
-
-
-                <div class="form-grid">
-
-                    <div class="form-group">
-
-                        <label>
-                            Province <span class="required">*</span>
-                        </label>
-
-                        <div class="input-wrap">
-
-                            <ion-icon name="map-outline"></ion-icon>
-
-                            <select id="province">
-
-                                <option value="">Select Province</option>
-                                <option>Sindh</option>
-                                <option>Punjab</option>
-                                <option>Balochistan</option>
-                                <option>Khyber Pakhtunkhwa</option>
-                                <option>Islamabad Capital Territory</option>
-                                <option>Gilgit-Baltistan</option>
-                                <option>Azad Kashmir</option>
-
-                            </select>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label>
-                            City <span class="required">*</span>
-                        </label>
-
-                        <div class="input-wrap">
-
-                            <ion-icon name="business-outline"></ion-icon>
-
-                            <select id="city">
-
-                                <option value="">Select City</option>
-                                <option>Abbottabad</option>
-                                <option>Attock</option>
-                                <option>Badin</option>
-                                <option>Bahawalpur</option>
-                                <option>Bannu</option>
-                                <option>Burewala</option>
-                                <option>Charsadda</option>
-                                <option>Chiniot</option>
-                                <option>Chitral</option>
-                                <option>Dadu</option>
-                                <option>Dera Ghazi Khan</option>
-                                <option>Dera Ismail Khan</option>
-                                <option>Faisalabad</option>
-                                <option>Gilgit</option>
-                                <option>Gujranwala</option>
-                                <option>Gujrat</option>
-                                <option>Gwadar</option>
-                                <option>Hafizabad</option>
-                                <option>Hub</option>
-                                <option>Hunza</option>
-                                <option>Hyderabad</option>
-                                <option>Islamabad</option>
-                                <option>Jacobabad</option>
-                                <option>Jamshoro</option>
-                                <option>Jhang</option>
-                                <option>Jhelum</option>
-                                <option>Karachi</option>
-                                <option>Kasur</option>
-                                <option>Khairpur</option>
-                                <option>Khanewal</option>
-                                <option>Khuzdar</option>
-                                <option>Kohat</option>
-                                <option>Kotri</option>
-                                <option>Lahore</option>
-                                <option>Larkana</option>
-                                <option>Mandi Bahauddin</option>
-                                <option>Mansehra</option>
-                                <option>Mardan</option>
-                                <option>Mianwali</option>
-                                <option>Mingora</option>
-                                <option>Mirpur</option>
-                                <option>Mirpurkhas</option>
-                                <option>Multan</option>
-                                <option>Murree</option>
-                                <option>Muzaffarabad</option>
-                                <option>Muzaffargarh</option>
-                                <option>Narowal</option>
-                                <option>Nawabshah</option>
-                                <option>Nowshera</option>
-                                <option>Okara</option>
-                                <option>Peshawar</option>
-                                <option>Quetta</option>
-                                <option>Rahim Yar Khan</option>
-                                <option>Rawalpindi</option>
-                                <option>Sadiqabad</option>
-                                <option>Sahiwal</option>
-                                <option>Sargodha</option>
-                                <option>Sheikhupura</option>
-                                <option>Shikarpur</option>
-                                <option>Sialkot</option>
-                                <option>Sibi</option>
-                                <option>Skardu</option>
-                                <option>Sukkur</option>
-                                <option>Swabi</option>
-                                <option>Tando Allahyar</option>
-                                <option>Tando Muhammad Khan</option>
-                                <option>Thatta</option>
-                                <option>Turbat</option>
-                                <option>Vehari</option>
-                                <option>Wah Cantt</option>
-                                <option>Zhob</option>
-                            </select>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label>Area / Zone</label>
-
-                        <div class="input-wrap">
-
-                            <ion-icon name="navigate-outline"></ion-icon>
-
-                            <input type="text" id="area" placeholder="Area / Zone">
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label>Postal Code</label>
-
-                        <div class="input-wrap">
-
-                            <ion-icon name="mail-unread-outline"></ion-icon>
-
-                            <input type="text" id="postal" placeholder="Postal code">
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="form-group full">
-
-                        <label>
-                            Complete Address
-                            <span class="required">*</span>
-                        </label>
-
-                        <textarea id="address" placeholder="House / apartment number, street, road..."></textarea>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- PAYMENT METHOD -->
-
-            <section class="card">
-
-                <div class="card-heading">
-
-                    <ion-icon name="card-outline"></ion-icon>
-
-                    <div>
-                        <h2>Payment Method</h2>
-                        <p>Select your preferred payment method</p>
-                    </div>
-
-                </div>
-
-
-                <div class="payment selected" onclick="selectPayment(this)">
-
-                    <div class="payment-header">
-
-                        <input type="radio" name="payment" class="payment-radio" checked>
-
-                        <div class="payment-icon">
-                            <ion-icon name="cash-outline"></ion-icon>
-                        </div>
-
-                        <div class="payment-info">
-                            <strong>Cash on Delivery</strong>
-                            <span>Pay when your order arrives</span>
-                        </div>
-
-                    </div>
-
-                    <div class="payment-body">
-                        <small>Pay cash to the delivery rider.</small>
-                    </div>
-
-                </div>
-
-
-                <div class="payment" onclick="selectPayment(this)">
-
-                    <div class="payment-header">
-
-                        <input type="radio" name="payment" class="payment-radio">
-
-                        <div class="payment-icon">
-                            <ion-icon name="phone-portrait-outline"></ion-icon>
-                        </div>
-
-                        <div class="payment-info">
-                            <strong>Easypaisa</strong>
-                            <span>Pay using Easypaisa</span>
-                        </div>
-
-                    </div>
-
-                    <div class="payment-body">
-                        <input type="tel" placeholder="Easypaisa mobile number">
-                    </div>
-
-                </div>
-
-
-                <div class="payment" onclick="selectPayment(this)">
-
-                    <div class="payment-header">
-
-                        <input type="radio" name="payment" class="payment-radio">
-
-                        <div class="payment-icon">
-                            <ion-icon name="phone-portrait-outline"></ion-icon>
-                        </div>
-
-                        <div class="payment-info">
-                            <strong>JazzCash</strong>
-                            <span>Pay using JazzCash</span>
-                        </div>
-
-                    </div>
-
-                    <div class="payment-body">
-                        <input type="tel" placeholder="JazzCash mobile number">
-                    </div>
-
-                </div>
-
-
-                <div class="payment" onclick="selectPayment(this)">
-
-                    <div class="payment-header">
-
-                        <input type="radio" name="payment" class="payment-radio">
-
-                        <div class="payment-icon">
-                            <ion-icon name="card-outline"></ion-icon>
-                        </div>
-
-                        <div class="payment-info">
-                            <strong>Debit / Credit Card</strong>
-                            <span>Visa / Mastercard</span>
-                        </div>
-
-                    </div>
-
-                    <div class="payment-body">
-                        <input type="text" placeholder="Card number">
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- WALLET -->
-
-            <section class="card">
-
-                <div class="card-heading">
-
-                    <ion-icon name="wallet-outline"></ion-icon>
-
-                    <div>
-                        <h2>Wallet & Rewards</h2>
-                        <p>Use your available wallet balance</p>
-                    </div>
-
-                </div>
-
-
-                <div class="wallet">
-
-                    <div class="wallet-top">
-
-                        <div>
-
-                            <div class="wallet-price">
-                                Rs. 850
+                            <div class="features">
+                                <div class="feature"><ion-icon name="shield-checkmark-outline"></ion-icon> Secure Payment</div>
+                                <div class="feature"><ion-icon name="car-outline"></ion-icon> Fast Delivery</div>
+                                <div class="feature"><ion-icon name="refresh-outline"></ion-icon> Easy Returns</div>
+                                <div class="feature"><ion-icon name="gift-outline"></ion-icon> Earn Rewards</div>
                             </div>
-
-                            <small>
-                                Available wallet balance
-                            </small>
-
                         </div>
-
-                        <ion-icon name="wallet" style="color:var(--primary);font-size:35px;"></ion-icon>
-
                     </div>
-
-
-                    <label class="wallet-use">
-
-                        <input type="checkbox" id="useWallet" onchange="toggleWallet()">
-
-                        Use wallet balance for this order
-
-                    </label>
-
+                </section>
+                <div class="checkout-actions">
+                    <span class="checkout-hint">Review your product and selected options.</span>
+                    <button type="button" class="checkout-btn" onclick="nextToLocation()">Continue to Delivery <ion-icon name="arrow-forward-outline"></ion-icon></button>
                 </div>
+            </div>
 
-            </section>
+            <!-- STEP 2: CUSTOMER + DELIVERY LOCATION -->
+            <div class="checkout-stage" id="stageLocation">
+                <section class="card">
+                    <div class="card-heading">
+                        <ion-icon name="person-outline"></ion-icon>
+                        <div><h2>Customer Information</h2><p>Enter your contact information</p></div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>First Name <span class="required">*</span></label>
+                            <div class="input-wrap"><ion-icon name="person-outline"></ion-icon><input type="text" id="firstName" placeholder="First name" autocomplete="given-name"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name <span class="required">*</span></label>
+                            <div class="input-wrap"><ion-icon name="person-outline"></ion-icon><input type="text" id="lastName" placeholder="Last name" autocomplete="family-name"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address <span class="required">*</span></label>
+                            <div class="input-wrap"><ion-icon name="mail-outline"></ion-icon><input type="email" id="email" placeholder="example@email.com" autocomplete="email"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Mobile Number <span class="required">*</span></label>
+                            <div class="input-wrap"><ion-icon name="call-outline"></ion-icon><input type="tel" id="mobile" placeholder="03XX XXXXXXX" autocomplete="tel"></div>
+                        </div>
+                    </div>
+                </section>
 
+                <section class="card">
+                    <div class="card-heading">
+                        <ion-icon name="location-outline"></ion-icon>
+                        <div><h2>Delivery Location</h2><p>Pin your exact location on the map or enter your complete address manually</p></div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Province <span class="required">*</span></label>
+                            <div class="input-wrap">
+                                <ion-icon name="map-outline"></ion-icon>
+                                <select id="province">
+                                    <option value="">Select Province</option>
+                                    <option>Sindh</option><option>Punjab</option><option>Balochistan</option>
+                                    <option>Khyber Pakhtunkhwa</option><option>Islamabad Capital Territory</option>
+                                    <option>Gilgit-Baltistan</option><option>Azad Kashmir</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>City <span class="required">*</span></label>
+                            <div class="input-wrap">
+                                <ion-icon name="business-outline"></ion-icon>
+                                <select id="city">
+                                    <option value="">Select City</option>
+                                    <option>Abbottabad</option><option>Attock</option><option>Badin</option><option>Bahawalpur</option>
+                                    <option>Bannu</option><option>Burewala</option><option>Charsadda</option><option>Chiniot</option>
+                                    <option>Chitral</option><option>Dadu</option><option>Dera Ghazi Khan</option><option>Dera Ismail Khan</option>
+                                    <option>Faisalabad</option><option>Gilgit</option><option>Gujranwala</option><option>Gujrat</option>
+                                    <option>Gwadar</option><option>Hafizabad</option><option>Hub</option><option>Hunza</option>
+                                    <option>Hyderabad</option><option>Islamabad</option><option>Jacobabad</option><option>Jamshoro</option>
+                                    <option>Jhang</option><option>Jhelum</option><option>Karachi</option><option>Kasur</option>
+                                    <option>Khairpur</option><option>Khanewal</option><option>Khuzdar</option><option>Kohat</option>
+                                    <option>Kotri</option><option>Lahore</option><option>Larkana</option><option>Mandi Bahauddin</option>
+                                    <option>Mansehra</option><option>Mardan</option><option>Mianwali</option><option>Mingora</option>
+                                    <option>Mirpur</option><option>Mirpurkhas</option><option>Multan</option><option>Murree</option>
+                                    <option>Muzaffarabad</option><option>Muzaffargarh</option><option>Narowal</option><option>Nawabshah</option>
+                                    <option>Nowshera</option><option>Okara</option><option>Peshawar</option><option>Quetta</option>
+                                    <option>Rahim Yar Khan</option><option>Rawalpindi</option><option>Sadiqabad</option><option>Sahiwal</option>
+                                    <option>Sargodha</option><option>Sheikhupura</option><option>Shikarpur</option><option>Sialkot</option>
+                                    <option>Sibi</option><option>Skardu</option><option>Sukkur</option><option>Swabi</option>
+                                    <option>Tando Allahyar</option><option>Tando Muhammad Khan</option><option>Thatta</option><option>Turbat</option>
+                                    <option>Vehari</option><option>Wah Cantt</option><option>Zhob</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Area / Zone <span class="required">*</span></label>
+                            <div class="input-wrap"><ion-icon name="navigate-outline"></ion-icon><input type="text" id="area" placeholder="Area / locality / sector"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Postal Code</label>
+                            <div class="input-wrap"><ion-icon name="mail-unread-outline"></ion-icon><input type="text" id="postal" placeholder="Postal code" inputmode="numeric"></div>
+                        </div>
+                        <div class="form-group full">
+                            <label>Complete Address <span class="required" id="addressRequiredMark">*</span></label>
+                            <textarea id="address" placeholder="House / apartment number, street, road, block, nearby landmark..."></textarea>
+                            <small style="display:block;margin-top:6px;color:#78817d">Required when you do not pin your location on the map. Enter a complete, identifiable delivery address.</small>
+                        </div>
+                    </div>
+                    <div class="loc-box" id="locBox">
+                        <div class="loc-box-head">
+                            <button type="button" class="loc-btn" id="locBtn"><ion-icon name="location-outline"></ion-icon> Pin Exact Location on Map</button>
+                            <span style="font-size:12px;color:#78817d">Or enter the exact address in the field above.</span>
+                        </div>
+                        <span class="loc-text location-required" id="locText">Required: pin your exact map location OR enter your complete address manually.</span>
+                    </div>
+                </section>
+
+                <div class="checkout-actions">
+                    <button type="button" class="checkout-btn secondary" onclick="goToStep(1)"><ion-icon name="arrow-back-outline"></ion-icon> Back</button>
+                    <button type="button" class="checkout-btn" onclick="nextToPayment()">Continue to Billing <ion-icon name="arrow-forward-outline"></ion-icon></button>
+                </div>
+            </div>
+
+            <!-- STEP 3: BILLING -->
+            <div class="checkout-stage" id="stagePayment">
+                <section class="card">
+                    <div class="card-heading">
+                        <ion-icon name="card-outline"></ion-icon>
+                        <div><h2>Payment Method</h2><p>Cash on Delivery is currently available</p></div>
+                    </div>
+                    <div class="payment selected" onclick="selectPayment(this)">
+                        <div class="payment-header">
+                            <input type="radio" name="payment" class="payment-radio" checked>
+                            <div class="payment-icon"><ion-icon name="cash-outline"></ion-icon></div>
+                            <div class="payment-info"><strong>Cash on Delivery</strong><span>Pay when your order arrives</span></div>
+                        </div>
+                        <div class="payment-body"><small>Pay cash to the delivery rider when your order is delivered.</small></div>
+                    </div>
+                    <p id="paymentUnavailable" hidden>Cash on Delivery is currently unavailable.</p>
+                </section>
+
+                <section class="card">
+                    <div class="card-heading">
+                        <ion-icon name="wallet-outline"></ion-icon>
+                        <div><h2>Wallet &amp; Rewards</h2><p>Use your available wallet balance</p></div>
+                    </div>
+                    <div class="wallet">
+                        <div class="wallet-top">
+                            <div><div class="wallet-price">Rs. 0</div><small>Available wallet balance</small></div>
+                            <ion-icon name="wallet" style="color:var(--primary);font-size:35px;"></ion-icon>
+                        </div>
+                        <label class="wallet-use"><input type="checkbox" id="useWallet" onchange="toggleWallet()"> Use wallet balance for this order</label>
+                    </div>
+                </section>
+
+                <div class="checkout-actions">
+                    <button type="button" class="checkout-btn secondary" onclick="goToStep(2)"><ion-icon name="arrow-back-outline"></ion-icon> Back</button>
+                    <button type="button" class="checkout-btn" id="reviewOrderBtn" onclick="placeOrder()">Review Order <ion-icon name="arrow-forward-outline"></ion-icon></button>
+                </div>
+            </div>
         </div>
 
-
-        <!-- RIGHT SIDE -->
-
+        <!-- RIGHT SIDE: ORDER SUMMARY -->
         <aside class="right">
-
             <section class="card">
-
                 <div class="card-heading">
-
                     <ion-icon name="receipt-outline"></ion-icon>
-
-                    <div>
-                        <h2>Order Summary</h2>
-                        <p>Review your purchase</p>
-                    </div>
-
+                    <div><h2>Order Summary</h2><p>Review your purchase</p></div>
                 </div>
-
-
                 <div class="summary-product">
-
-                    <img id="summaryImage"
-                        src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=300&q=80"
-                        alt="Product">
-
+                    <img id="summaryImage" src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=300&q=80" alt="Product">
                     <div class="summary-product-info">
-
-                        <strong id="summaryName">
-                            Premium Cotton T-Shirt
-                        </strong>
-
-                        <span>
-                            Color: <b id="summaryColor">Black</b>
-                        </span>
-
-                        <span>
-                            Size: <b id="summarySize">L</b>
-                        </span>
-
-                        <span>
-                            Qty: <b id="summaryQty">1</b>
-                        </span>
-
+                        <strong id="summaryName">Premium Cotton T-Shirt</strong>
+                        <span>Color: <b id="summaryColor">Black</b></span>
+                        <span>Size: <b id="summarySize">L</b></span>
+                        <span>Qty: <b id="summaryQty">1</b></span>
                     </div>
-
-                    <div class="summary-price" id="summaryPrice">
-                        Rs. 1,499
-                    </div>
-
+                    <div class="summary-price" id="summaryPrice">Rs. 1,499</div>
                 </div>
-
-
                 <div class="coupon">
-
                     <input type="text" id="coupon" placeholder="Promo code">
-
-                    <button onclick="applyCoupon()">
-                        Apply
-                    </button>
-
+                    <button type="button" onclick="applyCoupon()">Apply</button>
                 </div>
-
-
-                <div class="summary-row">
-                    <span>Subtotal</span>
-                    <span id="subtotal">Rs. 1,499</span>
-                </div>
-
-                <div class="summary-row">
-                    <span>Shipping</span>
-                    <span id="shipping">Rs. 150</span>
-                </div>
-
-                <div class="summary-row">
-                    <span>Discount</span>
-                    <span class="discount" id="discount">- Rs. 0</span>
-                </div>
-
-                <div class="summary-row">
-                    <span>Wallet</span>
-                    <span class="discount" id="walletDiscount">- Rs. 0</span>
-                </div>
-
-
-                <div class="total">
-                    <strong>Total</strong>
-                    <span id="total">Rs. 1,649</span>
-                </div>
-
-
-                <button class="place-order" onclick="placeOrder()">
-
-                    <ion-icon name="lock-closed-outline"></ion-icon>
-
-                    Place Order
-
-                </button>
-
-
-                <div class="secure-note">
-
-                    <ion-icon name="shield-checkmark-outline"></ion-icon>
-
-                    Secure and protected checkout
-
-                </div>
-
+                <div class="summary-row"><span>Subtotal</span><span id="subtotal">Rs. 1,499</span></div>
+                <div class="summary-row"><span>Shipping</span><span id="shipping">Rs. 250</span></div>
+                <div class="summary-row"><span>Discount</span><span class="discount" id="discount">- Rs. 0</span></div>
+                <div class="summary-row"><span>Wallet</span><span class="discount" id="walletDiscount">- Rs. 0</span></div>
+                <div class="total"><strong>Total</strong><span id="total">Rs. 1,749</span></div>
+                <div class="secure-note"><ion-icon name="shield-checkmark-outline"></ion-icon> Secure and protected checkout</div>
             </section>
-
 
             <section class="card">
-
-                <div class="card-heading">
-
-                    <ion-icon name="sparkles-outline"></ion-icon>
-
-                    <div>
-                        <h2>Why Shop With Subeesha?</h2>
-                    </div>
-
-                </div>
-
-
+                <div class="card-heading"><ion-icon name="sparkles-outline"></ion-icon><div><h2>Why Shop With Subeesha?</h2></div></div>
                 <div style="display:flex;flex-direction:column;gap:18px;">
-
-                    <div class="feature">
-
-                        <ion-icon name="shield-checkmark-outline"></ion-icon>
-
-                        Secure Shopping
-
-                    </div>
-
-                    <div class="feature">
-
-                        <ion-icon name="car-outline"></ion-icon>
-
-                        Fast Delivery
-
-                    </div>
-
-                    <div class="feature">
-
-                        <ion-icon name="gift-outline"></ion-icon>
-
-                        Earn Rewards
-
-                    </div>
-
+                    <div class="feature"><ion-icon name="shield-checkmark-outline"></ion-icon> Secure Shopping</div>
+                    <div class="feature"><ion-icon name="car-outline"></ion-icon> Fast Delivery</div>
+                    <div class="feature"><ion-icon name="gift-outline"></ion-icon> Earn Rewards</div>
                 </div>
-
             </section>
-
         </aside>
-
     </main>
 
-
-    <!-- ================================
-         SAME INDEX.HTML FOOTER
-    ================================= -->
-
+    <!-- FOOTER -->
     <footer id="footer">
-
         <div class="footer">
-
             <div class="footer-brand">
-
-                <span class="footer-logo-circle">
-
-                    <img src="../assets/images/logo.jpg" alt="Subeesha">
-
-                </span>
-
-                <p>
-                    E-commerce • E-business • Everyday Essentials.
-                    Shop more, live better with Subeesha.
-                </p>
-
-
+                <span class="footer-logo-circle"><img src="../assets/images/logo.jpg" alt="Subeesha"></span>
+                <p>E-commerce • E-business • Everyday Essentials. Shop more, live better with Subeesha.</p>
                 <div class="socials">
-
-                    <a class="social" href="#" aria-label="Facebook">
-                        <ion-icon name="logo-facebook"></ion-icon>
-                    </a>
-
-                    <a class="social" href="#" aria-label="Instagram">
-                        <ion-icon name="logo-instagram"></ion-icon>
-                    </a>
-
-                    <a class="social" href="#" aria-label="TikTok">
-                        <ion-icon name="logo-tiktok"></ion-icon>
-                    </a>
-
-                    <a class="social" href="#" aria-label="YouTube">
-                        <ion-icon name="logo-youtube"></ion-icon>
-                    </a>
-
+                    <a class="social" href="#" aria-label="Facebook"><ion-icon name="logo-facebook"></ion-icon></a>
+                    <a class="social" href="#" aria-label="Instagram"><ion-icon name="logo-instagram"></ion-icon></a>
+                    <a class="social" href="#" aria-label="TikTok"><ion-icon name="logo-tiktok"></ion-icon></a>
+                    <a class="social" href="#" aria-label="YouTube"><ion-icon name="logo-youtube"></ion-icon></a>
                 </div>
-
             </div>
-
-
-            <div>
-
-                <h3>Shop</h3>
-
-                <a href="../index.html#shop">All Products</a>
-
-                <a href="../index.html#new">New Arrivals</a>
-
-                <a href="../index.html#sale">Flash Sale</a>
-
-                <a href="../index.html#categories">Categories</a>
-
-            </div>
-
-
-            <div>
-
-                <h3>Customer Care</h3>
-
-                <a href="#">Contact Us</a>
-
-                <a href="#">Ring Measurement</a>
-
-                <a href="#">FAQs</a>
-
-                <a href="#">Shipping Policy</a>
-
-                <a href="#">Return Policy</a>
-
-            </div>
-
-
-            <div>
-
-                <h3>My Account</h3>
-
-                <a href="../account.html">My Account</a>
-
-                <a href="#">My Orders</a>
-
-                <a href="#">Wishlist</a>
-
-                <a href="../page/billing.html">Checkout</a>
-
-            </div>
-
+            <div><h3>Shop</h3><a href="../page/shop.html">All Products</a><a href="../page/new-arrivals.html">New Arrivals</a><a href="../page/flashsale.html">Flash Sale</a><a href="../page/Categories.html">Categories</a></div>
+            <div><h3>Customer Care</h3><a href="#">Contact Us</a><a href="#">Ring Measurement</a><a href="#">FAQs</a><a href="#">Shipping Policy</a><a href="#">Return Policy</a></div>
+            <div><h3>My Account</h3><a href="../account.html">My Account</a><a href="../page/profile.html#orders">My Orders</a><a href="../page/profile.html#wishlist">Wishlist</a><a href="../page/billing.html">Checkout</a></div>
         </div>
-
-
-        <div class="footer-bottom">
-
-            © 2026 Subeesha. All Rights Reserved.
-
-        </div>
-
+        <div class="footer-bottom">© 2026 Subeesha. All Rights Reserved.</div>
     </footer>
 
+    <!-- ORDER CONFIRMATION / REVIEW MODAL -->
+    <div class="order-review-overlay" id="orderReviewModal" aria-hidden="true">
+        <div class="order-review-modal" role="dialog" aria-modal="true" aria-labelledby="reviewModalTitle">
+            <div class="review-modal-header">
+                <div><span class="review-eyebrow">FINAL STEP</span><h2 id="reviewModalTitle">Review Your Order</h2><p>Please verify all information before confirming.</p></div>
+                <button type="button" class="review-close" onclick="closeReviewModal()" aria-label="Close"><ion-icon name="close-outline"></ion-icon></button>
+            </div>
+            <div class="review-modal-content" id="orderReviewContent"></div>
+            <div class="review-modal-footer">
+                <button type="button" class="checkout-btn secondary" onclick="closeReviewModal()"><ion-icon name="create-outline"></ion-icon> Edit Information</button>
+                <button type="button" class="checkout-btn" id="confirmOrderBtn" onclick="confirmPlaceOrder()"><ion-icon name="checkmark-circle-outline"></ion-icon> Confirm &amp; Place Order</button>
+            </div>
+        </div>
+    </div>
 
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -1036,8 +448,6 @@
     <script src="../assets/js/navbar.js"></script>
     <script src="../assets/js/sub-map.js"></script>
     <script src="../assets/js/billing.js"></script>
-
     <script src="../assets/js/store.js" defer></script>
 </body>
-
 </html>
