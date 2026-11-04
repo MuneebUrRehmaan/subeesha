@@ -214,9 +214,9 @@
         types: ["image/png", "image/jpeg", "image/webp", "image/gif", "image/avif", "image/svg+xml", "image/bmp", "image/tiff"],
         maxMB: 10,
         accept: "image/png,image/jpeg,image/webp,image/gif,image/avif,image/svg+xml,image/bmp,image/tiff",
-        valid: function (file, allowPdf) {
+        valid: function (file, allowPdf, allowAny) {
             if (!file) return "No file selected.";
-            var ok = SUB.cloud.types.indexOf(file.type) > -1 || (allowPdf && file.type === "application/pdf");
+            var ok = allowAny || SUB.cloud.types.indexOf(file.type) > -1 || (allowPdf && file.type === "application/pdf");
             if (!ok) return "Unsupported file type: " + (file.type || file.name);
             if (file.size > SUB.cloud.maxMB * 1024 * 1024) return "File is larger than " + SUB.cloud.maxMB + " MB.";
             return "";
@@ -243,7 +243,7 @@
         /* returns Promise<{url, publicId, width, height}> */
         upload: function (file, opt) {
             opt = opt || {};
-            var err = SUB.cloud.valid(file, opt.allowPdf);
+            var err = SUB.cloud.valid(file, opt.allowPdf, opt.allowAny);
             if (err) return Promise.reject(new Error(err));
             if (!SUB.cloudConfigured) return Promise.reject(new Error("Cloudinary is not configured. Edit assets/js/firebase-config.js"));
             return SUB.cloud.shrink(file).then(function (blob) {

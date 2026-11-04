@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Dashboard | Subeesha Reseller Panel</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script type="module" src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+<div class="dashboard">
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-top">
+            <a href="dashboard.html" class="brand">
+                <div class="brand-logo"><img src="assets/images/logo.jpg" alt="Subeesha"></div>
+                <div><h2>Subeesha</h2><span>Reseller Panel</span></div>
+            </a>
+        </div>
+        <div class="menu">
+            <p class="menu-title">MAIN MENU</p>
+            <a href="dashboard.html" class="menu-item"><ion-icon name="grid-outline"></ion-icon><span>Dashboard</span></a>
+            <a href="products.html" class="menu-item"><ion-icon name="bag-handle-outline"></ion-icon><span>Products</span></a>
+            <a href="orders.html" class="menu-item"><ion-icon name="receipt-outline"></ion-icon><span>My Sales</span></a>
+            <a href="finance.html" class="menu-item"><ion-icon name="analytics-outline"></ion-icon><span>Financial Dashboard</span></a>
+            <a href="commission.html" class="menu-item"><ion-icon name="cash-outline"></ion-icon><span>Commission</span></a>
+            <a href="withdraw.html" class="menu-item"><ion-icon name="wallet-outline"></ion-icon><span>Withdraw</span></a>
+            <a href="profile.html" class="menu-item"><ion-icon name="person-outline"></ion-icon><span>My Profile</span></a>
+        </div>
+        <div class="sidebar-bottom">
+            <div class="help-box">
+                <div class="help-icon"><ion-icon name="headset-outline"></ion-icon></div>
+                <div><h4>Need Help?</h4><p>Contact Support</p></div>
+            </div>
+            <button class="logout-btn" onclick="showToast('Logout functionality will be connected with backend.')">
+                <ion-icon name="log-out-outline"></ion-icon> Logout
+            </button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div class="top-left">
+                <button class="menu-toggle" id="menuToggle"><ion-icon name="menu-outline"></ion-icon></button>
+                <div><h1 data-page-title="Financial Dashboard">Financial Dashboard</h1><p>Your monthly sales and commission performance.</p></div>
+            </div>
+            <div class="top-right">
+                <button class="notification-btn" onclick="showToast('You have 3 new notifications!')">
+                    <ion-icon name="notifications-outline"></ion-icon><span></span>
+                </button>
+                <div class="profile-mini">
+                    <div class="avatar">R</div>
+                    <div class="profile-info"><strong>Reseller</strong><span>Reseller</span></div>
+                </div>
+            </div>
+        </header>
+
+        <section id="financePage" class="page-section finance-page is-loading">
+            <div class="section-heading finance-heading">
+                <div>
+                    <span>FINANCIAL INSIGHTS</span>
+                    <h2>Monthly Financial Report</h2>
+                    <p>See how your orders translate into sales and commission.</p>
+                </div>
+                <div class="finance-month-control">
+                    <label for="financeMonth">Reporting month</label>
+                    <select id="financeMonth" aria-label="Select reporting month"></select>
+                </div>
+            </div>
+
+            <div class="finance-stats-grid">
+                <article class="finance-stat-card">
+                    <div class="finance-stat-top"><span>Monthly Sales</span><span class="finance-stat-icon sales"><ion-icon name="trending-up-outline"></ion-icon></span></div>
+                    <strong id="financeSales">Rs. 0</strong><small id="financeSalesNote">Sales value excluding cancelled/returned orders</small>
+                </article>
+                <article class="finance-stat-card">
+                    <div class="finance-stat-top"><span>Total Orders</span><span class="finance-stat-icon orders"><ion-icon name="receipt-outline"></ion-icon></span></div>
+                    <strong id="financeOrderCount">0</strong><small id="financeOrderNote">Orders placed in selected month</small>
+                </article>
+                <article class="finance-stat-card">
+                    <div class="finance-stat-top"><span>Delivered Sales</span><span class="finance-stat-icon delivered"><ion-icon name="checkmark-done-outline"></ion-icon></span></div>
+                    <strong id="financeDeliveredSales">Rs. 0</strong><small id="financeDeliveredNote">0 delivered orders</small>
+                </article>
+                <article class="finance-stat-card">
+                    <div class="finance-stat-top"><span>In-progress Sales</span><span class="finance-stat-icon progress"><ion-icon name="time-outline"></ion-icon></span></div>
+                    <strong id="financePendingSales">Rs. 0</strong><small id="financePendingNote">0 orders in progress</small>
+                </article>
+                <article class="finance-stat-card">
+                    <div class="finance-stat-top"><span>Commission Earned</span><span class="finance-stat-icon earned"><ion-icon name="cash-outline"></ion-icon></span></div>
+                    <strong id="financeEarned">Rs. 0</strong><small>Commission on delivered orders</small>
+                </article>
+                <article class="finance-stat-card">
+                    <div class="finance-stat-top"><span>Pending Commission</span><span class="finance-stat-icon pending"><ion-icon name="hourglass-outline"></ion-icon></span></div>
+                    <strong id="financePendingCommission">Rs. 0</strong><small id="financeCommissionNote">Commission awaiting delivery</small>
+                </article>
+            </div>
+
+            <div class="finance-wallet-strip">
+                <div class="finance-wallet-icon"><ion-icon name="wallet-outline"></ion-icon></div>
+                <div><span>Available reseller balance</span><strong id="financeWallet">Rs. 0</strong><small>Current wallet balance available for withdrawal</small></div>
+                <a href="withdraw.html">Request withdrawal <ion-icon name="arrow-forward-outline"></ion-icon></a>
+            </div>
+
+            <div class="finance-analysis-grid">
+                <div class="card finance-chart-card">
+                    <div class="card-header">
+                        <div><h2>Sales Trend</h2><p>Monthly sales for the selected month and previous five months</p></div>
+                    </div>
+                    <div class="finance-chart" id="financeChart" aria-label="Monthly sales chart"></div>
+                </div>
+                <div class="card finance-impact-card">
+                    <div class="card-header"><div><h2>Monthly Impact</h2><p>Where your selected month stands</p></div></div>
+                    <div class="impact-list">
+                        <div><span>Delivered orders</span><strong id="impactDelivered">0</strong></div>
+                        <div><span>Open orders</span><strong id="impactOpen">0</strong></div>
+                        <div><span>Cancelled / returned</span><strong id="impactCancelled">0</strong></div>
+                        <div><span>Commission generated</span><strong id="impactCommission">Rs. 0</strong></div>
+                    </div>
+                    <p class="finance-footnote">Commission is counted as earned after an order reaches Delivered status. Cancelled and returned orders are excluded from active sales.</p>
+                </div>
+            </div>
+
+            <div class="card finance-orders-card">
+                <div class="finance-orders-heading">
+                    <div><h2>Monthly Order Details</h2><p id="financeTableDescription">All orders for the selected month.</p></div>
+                    <select id="financeStatusFilter" aria-label="Filter orders by status">
+                        <option value="all">All statuses</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Processing">Processing</option>
+                        <option value="Shipped">Shipped</option>
+                        <option value="Delivered">Delivered</option>
+                        <option value="Cancelled">Cancelled</option>
+                        <option value="Returned">Returned</option>
+                    </select>
+                </div>
+                <div class="table-wrapper">
+                    <table class="finance-table">
+                        <thead><tr><th>Date</th><th>Order</th><th>Customer / Items</th><th>Order Amount</th><th>Commission</th><th>Status</th></tr></thead>
+                        <tbody id="financeOrdersTable"><tr><td colspan="6" class="finance-empty">Loading financial records...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<div class="toast" id="toast"><ion-icon name="checkmark-circle-outline"></ion-icon><span id="toastMessage"></span></div>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="../../assets/js/firebase-config.js"></script>
+<script src="../../assets/js/sub-core.js"></script>
+<script src="assets/js/script.js"></script>
+<script src="assets/js/reseller-core.js"></script>
+<script src="assets/js/finance.js"></script>
+</body>
+</html>

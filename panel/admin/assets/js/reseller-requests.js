@@ -20,8 +20,14 @@ A.ready(function () {
         openModal("Application - " + a.fullName,
             '<div class="a-kv"><b>Email</b><span>' + esc(a.email) + "</span><b>Phone</b><span>" + esc(a.phone) + "</span><b>City</b><span>" + esc(a.city) + "</span><b>CNIC</b><span>" + esc(a.cnic) + "</span><b>Payout</b><span>" + esc(a.paymentMethod) + " · " + esc(a.accountNumber) + "</span><b>Status</b><span>" + A.pill(a.status) + "</span>" + (a.reason ? "<b>Reason</b><span>" + esc(a.reason) + "</span>" : "") + "</div>" +
             '<div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:10px">' + Object.keys(LBL).filter(function (k) { return d[k]; }).map(function (k) {
-                var isPdf = /\.pdf($|\?)/i.test(d[k]);
-                return '<a href="' + esc(safe(d[k])) + '" target="_blank" rel="noopener" style="width:130px;text-align:center;font-size:11px;color:inherit">' + (isPdf ? '<div style="height:90px;display:flex;align-items:center;justify-content:center;background:#f2f5f3;border-radius:4px"><i class="fa-solid fa-file-pdf" style="font-size:30px"></i></div>' : '<img src="' + esc(SUB.img(d[k], 300)) + '" style="width:130px;height:90px;object-fit:cover;border-radius:4px" alt="">') + "<br>" + LBL[k] + "</a>";
+                var url = d[k].split("?")[0];
+                var ext = (url.match(/\.([a-z0-9]{2,8})$/i) || ["", ""])[1].toLowerCase();
+                var isImage = /^(jpg|jpeg|png|webp|gif|avif|bmp|tif|tiff|svg|heic|heif)$/i.test(ext);
+                var icon = ext === "pdf" ? "fa-file-pdf" : /^(doc|docx|rtf|odt)$/i.test(ext) ? "fa-file-word" : /^(xls|xlsx|csv|ods)$/i.test(ext) ? "fa-file-excel" : /^(ppt|pptx|odp)$/i.test(ext) ? "fa-file-powerpoint" : "fa-file-lines";
+                var preview = isImage
+                    ? '<img src="' + esc(SUB.img(d[k], 300)) + '" style="width:130px;height:90px;object-fit:cover;border-radius:4px" alt="">'
+                    : '<div style="height:90px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:7px;background:#f2f5f3;border-radius:4px"><i class="fa-solid ' + icon + '" style="font-size:28px;color:#0e3d34"></i><small style="color:#66736c">' + esc(ext ? ext.toUpperCase() : "FILE") + '</small></div>';
+                return '<a href="' + esc(safe(d[k])) + '" target="_blank" rel="noopener" style="width:130px;text-align:center;font-size:11px;color:inherit">' + preview + "<br>" + LBL[k] + "</a>";
             }).join("") + "</div>", function () { closeModal(); }, "Close");
     };
     window.approveApp = function (id) {

@@ -125,7 +125,7 @@
         }
     }
 
-    function showPDFPreview(preview, file) {
+    function showFilePreview(preview, file) {
         preview.innerHTML = ""
 
         const icon = document.createElement("ion-icon")
@@ -134,8 +134,12 @@
         const name = document.createElement("span")
         name.textContent = file.name
 
+        const details = document.createElement("small")
+        details.textContent = file.size ? (file.size / (1024 * 1024)).toFixed(2) + " MB" : "Selected file"
+
         preview.appendChild(icon)
         preview.appendChild(name)
+        preview.appendChild(details)
     }
 
     function previewUpload(inputId, previewId) {
@@ -157,15 +161,13 @@
                 return
             }
 
-            if (file.type === "application/pdf") {
-                showPDFPreview(preview, file)
-                return
-            }
+            const previewableImages = [
+                "image/jpeg", "image/png", "image/gif", "image/webp",
+                "image/avif", "image/bmp", "image/svg+xml"
+            ]
 
-            if (!file.type.startsWith("image/")) {
-                alert("Please select a valid image or PDF file.")
-                input.value = ""
-                restorePreview(previewId)
+            if (!previewableImages.includes(file.type)) {
+                showFilePreview(preview, file)
                 return
             }
 
@@ -389,7 +391,7 @@
 
             const allowPdf = id === "feeReceipt"
 
-            const validationError = SUB.cloud.valid(file, allowPdf)
+            const validationError = SUB.cloud.valid(file, allowPdf, true)
 
             if (validationError) {
                 alert(validationError)
@@ -449,7 +451,8 @@
                 try {
                     response = await SUB.cloud.upload(file, {
                         folder: "reseller-applications",
-                        allowPdf: allowPdf
+                        allowPdf: allowPdf,
+                        allowAny: true
                     })
                 } catch (uploadError) {
                     console.error(

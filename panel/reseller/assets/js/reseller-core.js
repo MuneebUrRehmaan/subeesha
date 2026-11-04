@@ -25,7 +25,7 @@
         if (av) av.textContent = SUB.initials(p.name);
         if (nm) nm.textContent = p.name || "Reseller";
         var h1 = d.querySelector(".top-left h1");
-        if (h1) {
+        if (h1 && !h1.getAttribute("data-page-title")) {
             var hr = new Date().getHours(), greet = hr < 12 ? "Good Morning" : hr < 17 ? "Good Afternoon" : "Good Evening";
             h1.textContent = greet + ", " + (p.name || "").split(" ")[0] + " \uD83D\uDC4B";
         }
@@ -44,9 +44,29 @@
     }
     R.logout = function () { SUB.signOut().then(function () { location.href = "login.html"; }); };
 
+    function showAuthLoader() {
+        if (d.getElementById("resellerPageLoader")) return;
+        var loader = d.createElement("div");
+        loader.id = "resellerPageLoader";
+        loader.className = "reseller-page-loader";
+        loader.setAttribute("role", "status");
+        loader.setAttribute("aria-label", "Loading reseller panel");
+        loader.innerHTML =
+            '<aside class="auth-loader-sidebar"><div class="auth-loader-brand"><i></i><span></span></div>' +
+            '<div class="auth-loader-nav"><i></i><i></i><i></i><i></i><i></i><i></i></div></aside>' +
+            '<main class="auth-loader-main"><div class="auth-loader-top"><div><i></i><i></i></div><b></b></div>' +
+            '<div class="auth-loader-content"><div class="auth-loader-title"><i></i><i></i></div>' +
+            '<div class="auth-loader-stats"><i></i><i></i><i></i><i></i></div>' +
+            '<div class="auth-loader-panels"><i></i><i></i></div></div></main>';
+        d.body.appendChild(loader);
+    }
+    function removeAuthLoader() {
+        var loader = d.getElementById("resellerPageLoader");
+        if (loader) loader.remove();
+    }
     function boot(profile) {
         R.me = profile; chrome(); booted = true;
-        d.documentElement.style.visibility = "";
+        removeAuthLoader();
         queue.splice(0).forEach(function (fn) { try { fn(profile); } catch (e) { console.error(e); } });
     }
     function banner(msg) {
@@ -57,17 +77,27 @@
         n.innerHTML = msg; s.insertBefore(n, s.firstChild);
     }
     if (!SUB.configured) {
+        removeAuthLoader();
+        booted = true;
         d.addEventListener("DOMContentLoaded", function () {
             banner("<b>Firebase is not configured yet.</b> Static demo content is shown until <code>assets/js/firebase-config.js</code> is set up.");
         });
     } else {
-        d.documentElement.style.visibility = "hidden";
+        showAuthLoader();
         SUB.onAuth(function (user, profile) {
             if (booted) { if (!user) location.replace("login.html"); return; }
             if (!user || !profile || profile.role !== "reseller") { location.replace("login.html"); return; }
             if (SUB.isBlocked(profile)) { SUB.signOut().then(function () { location.replace("login.html"); }); return; }
             boot(profile);
         });
-        setTimeout(function () { d.documentElement.style.visibility = ""; }, 8000);
+        setTimeout(function () {
+            var loader = d.getElementById("resellerPageLoader");
+            if (loader) {
+                var message = d.createElement("p");
+                message.className = "auth-loader-message";
+                message.textContent = "Connecting securely to your reseller account…";
+                loader.appendChild(message);
+            }
+        }, 8000);
     }
 })(window, document);

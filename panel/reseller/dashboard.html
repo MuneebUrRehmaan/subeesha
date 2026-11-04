@@ -62,6 +62,11 @@
                 <span>My Sales</span>
             </a>
 
+            <a href="finance.html" class="menu-item">
+                <ion-icon name="analytics-outline"></ion-icon>
+                <span>Financial Dashboard</span>
+            </a>
+
             <a href="commission.html" class="menu-item">
                 <ion-icon name="cash-outline"></ion-icon>
                 <span>Commission</span>
@@ -122,8 +127,8 @@
                 </button>
 
                 <div>
-                    <h1>Good Morning, Aisha 👋</h1>
-                    <p>Here's what's happening with your sales today.</p>
+                    <h1>Welcome back 👋</h1>
+                    <p>Here’s what’s happening with your reseller business.</p>
                 </div>
 
             </div>
@@ -155,7 +160,18 @@
 
         <!-- DASHBOARD -->
 
-        <section id="dashboard" class="page-section">
+        <section id="dashboard" class="page-section dashboard-page is-loading">
+
+            <div class="dashboard-hero">
+                <div class="dashboard-hero-copy">
+                    <span>RESELLER OVERVIEW</span>
+                    <h2>Build your business with every sale.</h2>
+                    <p>Monitor your orders, commissions and earnings from one place.</p>
+                </div>
+                <a href="finance.html" class="dashboard-hero-link">
+                    View financial report <ion-icon name="arrow-forward-outline"></ion-icon>
+                </a>
+            </div>
 
             <div class="stats-grid">
 
@@ -167,7 +183,7 @@
 
                     <div>
                         <p>Total Sales</p>
-                        <h2>Rs. 48,500</h2>
+                        <h2 id="dashboardTotalSales">Rs. 0</h2>
                         <span class="growth">+12.5% this month</span>
                     </div>
 
@@ -181,8 +197,8 @@
                     </div>
 
                     <div>
-                        <p>Total Commission</p>
-                        <h2>Rs. 7,275</h2>
+                        <p>Commission Earned</p>
+                        <h2 id="dashboardEarned">Rs. 0</h2>
                         <span class="growth">+18.2% this month</span>
                     </div>
 
@@ -197,7 +213,7 @@
 
                     <div>
                         <p>Pending Commission</p>
-                        <h2>Rs. 1,850</h2>
+                        <h2 id="dashboardPending">Rs. 0</h2>
                         <span class="pending-text">3 orders pending</span>
                     </div>
 
@@ -212,7 +228,7 @@
 
                     <div>
                         <p>Available Balance</p>
-                        <h2>Rs. 5,425</h2>
+                        <h2 id="dashboardWallet">Rs. 0</h2>
 
                         <button class="small-btn"
                             onclick="goToPage('withdraw.html')">
@@ -237,10 +253,7 @@
                             <p>Your commission performance</p>
                         </div>
 
-                        <select>
-                            <option>This Month</option>
-                            <option>Last Month</option>
-                        </select>
+                        <span class="chart-range-label">Last 7 days</span>
 
                     </div>
 

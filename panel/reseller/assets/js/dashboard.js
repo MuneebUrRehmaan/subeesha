@@ -1,35 +1,98 @@
-/* Reseller dashboard - live stats */
+/* Reseller dashboard - live figures + loading shimmer */
 R.ready(function () {
-    var $ = function (s) { return document.querySelector(s); };
-    if (!SUB.configured) return;
-    SUB.db.collection("orders").where("resellerId", "==", R.me.id).get().then(function (s) {
-        var orders = SUB.docs(s);
-        var ok = orders.filter(function (o) { return !/^(Cancelled|Returned)$/.test(o.status); });
-        var sales = ok.reduce(function (t, o) { return t + SUB.num(o.total) + SUB.num(o.walletUsed); }, 0);
-        var earned = ok.filter(function (o) { return o.status === "Delivered" && !o.commissionVoid; }).reduce(function (t, o) { return t + SUB.num(o.commission); }, 0);
-        var pending = ok.filter(function (o) { return o.status !== "Delivered"; }).reduce(function (t, o) { return t + SUB.num(o.commission); }, 0);
-        var pendCount = ok.filter(function (o) { return o.status !== "Delivered"; }).length;
-        var cards = document.querySelectorAll(".stats-grid .stat-card h2");
-        if (cards[0]) cards[0].textContent = SUB.money(sales);
-        if (cards[1]) cards[1].textContent = SUB.money(earned);
-        if (cards[2]) cards[2].textContent = SUB.money(pending);
-        if (cards[3]) cards[3].textContent = SUB.money(R.me.wallet);
-        var pendText = document.querySelector(".pending-text"); if (pendText) pendText.textContent = pendCount + " order(s) pending";
-        var growth = document.querySelectorAll(".growth"); var now = new Date(), cm = now.getMonth();
-        function pct(list) {
-            var cur = list.filter(function (o) { var t = SUB.toDate(o.createdAt); return t && t.getMonth() === cm; }).reduce(function (s, o) { return s + SUB.num(o.total) + SUB.num(o.walletUsed); }, 0);
-            var prev = list.filter(function (o) { var t = SUB.toDate(o.createdAt); return t && t.getMonth() === (cm - 1 + 12) % 12; }).reduce(function (s, o) { return s + SUB.num(o.total) + SUB.num(o.walletUsed); }, 0);
-            if (!prev) return cur ? "New this month" : "No sales yet";
-            var p = Math.round((cur - prev) / prev * 100); return (p >= 0 ? "+" : "") + p + "% this month";
-        }
-        if (growth[0]) growth[0].textContent = pct(ok);
-        if (growth[1]) growth[1].textContent = pct(ok.filter(function (o) { return o.status === "Delivered"; }));
+    var section = document.getElementById("dashboard");
+    if (!section) return;
 
-        var days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], vals = [0, 0, 0, 0, 0, 0, 0];
-        var weekAgo = Date.now() - 7 * 864e5;
-        ok.forEach(function (o) { var t = SUB.ms(o.createdAt); if (t < weekAgo) return; var idx = (new Date(t).getDay() + 6) % 7; vals[idx] += SUB.num(o.total) + SUB.num(o.walletUsed); });
-        var max = Math.max.apply(null, vals.concat([1]));
+    function stopLoading() { section.classList.remove("is-loading"); }
+    if (!SUB.configured) { stopLoading(); return; }
+
+    var $ = function (selector) { return document.querySelector(selector); };
+    var cards = {
+        sales: $("#dashboardTotalSales"),
+        earned: $("#dashboardEarned"),
+        pending: $("#dashboardPending"),
+        wallet: $("#dashboardWallet")
+    };
+
+    function gross(order) {
+        return SUB.num(order.total) + SUB.num(order.walletUsed);
+    }
+    function isVoided(order) {
+        return /^(Cancelled|Returned)$/i.test(String(order.status || ""));
+    }
+    function isDelivered(order) {
+        return order.status === "Delivered" && !order.commissionVoid;
+    }
+    function isOpen(order) {
+        return !isVoided(order) && order.status !== "Delivered";
+    }
+    function monthKey(date) {
+        return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0");
+    }
+    function percentChange(list, metric) {
+        var now = new Date();
+        var currentKey = monthKey(now);
+        var prevDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        var previousKey = monthKey(prevDate);
+        var current = 0, previous = 0;
+        list.forEach(function (order) {
+            var date = SUB.toDate(order.createdAt);
+            if (!date) return;
+            var value = metric(order);
+            if (monthKey(date) === currentKey) current += value;
+            if (monthKey(date) === previousKey) previous += value;
+        });
+        if (!previous) return current ? "New this month" : "No activity this month";
+        var change = Math.round((current - previous) / previous * 100);
+        return (change > 0 ? "+" : "") + change + "% vs last month";
+    }
+
+    SUB.db.collection("orders").where("resellerId", "==", R.me.id).get().then(function (snapshot) {
+        var orders = SUB.docs(snapshot);
+        var active = orders.filter(function (order) { return !isVoided(order); });
+        var earnedOrders = active.filter(isDelivered);
+        var openOrders = active.filter(isOpen);
+        var sales = active.reduce(function (sum, order) { return sum + gross(order); }, 0);
+        var earned = earnedOrders.reduce(function (sum, order) { return sum + (order.commissionVoid ? 0 : SUB.num(order.commission)); }, 0);
+        var pending = openOrders.reduce(function (sum, order) { return sum + SUB.num(order.commission); }, 0);
+
+        if (cards.sales) cards.sales.textContent = SUB.money(sales);
+        if (cards.earned) cards.earned.textContent = SUB.money(earned);
+        if (cards.pending) cards.pending.textContent = SUB.money(pending);
+        if (cards.wallet) cards.wallet.textContent = SUB.money(R.me.wallet);
+
+        var pendingText = $(".pending-text");
+        if (pendingText) pendingText.textContent = openOrders.length + " order(s) in progress";
+        var growth = document.querySelectorAll(".growth");
+        if (growth[0]) growth[0].textContent = percentChange(active, gross);
+        if (growth[1]) growth[1].textContent = percentChange(earnedOrders, function (order) { return SUB.num(order.commission); });
+
+        var today = new Date();
+        var dayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        var days = [];
+        for (var i = 6; i >= 0; i--) {
+            var date = new Date(dayStart);
+            date.setDate(dayStart.getDate() - i);
+            days.push({ date: date, key: date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate(), value: 0 });
+        }
+        active.forEach(function (order) {
+            var date = SUB.toDate(order.createdAt);
+            if (!date) return;
+            var key = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
+            var day = days.filter(function (item) { return item.key === key; })[0];
+            if (day) day.value += gross(order);
+        });
+        var max = Math.max.apply(null, days.map(function (day) { return day.value; }).concat([1]));
         var bars = document.querySelectorAll(".bar-item .bar");
-        bars.forEach(function (b, i) { b.style.height = Math.max(4, Math.round(vals[i] / max * 100)) + "%"; b.title = SUB.money(vals[i]); });
-    }).catch(R.err);
+        var labels = document.querySelectorAll(".bar-item > span");
+        bars.forEach(function (bar, index) {
+            var day = days[index];
+            if (!day) return;
+            bar.style.height = Math.max(4, Math.round(day.value / max * 100)) + "%";
+            bar.title = SUB.money(day.value);
+            if (labels[index]) labels[index].textContent = day.date.toLocaleDateString("en-US", { weekday: "short" });
+        });
+    }).catch(function (error) {
+        R.err(error);
+    }).finally(stopLoading);
 });
