@@ -47,7 +47,10 @@ R.ready(function () {
         return (change > 0 ? "+" : "") + change + "% vs last month";
     }
 
-    SUB.db.collection("orders").where("resellerId", "==", R.me.id).get().then(function (snapshot) {
+    var resellerUid = R.uid || (SUB.user && SUB.user.uid);
+    if (!resellerUid) { stopLoading(); R.err(new Error("Your reseller session could not be verified. Please sign in again.")); return; }
+
+    SUB.db.collection("orders").where("resellerId", "==", resellerUid).onSnapshot(function (snapshot) {
         var orders = SUB.docs(snapshot);
         var active = orders.filter(function (order) { return !isVoided(order); });
         var earnedOrders = active.filter(isDelivered);
@@ -92,7 +95,9 @@ R.ready(function () {
             bar.title = SUB.money(day.value);
             if (labels[index]) labels[index].textContent = day.date.toLocaleDateString("en-US", { weekday: "short" });
         });
-    }).catch(function (error) {
+        stopLoading();
+    }, function (error) {
+        stopLoading();
         R.err(error);
-    }).finally(stopLoading);
+    });
 });

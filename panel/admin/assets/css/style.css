@@ -817,7 +817,7 @@ textarea:focus{
     min-height:40px;
     padding:9px 38px 9px 13px;
     border:1px solid #dfe7e2;
-    border-radius:9px;
+    border-radius:4px;
     outline:none;
     background-color:#fff;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%235b7166' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
@@ -845,7 +845,7 @@ textarea:focus{
 .modal-box select option,
 .form-grid select option,
 .table select option{padding:9px;color:#294238;background:#fff}
-.table select{min-height:32px;padding:6px 30px 6px 10px;border-radius:7px;font-size:11px;background-position:right 9px center}
+.table select{min-height:32px;padding:6px 30px 6px 10px;border-radius:4px;font-size:11px;background-position:right 9px center}
 .section-toolbar select,.toolbar-actions select,.filters select{min-width:145px}
 @media(max-width:600px){.section-toolbar select,.toolbar-actions select,.filters select{width:100%;min-width:0}}
 
@@ -862,7 +862,7 @@ textarea:focus{
     display: block;
     padding: 14px;
     background: #faf9f9;
-    border-radius: 6px;
+    border-radius: 4px;
     transition: transform 0.3s ease;
 }
 
@@ -878,7 +878,7 @@ textarea:focus{
     justify-content: center;
     overflow: hidden;
     background: #faf9f9;
-    border-radius: 6px;
+    border-radius: 4px;
 }
 
 /* Keep images properly contained */
@@ -912,7 +912,7 @@ textarea:focus{
     padding: 10px;
     background: #faf9f9;
     border: 1px solid #eee;
-    border-radius: 6px;
+    border-radius: 4px;
 }
 
 /* ==============================
@@ -996,7 +996,7 @@ textarea:focus{
     object-position: center;
     display: block;
     padding: 0;
-    border-radius: 6px;
+    border-radius: 4px;
 }
 
 /* Image container */
@@ -1011,6 +1011,6 @@ textarea:focus{
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 6px;
+    border-radius: 4px;
     background: #f8f8f8;
 }

@@ -26,18 +26,25 @@ A.ready(function () {
                 var icon = ext === "pdf" ? "fa-file-pdf" : /^(doc|docx|rtf|odt)$/i.test(ext) ? "fa-file-word" : /^(xls|xlsx|csv|ods)$/i.test(ext) ? "fa-file-excel" : /^(ppt|pptx|odp)$/i.test(ext) ? "fa-file-powerpoint" : "fa-file-lines";
                 var preview = isImage
                     ? '<img src="' + esc(SUB.img(d[k], 300)) + '" style="width:130px;height:90px;object-fit:cover;border-radius:4px" alt="">'
-                    : '<div style="height:90px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:7px;background:#f2f5f3;border-radius:4px"><i class="fa-solid ' + icon + '" style="font-size:28px;color:#0e3d34"></i><small style="color:#66736c">' + esc(ext ? ext.toUpperCase() : "FILE") + '</small></div>';
+                    : '<div style="height:4px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:7px;background:#f2f5f3;border-radius:4px"><i class="fa-solid ' + icon + '" style="font-size:4px;color:#0e3d34"></i><small style="color:#66736c">' + esc(ext ? ext.toUpperCase() : "FILE") + '</small></div>';
                 return '<a href="' + esc(safe(d[k])) + '" target="_blank" rel="noopener" style="width:130px;text-align:center;font-size:11px;color:inherit">' + preview + "<br>" + LBL[k] + "</a>";
             }).join("") + "</div>", function () { closeModal(); }, "Close");
     };
     window.approveApp = function (id) {
         var a = list.filter(function (x) { return x.id === id; })[0];
-        if (!confirm("Approve " + a.fullName + " as a reseller? A login will be created.")) return;
-        A.createReseller({ name: a.fullName, email: a.email.toLowerCase(), phone: a.phone, city: a.city, paymentMethod: a.paymentMethod, account: a.accountNumber }).then(function (r) {
-            return SUB.db.collection("resellerApplications").doc(id).update({ status: "Approved", resellerUid: r.uid, resellerCode: r.code, processedAt: SUB.now(), processedBy: A.me.name }).then(function () {
-                A.refreshBadges(); load(); A.showCredentials("Reseller Approved", a.email, r.password, r.code);
+        if (!confirm("Approve " + a.fullName + " as a reseller? Any existing customer account will be linked; otherwise a new login will be created.")) return;
+        A.createReseller({ applicationId: id }).then(function (r) {
+            A.refreshBadges();
+            return load().then(function () {
+                A.showCredentials(
+                    "Reseller Approved",
+                    a.email,
+                    r.password,
+                    r.code,
+                    !!r.existingAccount
+                );
             });
-        }).catch(function (e) { A.err(e.code === "auth/email-already-in-use" ? new Error("This email already has an account. Ask the applicant to apply with a different email.") : e); });
+        }).catch(A.err);
     };
     window.rejectApp = function (id) {
         openModal("Reject Application", '<div class="field full"><label>Reason (optional)</label><input id="rjReason"></div>', A.save(function () {

@@ -6,6 +6,7 @@
     "use strict";
     var R = w.R = {};
     R.me = null;
+    R.uid = null;
     var esc = SUB.esc;
     R.money = SUB.money;
 
@@ -64,8 +65,10 @@
         var loader = d.getElementById("resellerPageLoader");
         if (loader) loader.remove();
     }
-    function boot(profile) {
-        R.me = profile; chrome(); booted = true;
+    function boot(profile, user) {
+        R.me = profile;
+        R.uid = (user && user.uid) || (profile && profile.id) || null;
+        chrome(); booted = true;
         removeAuthLoader();
         queue.splice(0).forEach(function (fn) { try { fn(profile); } catch (e) { console.error(e); } });
     }
@@ -88,7 +91,7 @@
             if (booted) { if (!user) location.replace("login.html"); return; }
             if (!user || !profile || profile.role !== "reseller") { location.replace("login.html"); return; }
             if (SUB.isBlocked(profile)) { SUB.signOut().then(function () { location.replace("login.html"); }); return; }
-            boot(profile);
+            boot(profile, user);
         });
         setTimeout(function () {
             var loader = d.getElementById("resellerPageLoader");

@@ -4,7 +4,7 @@ R.ready(function () {
     var pendingSum = 0;
     function avail() { return Math.max(0, SUB.num(R.me.wallet) - pendingSum); }
     info.textContent = SUB.money(avail());
-    SUB.db.collection("payouts").where("uid", "==", R.me.id).get().then(function (s) {
+    SUB.db.collection("payouts").where("uid", "==", (R.uid || R.me.id)).get().then(function (s) {
         SUB.docs(s).forEach(function (p) { if (p.status === "Pending") pendingSum += SUB.num(p.amount); });
         info.textContent = SUB.money(avail());
     }).catch(function () { });
@@ -23,7 +23,7 @@ R.ready(function () {
         if (amount > avail()) return R.toast("Amount exceeds your available balance (pending withdrawals are already reserved).");
         placing = true;
         SUB.db.collection("payouts").add({
-            uid: R.me.id, name: R.me.name, amount: amount, method: methodSel.value, account: account, status: "Pending", createdAt: SUB.now()
+            uid: (R.uid || R.me.id), name: R.me.name, amount: amount, method: methodSel.value, account: account, status: "Pending", createdAt: SUB.now()
         }).then(function () {
             pendingSum += amount; info.textContent = SUB.money(avail());
             R.toast("Withdrawal request submitted successfully!");

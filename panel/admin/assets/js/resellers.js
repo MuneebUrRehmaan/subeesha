@@ -32,12 +32,15 @@ A.ready(function () {
             '<div class="form-grid"><div class="field"><label>Full Name *</label><input id="rName"></div><div class="field"><label>Email *</label><input id="rEmail" type="email"></div>' +
             '<div class="field"><label>Phone *</label><input id="rPhone"></div><div class="field"><label>City</label><input id="rCity"></div>' +
             '<div class="field"><label>Payment Method</label><select id="rPay"><option>Easypaisa</option><option>JazzCash</option><option>Bank Account</option></select></div><div class="field"><label>Account Number</label><input id="rAcc"></div></div>' +
-            '<p class="label" style="margin-top:8px">A login is created with a one-time temporary password that you will see after saving.</p>',
+            '<p class="label" style="margin-top:8px">An existing account with this email will be linked; otherwise a new login and one-time temporary password will be created.</p>',
             A.save(function () {
                 var o = { name: A.val("rName"), email: A.val("rEmail").toLowerCase(), phone: A.val("rPhone"), city: A.val("rCity"), paymentMethod: A.val("rPay"), account: A.val("rAcc") };
                 if (!o.name || !o.email || !o.phone) throw new Error("Name, email and phone are required.");
-                return A.createReseller(o).then(function (r) { setTimeout(function () { A.showCredentials("Reseller Created", o.email, r.password, r.code); }, 200); load(); return true; })
-                    .catch(function (e) { throw new Error(e.code === "auth/email-already-in-use" ? "This email already has an account." : SUB.authError(e)); });
+                return A.createReseller(o).then(function (r) {
+                    setTimeout(function () { A.showCredentials("Reseller Created", o.email, r.password, r.code, !!r.existingAccount); }, 200);
+                    load();
+                    return true;
+                });
             }), "Create Reseller");
     };
 });

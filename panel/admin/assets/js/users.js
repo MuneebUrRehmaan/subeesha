@@ -66,7 +66,7 @@ A.ready(function () {
             '<div class="form-group"><label>Full Name *</label><input id="nuName"></div><div class="form-group"><label>Email *</label><input id="nuEmail" type="email"></div>' +
             '<div class="form-group"><label>User Type</label><select id="nuType" onchange="document.getElementById(\'nuRoleBox\').style.display=this.value===\'admin\'?\'block\':\'none\'"><option value="customer">Customer</option><option value="reseller">Reseller</option><option value="admin">Admin</option></select></div>' +
             '<div class="form-group" id="nuRoleBox" style="display:none"><label>Admin Role</label><select id="nuRole">' + ROLES.map(function (r) { return "<option" + (r === "Staff" ? " selected" : "") + ">" + r + "</option>"; }).join("") + "</select></div>" +
-            '<div class="form-group"><label>Phone (optional)</label><input id="nuPhone"></div><p class="label">A one-time temporary password is generated and shown after saving.</p>',
+            '<div class="form-group"><label>Phone (optional)</label><input id="nuPhone"></div><p class="label">New accounts receive a one-time password. Existing reseller accounts keep their current password when linked.</p>',
             A.save(function () {
                 var o = { name: A.val("nuName"), email: A.val("nuEmail").toLowerCase(), phone: A.val("nuPhone") }, t = A.val("nuType");
                 if (!o.name || !o.email) throw new Error("Name and email are required.");
@@ -80,8 +80,13 @@ A.ready(function () {
                         return SUB.db.collection("users").doc(uid).set(d).then(function () { return { password: pass, code: "-" }; });
                     });
                 }
-                return p.then(function (r) { load(); setTimeout(function () { A.showCredentials("User Created", o.email, r.password, r.code || "-"); }, 200); return true; })
-                    .catch(function (e) { throw new Error(e.code === "auth/email-already-in-use" ? "This email already has an account." : SUB.authError(e)); });
+                return p.then(function (r) {
+                    load();
+                    setTimeout(function () {
+                        A.showCredentials(t === "reseller" ? "Reseller Created" : "User Created", o.email, r.password, r.code || "-", !!r.existingAccount);
+                    }, 200);
+                    return true;
+                }).catch(function (e) { throw new Error(SUB.authError(e)); });
             }), "Save User");
     };
 });

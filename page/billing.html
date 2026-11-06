@@ -28,12 +28,12 @@
         @keyframes checkoutFade { from { opacity:.45; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
         .checkout-actions { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:18px 0 4px; }
         .checkout-hint { color:#78817d; font-size:13px; }
-        .checkout-btn { min-height:46px; border:0; border-radius:5px; padding:0 20px; display:inline-flex; align-items:center; justify-content:center; gap:9px; background:var(--primary,#800000); color:#fff; font:inherit; font-size:14px; font-weight:600; cursor:pointer; transition:opacity .2s,transform .2s; }
+        .checkout-btn { min-height:46px; border:0; border-radius:4px; padding:0 20px; display:inline-flex; align-items:center; justify-content:center; gap:9px; background:var(--primary,#800000); color:#fff; font:inherit; font-size:14px; font-weight:600; cursor:pointer; transition:opacity .2s,transform .2s; }
         .checkout-btn:hover { opacity:.92; transform:translateY(-1px); }
         .checkout-btn:disabled { opacity:.55; cursor:not-allowed; transform:none; }
         .checkout-btn.secondary { color:#303a35; background:#f0f2f1; border:1px solid #e0e5e2; }
         .checkout-btn ion-icon { font-size:18px; }
-        .loc-box { margin-top:12px; padding:14px; border:1px solid #e2e7e4; border-radius:6px; background:#fafcfb; }
+        .loc-box { margin-top:12px; padding:14px; border:1px solid #e2e7e4; border-radius:4px; background:#fafcfb; }
         .loc-box-head { display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
         .loc-btn { min-height:40px; display:inline-flex; align-items:center; gap:8px; padding:0 14px; border:1px solid var(--primary,#800000); border-radius:4px; background:#fff; color:var(--primary,#800000); font-weight:600; cursor:pointer; }
         .loc-btn ion-icon { font-size:18px; }
@@ -42,7 +42,7 @@
         .location-required { color:#8b5a00; }
         .order-review-overlay { position:fixed; inset:0; z-index:9999; display:none; align-items:center; justify-content:center; padding:18px; background:rgba(15,22,18,.58); }
         .order-review-overlay.open { display:flex; }
-        .order-review-modal { width:min(760px,100%); max-height:min(90vh,900px); display:flex; flex-direction:column; overflow:hidden; border-radius:8px; background:#fff; box-shadow:0 24px 80px rgba(0,0,0,.24); }
+        .order-review-modal { width:min(760px,100%); max-height:min(90vh,900px); display:flex; flex-direction:column; overflow:hidden; border-radius:4px; background:#fff; box-shadow:0 24px 80px rgba(0,0,0,.24); }
         .review-modal-header { display:flex; align-items:flex-start; justify-content:space-between; gap:15px; padding:22px 24px 17px; border-bottom:1px solid #edf0ee; }
         .review-eyebrow { color:var(--primary,#800000); font-size:10px; font-weight:800; letter-spacing:1.5px; }
         .review-modal-header h2 { margin:5px 0; color:#202923; font-size:22px; }
@@ -70,6 +70,13 @@
         .review-total-row.final { margin-top:8px; padding-top:12px; border-top:1px solid #e7ebe8; color:#202923; font-size:16px; font-weight:800; }
         .review-total-row .negative { color:#188451; }
         .review-modal-footer { display:flex; justify-content:flex-end; gap:10px; padding:16px 24px; border-top:1px solid #edf0ee; background:#fff; }
+        .checkout-loading-state,.checkout-empty-state,.checkout-empty-summary{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;width:100%;padding:42px 18px;color:#52615a}
+        .checkout-loading-icon,.checkout-empty-icon{display:grid;place-items:center;width:54px;height:54px;border-radius:4px;background:#f1f4f2;color:var(--primary,#800000);font-size:27px}
+        .checkout-loading-state strong,.checkout-empty-state h3,.checkout-empty-summary h2{margin:0;color:#26332d}
+        .checkout-loading-state>span:last-child,.checkout-empty-state p,.checkout-empty-summary p{margin:0;max-width:390px;color:#76827b;font-size:13px;line-height:1.6}
+        .checkout-empty-button{display:inline-flex;width:auto;text-decoration:none;margin-top:6px;padding:11px 20px}
+        .summary-list{display:flex;flex-direction:column;gap:12px}
+        .checkout-loading-state{min-height:220px}
         body.review-open { overflow:hidden; }
         @media(max-width:600px) {
             .steps { gap:5px; padding:0 8px; }
@@ -174,49 +181,11 @@
                         <ion-icon name="bag-handle-outline"></ion-icon>
                         <div><h2>Product Summary</h2><p>Select your preferred product options</p></div>
                     </div>
-                    <div class="product-area">
-                        <div class="product-gallery">
-                            <img id="mainProductImage" class="main-image" src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85" alt="Product">
-                            <div class="image-note"><ion-icon name="images-outline"></ion-icon> Product image preview</div>
-                        </div>
-                        <div class="product-info">
-                            <h2 id="productName">Premium Cotton T-Shirt</h2>
-                            <div class="rating"><span class="stars">★★★★★</span><span>4.8 (126 Reviews)</span></div>
-                            <div class="price">
-                                <span class="current-price" id="productPrice">Rs. 1,499</span>
-                                <span class="old-price">Rs. 1,999</span>
-                                <span class="sale-badge">25% OFF</span>
-                            </div>
-                            <div class="stock"><ion-icon name="checkmark-circle"></ion-icon> In Stock</div>
-                            <div class="option-title"><span>Select Color</span><span class="selected-value" id="selectedColor">Black</span></div>
-                            <div class="colors">
-                                <button class="color-option active" onclick="selectColor('Black','https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85',this)" aria-label="Black"><span class="color-inner black"></span></button>
-                                <button class="color-option" onclick="selectColor('White','https://images.unsplash.com/photo-1603252110481-7ba873bf42ab?auto=format&fit=crop&w=900&q=85',this)" aria-label="White"><span class="color-inner white"></span></button>
-                                <button class="color-option" onclick="selectColor('Red','https://images.unsplash.com/photo-1562157873-818bc0726f68?auto=format&fit=crop&w=900&q=85',this)" aria-label="Red"><span class="color-inner red"></span></button>
-                                <button class="color-option" onclick="selectColor('Blue','https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=900&q=85',this)" aria-label="Blue"><span class="color-inner blue"></span></button>
-                                <button class="color-option" onclick="selectColor('Green','https://images.unsplash.com/photo-1503341504253-dff4815485f1?auto=format&fit=crop&w=900&q=85',this)" aria-label="Green"><span class="color-inner green"></span></button>
-                                <button class="color-option" onclick="selectColor('Brown','https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=900&q=85',this)" aria-label="Brown"><span class="color-inner brown"></span></button>
-                            </div>
-                            <div class="option-title"><span>Select Size</span><span class="selected-value" id="selectedSize">L</span></div>
-                            <div class="sizes">
-                                <button class="size" onclick="selectSize('S',this)">S</button>
-                                <button class="size" onclick="selectSize('M',this)">M</button>
-                                <button class="size active" onclick="selectSize('L',this)">L</button>
-                                <button class="size" onclick="selectSize('XL',this)">XL</button>
-                                <button class="size" onclick="selectSize('XXL',this)">XXL</button>
-                            </div>
-                            <div class="option-title"><span>Quantity</span></div>
-                            <div class="quantity-box">
-                                <button class="qty-btn" onclick="changeQuantity(-1)">−</button>
-                                <span class="qty-number" id="quantity">1</span>
-                                <button class="qty-btn" onclick="changeQuantity(1)">+</button>
-                            </div>
-                            <div class="features">
-                                <div class="feature"><ion-icon name="shield-checkmark-outline"></ion-icon> Secure Payment</div>
-                                <div class="feature"><ion-icon name="car-outline"></ion-icon> Fast Delivery</div>
-                                <div class="feature"><ion-icon name="refresh-outline"></ion-icon> Easy Returns</div>
-                                <div class="feature"><ion-icon name="gift-outline"></ion-icon> Earn Rewards</div>
-                            </div>
+                    <div class="product-area" id="checkoutProductArea">
+                        <div class="checkout-loading-state" role="status" aria-live="polite">
+                            <span class="checkout-loading-icon"><ion-icon name="bag-handle-outline"></ion-icon></span>
+                            <strong>Loading your product</strong>
+                            <span>Please wait while we prepare your checkout.</span>
                         </div>
                     </div>
                 </section>
@@ -373,25 +342,16 @@
                     <ion-icon name="receipt-outline"></ion-icon>
                     <div><h2>Order Summary</h2><p>Review your purchase</p></div>
                 </div>
-                <div class="summary-product">
-                    <img id="summaryImage" src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=300&q=80" alt="Product">
-                    <div class="summary-product-info">
-                        <strong id="summaryName">Premium Cotton T-Shirt</strong>
-                        <span>Color: <b id="summaryColor">Black</b></span>
-                        <span>Size: <b id="summarySize">L</b></span>
-                        <span>Qty: <b id="summaryQty">1</b></span>
-                    </div>
-                    <div class="summary-price" id="summaryPrice">Rs. 1,499</div>
-                </div>
+                <div id="summaryList" class="summary-list" aria-live="polite"></div>
                 <div class="coupon">
                     <input type="text" id="coupon" placeholder="Promo code">
                     <button type="button" onclick="applyCoupon()">Apply</button>
                 </div>
-                <div class="summary-row"><span>Subtotal</span><span id="subtotal">Rs. 1,499</span></div>
-                <div class="summary-row"><span>Shipping</span><span id="shipping">Rs. 250</span></div>
+                <div class="summary-row"><span>Subtotal</span><span id="subtotal">Rs. 0</span></div>
+                <div class="summary-row"><span>Shipping</span><span id="shipping">Rs. 0</span></div>
                 <div class="summary-row"><span>Discount</span><span class="discount" id="discount">- Rs. 0</span></div>
                 <div class="summary-row"><span>Wallet</span><span class="discount" id="walletDiscount">- Rs. 0</span></div>
-                <div class="total"><strong>Total</strong><span id="total">Rs. 1,749</span></div>
+                <div class="total"><strong>Total</strong><span id="total">Rs. 0</span></div>
                 <div class="secure-note"><ion-icon name="shield-checkmark-outline"></ion-icon> Secure and protected checkout</div>
             </section>
 

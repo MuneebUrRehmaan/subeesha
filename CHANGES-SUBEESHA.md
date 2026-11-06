@@ -66,3 +66,26 @@ Use `info@subeesha.com` as the username and the actual Hostinger mailbox passwor
 - Navbar link coverage check across the storefront pages.
 
 The project has not been deployed to Firebase and live SMTP/email delivery has not been tested from this environment.
+
+
+---
+
+## Reseller orders, approvals, checkout empty state and corner-radius update
+
+1. Removed the duplicate demo submit listener from the reseller panel. Real order creation is handled only by `products.js`; the fake order/withdrawal success handlers and premature redirect have been removed.
+2. Reseller-created orders are attributed to the signed-in Firebase UID. Reseller Orders, Dashboard, Finance and Commission pages now listen for matching orders in real time.
+3. Added the `createResellerAccount` callable Cloud Function. When an applicant's email already has a Firebase Auth customer account, the existing UID is promoted to `reseller` and the current password, wallet and existing profile data are retained. New applicants still receive a new account and one-time temporary password. Existing admin accounts are protected from conversion.
+4. Removed hardcoded demo merchandise from the checkout page. An empty/unavailable cart now shows a neutral empty state and no fake product, color or price in the order summary.
+5. Capped normal component/card/control corner radii at 4px. Intentional circular and pill-shaped elements remain fully rounded.
+6. Updated `README-SETUP.md` with the Cloud Function deployment command.
+
+Deploy the new function and hosting files from the project root:
+
+```bash
+cd functions
+npm install
+cd ..
+firebase deploy --only functions:createResellerAccount,hosting
+```
+
+The new Cloud Function and Firebase changes have passed static checks in this environment, but have not been deployed or exercised against the live Firebase project.

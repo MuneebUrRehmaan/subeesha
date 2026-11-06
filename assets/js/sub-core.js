@@ -442,6 +442,9 @@
         var user = SUB.user;
         if (!user) return Promise.reject(new Error("Please login to place your order."));
         var profile = SUB.profile || {};
+        if (o.source === "reseller" && (profile.role !== "reseller" || SUB.isBlocked(profile))) {
+            return Promise.reject(new Error("Only an active reseller account can create reseller orders."));
+        }
         return Promise.all([SUB.catalog(true), SUB.settings("shipping", true)]).then(function (r) {
             var cat = r[0], ship = r[1];
             var lines = [], commission = 0;
@@ -463,9 +466,15 @@
             var dinfo = SUB.deliveryInfo(subtotal, ship, { city: (o.customer || {}).city, lat: loc && loc.lat, lng: loc && loc.lng });
             var shipping = dinfo.charge;
             var couponP = o.coupon ? SUB.checkCoupon(o.coupon, subtotal) : Promise.resolve(null);
-            var resP = (o.resellerCode && !o.resellerId)
-                ? SUB.db.collection("resellerCodes").doc(o.resellerCode).get().then(function (s) { return s.exists ? s.data().uid : null; }).catch(function () { return null; })
-                : Promise.resolve(o.resellerId || null);
+            // A reseller-created order must always be attributed to the authenticated UID.
+            // Never trust the profile's editable/custom fields for this relationship.
+            var resP = o.source === "reseller"
+                ? Promise.resolve(user.uid)
+                : (o.resellerCode
+                    ? SUB.db.collection("resellerCodes").doc(String(o.resellerCode).trim().toUpperCase()).get()
+                        .then(function (s) { return s.exists ? s.data().uid : null; })
+                        .catch(function () { return null; })
+                    : Promise.resolve(o.resellerId || null));
             return Promise.all([couponP, resP]).then(function (x) {
                 var coupon = x[0], resellerId = x[1];
                 if (resellerId === user.uid && o.source !== "reseller") resellerId = null;

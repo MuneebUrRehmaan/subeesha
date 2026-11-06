@@ -56,7 +56,7 @@ R.ready(function () {
         placing = true;
         SUB.placeOrder({
             items: [{ id: selected.id, qty: qty }], customer: { name: name, phone: phone, city: city, address: addr, province: "", area: "", postal: "", email: "" },
-            paymentMethod: pay, source: "reseller", resellerId: R.me.id
+            paymentMethod: pay, source: "reseller", resellerId: R.uid || (SUB.user && SUB.user.uid)
         }).then(function (o) {
             window.closeOrderModal();
             R.toast("Order " + o.orderNo + " placed successfully!");

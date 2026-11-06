@@ -439,15 +439,13 @@ function syncCart() {
 
 /* ---------- SUMMARY ---------- */
 function renderSummaryProducts() {
-    const first = document.querySelector(".summary-product")
-    if (!first) return
+    const box = $("summaryList")
+    if (!box) return
 
-    let box = $("summaryList")
-    if (!box) {
-        box = document.createElement("div")
-        box.id = "summaryList"
-        first.parentNode.insertBefore(box, first)
-        first.style.display = "none"
+    // Never leave static/demo merchandise in the summary when the cart is empty.
+    if (!items.length) {
+        box.innerHTML = ""
+        return
     }
 
     box.innerHTML = items.map(item => `
@@ -878,18 +876,36 @@ function confirmPlaceOrder() {
 
 /* ---------- INIT HELPERS ---------- */
 function emptyState(message) {
+    const title = document.querySelector(".page-title h1")
+    if (title) title.textContent = message
+
     const area = document.querySelector("#stageProduct .product-area")
     if (area) {
         area.innerHTML = `
-            <div style="text-align:center;width:100%;padding:40px 10px">
-                <ion-icon name="bag-handle-outline" style="font-size:54px;color:var(--primary)"></ion-icon>
-                <h3 style="margin:10px 0">${esc(message)}</h3>
-                <a href="${SUB.url("page/shop.html")}" class="place-order" style="display:inline-flex;text-decoration:none;width:auto;padding:12px 26px">Continue Shopping</a>
+            <div class="checkout-empty-state">
+                <span class="checkout-empty-icon"><ion-icon name="bag-handle-outline"></ion-icon></span>
+                <h3>${esc(message)}</h3>
+                <p>No product has been added to this checkout.</p>
+                <a href="${SUB.url("page/shop.html")}" class="checkout-btn checkout-empty-button">Continue Shopping</a>
             </div>`
     }
 
     const actions = document.querySelector("#stageProduct .checkout-actions")
     if (actions) actions.style.display = "none"
+
+    const summaryCard = document.querySelector(".right .card")
+    if (summaryCard) {
+        summaryCard.innerHTML = `
+            <div class="checkout-empty-summary">
+                <span class="checkout-empty-icon"><ion-icon name="receipt-outline"></ion-icon></span>
+                <h2>No order summary yet</h2>
+                <p>Your selected products and total will appear here after you add an item.</p>
+                <a href="${SUB.url("page/shop.html")}" class="checkout-btn checkout-empty-button">Browse Products</a>
+            </div>`
+    }
+
+    const steps = document.querySelector(".steps")
+    if (steps) steps.style.display = "none"
     calculateTotal()
 }
 
@@ -916,7 +932,7 @@ async function initCheckout() {
     setupLocation()
 
     if (!SUB.configured) {
-        calculateTotal()
+        emptyState(cartMode ? "Your cart is unavailable" : "Product details are unavailable")
         return
     }
 

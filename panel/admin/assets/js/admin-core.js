@@ -40,7 +40,7 @@
         ".a-sk-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.a-sk-row .sk{height:96px}" +
         "@media(max-width:800px){.a-sk-row{grid-template-columns:repeat(2,1fr)}}" +
         "html.a-booting .content>*:not(#aBootSk){display:none!important}html.a-booting .sidebar .menu{visibility:hidden}" +
-        ".toggle{border-radius:20px!important}" + "@media (prefers-reduced-motion:reduce){.sk::after{animation:none}}";
+        ".toggle{border-radius:999px!important}" + "@media (prefers-reduced-motion:reduce){.sk::after{animation:none}}";
     var css = d.createElement("style");
     css.textContent =
         ".a-note{background:#fff6e4;border:1px solid #f0dcaa;color:#7a5a12;padding:12px 14px;border-radius:4px;font-size:12px;margin-bottom:14px;line-height:1.6}" +
@@ -290,41 +290,33 @@
     };
 
     /* =====================================================
-       RESELLER ACCOUNT CREATION (no server needed)
-       Creates the Firebase Auth login with a one-time temporary
-       password (shown once, never stored) + users doc + public code.
+       RESELLER ACCOUNT CREATION
+       A callable Cloud Function links an existing Firebase
+       account or creates a new account without signing out
+       the current admin session.
        ===================================================== */
-    A.newResellerCode = function () {
-        var chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789", tries = 0;
-        function attempt() {
-            var c = "SUB", arr = new Uint32Array(4); (w.crypto || w.msCrypto).getRandomValues(arr);
-            for (var i = 0; i < 4; i++) c += chars[arr[i] % chars.length];
-            return SUB.db.collection("resellerCodes").doc(c).get().then(function (s) { return (s.exists && ++tries < 6) ? attempt() : c; });
-        }
-        return attempt();
-    };
     A.createReseller = function (o) {
-        var pass = SUB.randomPassword();
-        return A.newResellerCode().then(function (code) {
-            return SUB.createAccount(o.email, pass).then(function (uid) {
-                var db = SUB.db, b = db.batch();
-                b.set(db.collection("users").doc(uid), {
-                    name: o.name, email: o.email, whatsapp: o.phone || "", phone: o.phone || "", role: "reseller", status: "active", access: "Allowed",
-                    resellerCode: code, city: o.city || "", paymentMethod: o.paymentMethod || "", account: o.account || "", points: 0, wallet: 0, walletUsed: 0,
-                    createdAt: SUB.now(), createdBy: (A.me && A.me.name) || "admin"
-                });
-                b.set(db.collection("resellerCodes").doc(code), { uid: uid, name: o.name });
-                return b.commit().then(function () { return { uid: uid, code: code, password: pass }; });
-            });
-        });
+        if (!firebase.functions) {
+            return Promise.reject(new Error("Reseller account service is unavailable. Deploy the Firebase Functions update and reload this page."));
+        }
+        var callable = firebase.functions().httpsCallable("createResellerAccount");
+        return callable(o || {}).then(function (result) { return result.data || {}; });
     };
-    A.showCredentials = function (title, email, pass, code) {
+
+    A.showCredentials = function (title, email, pass, code, existingAccount) {
+        var loginUrl = location.origin + location.pathname.replace(/admin\/[^/]*$/, "reseller/index.html");
+        var accountMessage = existingAccount
+            ? '<div class="a-note ok">This existing account has been linked to the reseller application. The reseller can sign in with the <b>same email and current password</b>. Use Forgot Password if they need to reset it.</div>'
+            : '<div class="a-note ok">Reseller account created. <b>Copy the temporary password now</b> - it is shown only once and is not stored anywhere. The reseller can change it after signing in.</div>';
+        var passwordRow = existingAccount ? "" : '<b>Temporary password</b><span><code id="cPw">' + esc(pass) + "</code></span>";
         openModal(title,
-            '<div class="a-note ok">Account created. <b>Copy these login details now</b> - the password is shown only once and is not stored anywhere. The reseller can change it from the panel login page (Forgot password).</div>' +
-            '<div class="a-kv"><b>Login URL</b><span>' + esc(location.origin + location.pathname.replace(/admin\/[^/]*$/, "reseller/index.html")) + "</span><b>Email</b><span>" + esc(email) + "</span><b>Password</b><span><code id=\"cPw\">" + esc(pass) + "</code></span><b>Reseller code</b><span>" + esc(code) + "</span></div>",
+            accountMessage +
+            '<div class="a-kv"><b>Login URL</b><span>' + esc(loginUrl) + "</span><b>Email</b><span>" + esc(email) + "</span>" +
+            passwordRow + "<b>Reseller code</b><span>" + esc(code) + "</span></div>",
             function () {
-                var t = "Subeesha Reseller Login\nEmail: " + email + "\nPassword: " + pass + "\nReseller code: " + code;
-                if (navigator.clipboard) navigator.clipboard.writeText(t).then(function () { A.toast("Login details copied"); }); else A.toast("Select and copy manually.");
+                var t = "Subeesha Reseller Login\nEmail: " + email + (existingAccount ? "\nUse the existing account password." : "\nPassword: " + pass) + "\nReseller code: " + code + "\nLogin URL: " + loginUrl;
+                if (navigator.clipboard) navigator.clipboard.writeText(t).then(function () { A.toast("Login details copied"); });
+                else A.toast("Select and copy manually.");
             }, "Copy details");
     };
 

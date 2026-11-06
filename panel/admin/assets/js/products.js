@@ -10,7 +10,7 @@ A.ready(function () {
             var img = (p.images || [])[0];
             var stock = p.stock == null ? "-" : p.stock;
            return '<div class="product-card">' +
-    '<div class="product-img" style="width:100%;height:160px;max-height:160px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;background:#f8f8f8;border-radius:6px">' +
+    '<div class="product-img" style="width:100%;height:160px;max-height:160px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;background:#f8f8f8;border-radius:4px">' +
     (img
         ? '<img src="' + esc(SUB.img(img, 400)) + '" alt="' + esc(p.name) + '" style="width:100%;height:100%;max-height:160px;object-fit:contain;object-position:center;display:block">'
         : '<i class="fa-solid fa-image" style="color:#c5cec9"></i>') +

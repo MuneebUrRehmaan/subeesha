@@ -40,10 +40,27 @@ There is no server, so the very first admin has to be created by hand:
 
 Every other admin, reseller or staff account can then be created **from inside the Admin Panel** (Users page / Resellers page) - it generates a login automatically and shows the one-time password.
 
-## 5. Load some starter content
+## 5. Deploy reseller approval / existing-account linking
+
+The Admin Panel uses the callable Cloud Function `createResellerAccount` to approve reseller applications.
+It checks for an existing Firebase Authentication account by email:
+- If the email already belongs to a customer, that same UID is promoted to `reseller`; the current password and existing wallet/profile data are kept.
+- If no account exists, a new account is created and a one-time temporary password is shown.
+- Existing admin accounts cannot be converted into resellers.
+
+Deploy the callable function and hosting changes after updating the project:
+```
+cd functions
+npm install
+cd ..
+firebase deploy --only functions:createResellerAccount,hosting
+```
+The existing mail function remains deployed as-is. For a full backend redeploy (including mail), use `firebase deploy --only functions`.
+
+## 6. Load some starter content
 Open Admin Panel > Dashboard (or Settings) as Super Admin/Manager and click **Import Demo Data**. This loads the categories, products, banners and coupons that were originally hard-coded in the design, so the store isn't empty on first run.
 
-## 6. Hosting
+## 7. Hosting
 Any static host works (Firebase Hosting, Netlify, Vercel, a shared host). `firebase.json` is already set up for `firebase deploy --only hosting`.
 
 ## Roles

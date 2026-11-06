@@ -155,12 +155,27 @@ R.ready(function () {
     monthSelect.addEventListener("change", render);
     filterSelect.addEventListener("change", function () { renderTable(selectedOrders()); });
 
-    SUB.db.collection("orders").where("resellerId", "==", R.me.id).get().then(function (snapshot) {
+    var resellerUid = R.uid || (SUB.user && SUB.user.uid);
+    if (!resellerUid) {
+        tableBody.innerHTML = '<tr><td colspan="6" class="finance-empty">Your reseller session could not be verified. Please sign in again.</td></tr>';
+        finishLoading();
+        return;
+    }
+
+    var monthOptionsReady = false;
+    SUB.db.collection("orders").where("resellerId", "==", resellerUid).onSnapshot(function (snapshot) {
         allOrders = SUB.docs(snapshot);
+        var previousMonth = monthSelect.value;
         buildMonthOptions();
+        if (monthOptionsReady && previousMonth && Array.from(monthSelect.options).some(function (o) { return o.value === previousMonth; })) {
+            monthSelect.value = previousMonth;
+        }
+        monthOptionsReady = true;
         render();
-    }).catch(function (error) {
+        finishLoading();
+    }, function (error) {
         R.err(error);
         tableBody.innerHTML = '<tr><td colspan="6" class="finance-empty">Could not load financial records. Please refresh the page.</td></tr>';
-    }).finally(finishLoading);
+        finishLoading();
+    });
 });
