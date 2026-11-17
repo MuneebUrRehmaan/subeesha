@@ -1,8 +1,8 @@
 
 /* =========================================================
    SUBEESHA - BECOME RESELLER
-   Fixed registration, Cloudinary uploads, Firebase save,
-   CNIC formatting, document previews, FAQ and modal.
+   Spark-compatible applicant account + Cloudinary uploads,
+   Firestore application, CNIC formatting, previews and FAQ.
    ========================================================= */
 
 (function () {
@@ -264,6 +264,80 @@
     }
 
     /* =====================================================
+       APPLICANT AUTHENTICATION (NO CLOUD FUNCTIONS REQUIRED)
+    ===================================================== */
+
+    async function ensureApplicantAccount(email, fullName, phone, password) {
+        let authUser = SUB.user || (SUB.auth && SUB.auth.currentUser) || null
+
+        if (authUser && String(authUser.email || "").toLowerCase() !== email) {
+            throw new Error("You are signed in with another email. Please sign out first, then apply using the email you want for your reseller account.")
+        }
+
+        if (!authUser) {
+            if (!password || password.length < 6) {
+                throw new Error("Please create an account password with at least 6 characters, or sign in with your existing Subeesha account.")
+            }
+
+            try {
+                const credential = await SUB.auth.createUserWithEmailAndPassword(email, password)
+                authUser = credential.user
+            } catch (authError) {
+                if (authError?.code !== "auth/email-already-in-use") {
+                    throw new Error(SUB.authError(authError))
+                }
+
+                try {
+                    const credential = await SUB.auth.signInWithEmailAndPassword(email, password)
+                    authUser = credential.user
+                } catch (signInError) {
+                    throw new Error(SUB.authError(signInError) || "This email already has an account. Enter its current password to continue.")
+                }
+            }
+        }
+
+        if (!authUser) {
+            throw new Error("Your account could not be verified. Please sign in and try again.")
+        }
+
+        const userRef = SUB.db.collection("users").doc(authUser.uid)
+        const userSnapshot = await userRef.get()
+        let profile
+
+        if (!userSnapshot.exists) {
+            profile = {
+                name: fullName,
+                email: email,
+                whatsapp: phone,
+                role: "customer",
+                status: "active",
+                access: "Allowed",
+                points: 0,
+                wallet: 0,
+                walletUsed: 0,
+                createdAt: SUB.now()
+            }
+            await userRef.set(profile)
+        } else {
+            profile = userSnapshot.data() || {}
+        }
+
+        if (profile.role === "admin") {
+            throw new Error("Admin accounts cannot be registered as resellers.")
+        }
+        if (profile.role === "reseller") {
+            throw new Error("This email already belongs to an approved reseller account. Please use the reseller login.")
+        }
+        if (SUB.isBlocked(profile)) {
+            throw new Error("This account is blocked or suspended. Please contact support.")
+        }
+
+        SUB.user = authUser
+        SUB.profile = Object.assign({ id: authUser.uid }, profile)
+        return authUser.uid
+    }
+
+    /* =====================================================
        RESELLER FORM SUBMISSION
     ===================================================== */
 
@@ -308,6 +382,8 @@
         const cnic = $("cnic")?.value.trim() || ""
         const paymentMethod = $("paymentMethod")?.value || ""
         const accountNumber = $("accountNumber")?.value.trim() || ""
+        const accountPassword = $("accountPassword")?.value || ""
+        const confirmAccountPassword = $("confirmAccountPassword")?.value || ""
         const terms = $("terms")
 
         /* ================================================
@@ -344,6 +420,30 @@
         if (terms && !terms.checked) {
             alert("Please accept the terms and conditions.")
             return
+        }
+
+        const signedInUser = SUB && (SUB.user || (SUB.auth && SUB.auth.currentUser))
+        const isSameSignedInEmail = signedInUser && String(signedInUser.email || "").toLowerCase() === email
+
+        if (signedInUser && !isSameSignedInEmail) {
+            alert("You are signed in with another email. Please sign out first, then apply using the email you want for your reseller account.")
+            return
+        }
+
+        if (!isSameSignedInEmail && accountPassword.length < 6) {
+            alert("Please create a password with at least 6 characters. If you already have a Subeesha account, enter its current password.")
+            return
+        }
+
+        if (accountPassword || confirmAccountPassword) {
+            if (accountPassword !== confirmAccountPassword) {
+                alert("Account password and confirmation do not match.")
+                return
+            }
+            if (accountPassword.length < 6) {
+                alert("Password must contain at least 6 characters.")
+                return
+            }
         }
 
         /* ================================================
@@ -502,20 +602,26 @@
                 submitButton.textContent = "Submitting application..."
             }
 
+            const applicantUid = await ensureApplicantAccount(
+                email.toLowerCase(),
+                fullName,
+                phone,
+                accountPassword
+            )
+            const applicantEmail = String((SUB.user && SUB.user.email) || email).trim()
+
             const applicationData = {
+                applicantUid: applicantUid,
                 fullName: fullName,
                 phone: phone,
-                email: email.toLowerCase(),
+                email: applicantEmail,
                 city: city,
                 cnic: cnic,
                 paymentMethod: paymentMethod,
                 accountNumber: accountNumber,
                 documents: docs,
                 status: "Pending",
-                createdAt:
-                    typeof SUB.now === "function"
-                        ? SUB.now()
-                        : firebase.firestore.FieldValue.serverTimestamp()
+                createdAt: SUB.now()
             }
 
             const result = await SUB.db
@@ -524,7 +630,8 @@
 
             console.log(
                 "Reseller application submitted successfully:",
-                result.id
+                result.id,
+                "Applicant UID:", applicantUid
             )
 
             /* ============================================

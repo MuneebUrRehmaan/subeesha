@@ -111,6 +111,9 @@
         SUB.ready.then(function () { fn(SUB.user, SUB.profile); });
     };
     SUB.isBlocked = function (p) { return !!p && (p.status === "blocked" || p.access === "Suspended"); };
+    SUB.isAuthenticated = function () {
+        return !!(SUB.user && SUB.profile && !SUB.isBlocked(SUB.profile));
+    };
 
     if (SUB.configured) {
         SUB.auth.onAuthStateChanged(function (u) {
@@ -364,11 +367,16 @@
         count: function () { return SUB.cart.get().reduce(function (s, i) { return s + i.qty; }, 0); },
         total: function () { return SUB.cart.get().reduce(function (s, i) { return s + i.qty * SUB.num(i.price); }, 0); },
         add: function (item) {
+            if (!SUB.isAuthenticated()) {
+                SUB.notify("Please login first to add products to your cart.", "warning", "Login Required");
+                return false;
+            }
             var items = SUB.cart.get();
             var f = items.filter(function (i) { return i.id === item.id && (i.color || "") === (item.color || "") && (i.size || "") === (item.size || ""); })[0];
             if (f) { f.qty = Math.min(10, f.qty + (item.qty || 1)); f.price = item.price; }
             else items.push({ id: item.id, name: item.name, price: item.price, image: item.image || "", qty: item.qty || 1, color: item.color || "", size: item.size || "" });
             SUB.cart.save(items);
+            return true;
         },
         setQty: function (idx, qty) {
             var items = SUB.cart.get(); if (!items[idx]) return;
@@ -452,6 +460,10 @@
                 var it = o.items[i];
                 var p = cat.products.filter(function (x) { return x.id === it.id; })[0];
                 if (!p) throw new Error("A product in your order is no longer available.");
+                if (o.source === "reseller") {
+                    var assigned = Array.isArray(profile.assignedProductIds) ? profile.assignedProductIds : [];
+                    if (assigned.indexOf(p.id) < 0) throw new Error(p.name + " has not been assigned to your reseller account.");
+                }
                 var qty = Math.max(1, Math.min(10, Math.floor(SUB.num(it.qty) || 1)));
                 if (p._stock < qty) throw new Error(p.name + " has only " + p._stock + " item(s) in stock.");
                 var line = { id: p.id, name: p.name, price: p._price, qty: qty, image: p._img, color: it.color || "", size: it.size || "", sku: p.sku || "" };

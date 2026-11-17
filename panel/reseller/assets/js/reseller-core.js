@@ -32,15 +32,26 @@
         }
         var lo = d.querySelector(".logout-btn");
         if (lo) lo.setAttribute("onclick", "R.logout()");
-        var referral = location.origin + location.pathname.replace(/panel\/reseller\/.*/, "index.html") + "?ref=" + (p.resellerCode || "");
+        var sitePath = location.pathname.replace(/panel\/reseller\/.*/, "");
+        var referral = location.origin + sitePath + "index.html?ref=" + encodeURIComponent(p.resellerCode || "");
+        R.productLink = function (id) {
+            return location.origin + sitePath + "page/billing.html?product=" + encodeURIComponent(id || "") + "&ref=" + encodeURIComponent(p.resellerCode || "");
+        };
+        function copyLink(value, successMessage) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(value).then(function () { R.toast(successMessage); }).catch(function () {
+                    w.prompt("Copy this link", value);
+                });
+            } else {
+                w.prompt("Copy this link", value);
+            }
+        }
         w.copyReferralLink = function () {
-            if (navigator.clipboard) navigator.clipboard.writeText(referral);
-            R.toast("Your reseller referral link copied!");
+            copyLink(referral, "Your reseller referral link copied!");
         };
         w.shareProduct = function (name, id) {
-            var link = location.origin + location.pathname.replace(/panel\/reseller\/.*/, "page/billing.html") + "?product=" + encodeURIComponent(id || "") + "&ref=" + (p.resellerCode || "");
-            if (navigator.clipboard) navigator.clipboard.writeText(link);
-            R.toast(name + " referral link copied!");
+            var link = R.productLink(id);
+            copyLink(link, name + " product link copied!");
         };
     }
     R.logout = function () { SUB.signOut().then(function () { location.href = "login.html"; }); };

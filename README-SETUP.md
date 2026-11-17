@@ -38,24 +38,25 @@ There is no server, so the very first admin has to be created by hand:
    - `walletUsed` (number) = `0`
 3. Open `panel/admin/login.html` and sign in.
 
-Every other admin, reseller or staff account can then be created **from inside the Admin Panel** (Users page / Resellers page) - it generates a login automatically and shows the one-time password.
+Other admin and staff accounts can then be created **from inside the Admin Panel**. Reseller accounts must apply through the public Become a Seller form and be approved from Admin > Applications.
 
-## 5. Deploy reseller approval / existing-account linking
+## 5. Reseller applications and approval (Firebase Spark compatible)
 
-The Admin Panel uses the callable Cloud Function `createResellerAccount` to approve reseller applications.
-It checks for an existing Firebase Authentication account by email:
-- If the email already belongs to a customer, that same UID is promoted to `reseller`; the current password and existing wallet/profile data are kept.
-- If no account exists, a new account is created and a one-time temporary password is shown.
-- Existing admin accounts cannot be converted into resellers.
+The reseller application and approval flow does **not** use Cloud Functions and works on the Firebase Spark plan:
+- Applicants create a Subeesha login (or sign in with their existing account) while submitting the reseller form.
+- The application stores the authenticated Firebase UID, so the admin can approve the exact account without searching Authentication by email.
+- Super Admin / Manager approves the application from **Admin > Applications**. Approval promotes the applicant's existing customer profile to `reseller`; their password, wallet and points are preserved.
+- New applicants choose their own password. The admin does not receive or need that password.
+- From **Admin > Resellers > Assign**, select the products that each reseller is allowed to display, share and sell.
+- A reseller sees only assigned products in their Products page. Product links carry the reseller referral code, and order creation is also checked against the assigned product IDs in Firestore rules.
+- Reseller accounts can only be created by approving an application. The manual Add Reseller action has been removed.
 
-Deploy the callable function and hosting changes after updating the project:
+Deploy the updated website and rules:
 ```
-cd functions
-npm install
-cd ..
-firebase deploy --only functions:createResellerAccount,hosting
+firebase deploy --only hosting,firestore:rules
 ```
-The existing mail function remains deployed as-is. For a full backend redeploy (including mail), use `firebase deploy --only functions`.
+
+For older applications that were submitted before applicant accounts were introduced, the admin approval screen can create a login with a one-time temporary password. If that email already has an Auth login but no linked user profile, ask the applicant to sign in and submit the updated application so the UID can be linked safely.
 
 ## 6. Load some starter content
 Open Admin Panel > Dashboard (or Settings) as Super Admin/Manager and click **Import Demo Data**. This loads the categories, products, banners and coupons that were originally hard-coded in the design, so the store isn't empty on first run.
@@ -97,7 +98,7 @@ Customers can pin their location on a Leaflet/OpenStreetMap map at **signup** (o
 Maps use OpenStreetMap tiles and Nominatim search (free, no API key; fair-use limits apply).
 
 ### 3. Order emails (Admin > Settings > Email Notifications)
-The admin panel already writes outgoing email jobs to the Firestore `mail` collection. The project includes a self-managed Firebase Cloud Function that processes this queue using Hostinger SMTP.
+The admin panel writes outgoing email jobs to the Firestore `mail` collection. The project includes an optional self-managed Firebase Cloud Function that processes this queue using Hostinger SMTP. This email automation is separate from reseller applications and still requires the Blaze plan; it is not required for reseller approval or product assignment on Spark.
 
 **Hostinger SMTP values**
 - SMTP host: `smtp.hostinger.com`

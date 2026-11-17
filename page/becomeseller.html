@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="../assets/css/becomeseller.css">
     <link rel="stylesheet" href="../assets/css/navbar.css">
     <link rel="stylesheet" href="../assets/css/sub-ui.css">
+<style>
+        .field-hint{display:block;margin-top:6px;color:#78837e;font-size:11px;line-height:1.5}
+    </style>
 </head>
 
 <body data-page="becomeseller">
@@ -589,6 +592,26 @@
                                 <label>Email Address</label>
 
                                 <input type="email" id="email" placeholder="Enter email address" required>
+
+                            </div>
+
+                            <!-- RESELLER LOGIN -->
+
+                            <div class="form-group">
+
+                                <label>Account Password</label>
+
+                                <input type="password" id="accountPassword" placeholder="Create a password or enter your current password" minlength="6" autocomplete="new-password">
+
+                                <small class="field-hint">Use your existing account password if you already shop with Subeesha. Already signed in with this email? You can leave it blank.</small>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Confirm Password</label>
+
+                                <input type="password" id="confirmAccountPassword" placeholder="Confirm account password" minlength="6" autocomplete="new-password">
 
                             </div>
 

@@ -62,13 +62,17 @@
             var p = (w.__products || []).filter(function (x) { return x.id === idOrName; })[0];
             if (p) {
                 if (p._stock <= 0) return SUB.notify(p.name + " is out of stock.", "error", "Out of Stock");
-                SUB.cart.add({ id: p.id, name: p.name, price: p._price, image: p._img, qty: 1 });
+                if (!SUB.cart.add({ id: p.id, name: p.name, price: p._price, image: p._img, qty: 1 })) return;
                 return SUB.notify(p.name + " added to cart!", "success", "Added to Cart");
             }
-            SUB.cart.add({ id: "demo-" + SUB.slug(idOrName), name: idOrName, price: Number(price) || 0, qty: 1 });
+            if (!SUB.cart.add({ id: "demo-" + SUB.slug(idOrName), name: idOrName, price: Number(price) || 0, qty: 1 })) return;
             SUB.notify(idOrName + " added to cart!", "success", "Added to Cart");
         };
         w.showCart = function () {
+            if (!SUB.isAuthenticated()) {
+                w.location.href = SUB.url("page/billing.html?cart=1");
+                return;
+            }
             if (!SUB.cart.count()) return SUB.notify("Your cart is empty.", "warning", "Cart");
             w.location.href = SUB.url("page/billing.html?cart=1");
         };
@@ -137,7 +141,7 @@
             if (p._stock <= 0) return SUB.notify(p.name + " is out of stock.", "error", "Out of Stock");
             // products with sizes/colours need a choice first -> open the detail page
             if ((p.sizes && p.sizes.length) || (p.colors && p.colors.length)) { w.location.href = productUrl(id); return; }
-            SUB.cart.add({ id: p.id, name: p.name, price: p._price, image: p._img, qty: 1 });
+            if (!SUB.cart.add({ id: p.id, name: p.name, price: p._price, image: p._img, qty: 1 })) return;
             SUB.notify(p.name + " added to your cart.", "success", "Added to Cart");
         },
         wish: function (btn, id) {

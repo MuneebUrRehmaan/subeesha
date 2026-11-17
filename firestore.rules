@@ -26,6 +26,15 @@ service cloud.firestore {
     function isStaff()    { return isAdmin() && adminRole() in ['Super Admin', 'Manager', 'Staff']; }
     function isReseller() { return active() && me().role == 'reseller'; }
     function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+    function resellerOrderHasAssignedProduct() {
+      let items = request.resource.data.get('items', []);
+      let assigned = me().get('assignedProductIds', []);
+      return items is list
+             && items.size() == 1
+             && items[0].id is string
+             && assigned is list
+             && assigned.hasAny([items[0].id]);
+    }
 
     /* ---------- users ---------- */
     match /users/{uid} {
@@ -42,10 +51,31 @@ service cloud.firestore {
                         && request.resource.data.wallet == 0
                         && request.resource.data.walletUsed == 0)
                     || isSuper()
-                    || (isStaff() && request.resource.data.role != 'admin');
+                    || (isManager()
+                        && request.resource.data.role == 'reseller'
+                        && request.resource.data.resellerApplicationId is string
+                        && exists(/databases/$(database)/documents/resellerApplications/$(request.resource.data.resellerApplicationId))
+                        && get(/databases/$(database)/documents/resellerApplications/$(request.resource.data.resellerApplicationId)).data.status == 'Pending'
+                        && get(/databases/$(database)/documents/resellerApplications/$(request.resource.data.resellerApplicationId)).data.applicantUid == uid
+                        && get(/databases/$(database)/documents/resellerApplications/$(request.resource.data.resellerApplicationId)).data.email == request.resource.data.email)
+                    || (isStaff() && request.resource.data.role == 'customer');
 
       allow update: if isSuper()
-                    || (isStaff() && resource.data.role != 'admin' && request.resource.data.role != 'admin')
+                    || (isManager()
+                        && resource.data.get('role', 'customer') == 'customer'
+                        && request.resource.data.role == 'reseller'
+                        && request.resource.data.resellerApplicationId is string
+                        && exists(/databases/$(database)/documents/resellerApplications/$(request.resource.data.resellerApplicationId))
+                        && get(/databases/$(database)/documents/resellerApplications/$(request.resource.data.resellerApplicationId)).data.status == 'Pending'
+                        && get(/databases/$(database)/documents/resellerApplications/$(request.resource.data.resellerApplicationId)).data.applicantUid == uid
+                        && get(/databases/$(database)/documents/resellerApplications/$(request.resource.data.resellerApplicationId)).data.email == request.resource.data.email
+                        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name','email','phone','whatsapp','city','cnic','paymentMethod','account','resellerDocuments','role','status','access','resellerCode','assignedProductIds','points','wallet','walletUsed','createdAt','updatedAt','createdBy','resellerApplicationId']))
+                    || (isManager()
+                        && resource.data.role == 'reseller'
+                        && request.resource.data.role == 'reseller'
+                        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','access','assignedProductIds','updatedAt','paymentMethod','account','phone','whatsapp','city','name']))
+                    || (isStaff() && resource.data.role != 'admin' && request.resource.data.role != 'admin'
+                        && resource.data.role != 'reseller' && request.resource.data.role != 'reseller')
                     || (isAdmin() && resource.data.role != 'admin' && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['points','wallet','walletUsed']))
                     || (isOwner(uid) && active() && (
                           // normal profile edit
@@ -107,7 +137,8 @@ service cloud.firestore {
                            && request.resource.data.source == 'reseller'
                            && request.resource.data.resellerId == request.auth.uid
                            && request.resource.data.userId == null
-                           && request.resource.data.walletUsed == 0)
+                           && request.resource.data.walletUsed == 0
+                           && resellerOrderHasAssignedProduct())
                          ||
                          isAdmin()
                        );
@@ -170,7 +201,19 @@ service cloud.firestore {
 
     /* ---------- reseller system ---------- */
     match /resellerApplications/{id} {
-      allow create: if request.resource.data.status == 'Pending';
+      allow create: if signedIn()
+                    && request.resource.data.keys().hasOnly(['applicantUid','fullName','phone','email','city','cnic','paymentMethod','accountNumber','documents','status','createdAt'])
+                    && request.resource.data.applicantUid == request.auth.uid
+                    && request.resource.data.email == request.auth.token.email
+                    && request.resource.data.status == 'Pending'
+                    && request.resource.data.fullName is string
+                    && request.resource.data.phone is string
+                    && request.resource.data.city is string
+                    && request.resource.data.cnic is string
+                    && request.resource.data.paymentMethod is string
+                    && request.resource.data.accountNumber is string
+                    && request.resource.data.documents is map
+                    && request.resource.data.createdAt == request.time;
       allow read, update, delete: if isManager();
     }
     match /resellerCodes/{code} { allow get: if true; allow list: if isAdmin(); allow write: if isManager(); }

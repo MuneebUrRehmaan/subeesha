@@ -610,10 +610,22 @@ w.showToast = function (m, type, title) {
                     );
                 }
 
+                if (!SUB.isAuthenticated()) {
+                    if (buyNow) {
+                        var checkoutTarget = "page/billing.html?product=" + encodeURIComponent(p.id) +
+                            "&qty=" + encodeURIComponent(String(qty)) +
+                            "&color=" + encodeURIComponent(color || "") +
+                            "&size=" + encodeURIComponent(size || "");
+                        w.location.href = SUB.url("account.html?next=" + encodeURIComponent(checkoutTarget));
+                    } else {
+                        SUB.notify("Please login first to add products to your cart.", "warning", "Login Required");
+                    }
+                    return;
+                }
 
                 /* Add selected product to cart */
 
-                SUB.cart.add({
+                if (!SUB.cart.add({
                     id: p.id,
                     name: p.name,
                     price: p._price,
@@ -621,7 +633,7 @@ w.showToast = function (m, type, title) {
                     qty: qty,
                     color: color,
                     size: size
-                });
+                })) return;
 
 
                 /* BUY NOW: Go directly to checkout */

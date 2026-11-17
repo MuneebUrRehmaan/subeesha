@@ -74,18 +74,25 @@ The project has not been deployed to Firebase and live SMTP/email delivery has n
 
 1. Removed the duplicate demo submit listener from the reseller panel. Real order creation is handled only by `products.js`; the fake order/withdrawal success handlers and premature redirect have been removed.
 2. Reseller-created orders are attributed to the signed-in Firebase UID. Reseller Orders, Dashboard, Finance and Commission pages now listen for matching orders in real time.
-3. Added the `createResellerAccount` callable Cloud Function. When an applicant's email already has a Firebase Auth customer account, the existing UID is promoted to `reseller` and the current password, wallet and existing profile data are retained. New applicants still receive a new account and one-time temporary password. Existing admin accounts are protected from conversion.
+3. The initial version used a `createResellerAccount` callable Cloud Function. **This has since been replaced by the Spark-compatible flow described in `README-SETUP.md`**: applicants authenticate on the Become a Seller form, and an admin approves/promotes that exact UID directly through Firestore. Reseller approval and product assignment no longer require Cloud Functions.
 4. Removed hardcoded demo merchandise from the checkout page. An empty/unavailable cart now shows a neutral empty state and no fake product, color or price in the order summary.
 5. Capped normal component/card/control corner radii at 4px. Intentional circular and pill-shaped elements remain fully rounded.
 6. Updated `README-SETUP.md` with the Cloud Function deployment command.
 
-Deploy the new function and hosting files from the project root:
+For the current Spark-compatible reseller implementation, deploy hosting and Firestore rules from the project root:
 
 ```bash
-cd functions
-npm install
-cd ..
-firebase deploy --only functions:createResellerAccount,hosting
+firebase deploy --only hosting,firestore:rules
 ```
 
+Do not deploy the retired `createResellerAccount` function for reseller approvals.
+
 The new Cloud Function and Firebase changes have passed static checks in this environment, but have not been deployed or exercised against the live Firebase project.
+
+
+## Login required for cart and checkout (17 November 2026)
+
+1. Adding a product to the cart now requires an authenticated Subeesha account. The shared cart function blocks unauthenticated attempts, including product cards, quick view, wishlist and product detail actions.
+2. Buy Now redirects signed-out visitors to the account page and resumes checkout for the selected product after login.
+3. Opening the cart while signed out shows a clear “Login first to add product to your cart” message with Login / Create Account and Continue Shopping links. Direct checkout URLs are protected by the same login check.
+4. The existing Spark-compatible reseller application approval action remains available under Admin Panel → Reseller System → Reseller Applications.

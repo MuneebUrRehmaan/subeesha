@@ -7,15 +7,34 @@ R.ready(function () {
     function draw(list) {
         grid.innerHTML = list.length ? list.map(function (p) {
             var earn = Math.round(p._price * SUB.num(p.commission) / 100);
+            var productLink = R.productLink(p.id);
             return '<div class="product-card" data-product="' + esc(p.name) + '" data-id="' + esc(p.id) + '"><div class="product-image"><span class="commission-badge">' + SUB.num(p.commission) + '% Commission</span><img src="' + esc(SUB.img(p._img, 600)) + '" alt="' + esc(p.name) + '"></div>' +
                 '<div class="product-info"><span class="category">' + esc(p.category || "") + "</span><h3>" + esc(p.name) + '</h3><div class="product-price"><strong>' + SUB.money(p._price) + "</strong><span>You Earn: " + SUB.money(earn) + "</span></div>" +
-                '<div class="product-actions"><button class="share-btn" onclick="shareProduct(\'' + esc(p.name).replace(/'/g, "") + "','" + esc(p.id) + '\')"><ion-icon name="share-social-outline"></ion-icon> Share</button>' +
+                '<div class="product-actions"><button class="share-btn" onclick="shareProduct(\'' + esc(p.name).replace(/'/g, "") + "','" + esc(p.id) + '\')"><ion-icon name="share-social-outline"></ion-icon> Copy Link</button>' +
+                '<a class="share-btn" href="' + esc(productLink) + '" target="_blank" rel="noopener" style="text-decoration:none"><ion-icon name="open-outline"></ion-icon> View Link</a>' +
                 '<button class="order-btn" onclick="openOrderModal(\'' + esc(p.id) + '\')"' + (p._stock <= 0 ? " disabled" : "") + '><ion-icon name="add-circle-outline"></ion-icon> ' + (p._stock <= 0 ? "Out of Stock" : "Create Order") + "</button></div></div></div>";
         }).join("") : '<p style="grid-column:1/-1;text-align:center;color:#68736e;padding:30px">No products available yet.</p>';
     }
-    SUB.catalog().then(function (c) {
-        products = c.products.filter(function (p) { return SUB.num(p.commission) > 0; });
+    var assignedIds = Array.isArray(R.me.assignedProductIds) ? R.me.assignedProductIds : [];
+    if (!assignedIds.length) {
+        draw([]);
+        var emptyMessage = grid.querySelector("p");
+        if (emptyMessage) emptyMessage.textContent = "No products have been assigned to your account yet. Please contact Subeesha admin.";
+    }
+
+    SUB.catalog(true).then(function (c) {
+        products = c.products.filter(function (p) {
+            return assignedIds.indexOf(p.id) > -1 && p.active !== false;
+        });
         draw(products);
+        if (!products.length) {
+            var emptyMessage = grid.querySelector("p");
+            if (emptyMessage) {
+                emptyMessage.textContent = assignedIds.length
+                    ? "Your assigned products are currently inactive or unavailable. Please contact Subeesha admin."
+                    : "No products have been assigned to your account yet. Please contact Subeesha admin.";
+            }
+        }
         var search = document.getElementById("productSearch");
         if (search) search.addEventListener("keyup", function () {
             var v = this.value.toLowerCase();

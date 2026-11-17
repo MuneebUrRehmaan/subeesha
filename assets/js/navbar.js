@@ -148,6 +148,10 @@
     });
     var cart = $("sbCart");
     if (cart) cart.addEventListener("click", function () {
+        if (!SUB.isAuthenticated()) {
+            w.location.href = SUB.url("page/billing.html?cart=1");
+            return;
+        }
         if (!SUB.cart.count()) return SUB.notify("Your cart is empty.", "warning", "Cart");
         w.location.href = SUB.url("page/billing.html?cart=1");
     });

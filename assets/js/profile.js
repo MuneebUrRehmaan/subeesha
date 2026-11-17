@@ -448,7 +448,7 @@ function removeWish(id) { SUB.wish.toggle(id); loadWishlist(); showToast("Succes
 function wishToCart(id) {
     const p = (window.__products || []).find(x => x.id === id); if (!p) return;
     if (p._stock <= 0) return showToast("Error", "This product is out of stock.", "error");
-    SUB.cart.add({ id: p.id, name: p.name, price: p._price, image: p._img, qty: 1 });
+    if (!SUB.cart.add({ id: p.id, name: p.name, price: p._price, image: p._img, qty: 1 })) return;
     showToast("Success", "Product added to cart.", "success");
 }
 

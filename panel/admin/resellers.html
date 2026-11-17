@@ -201,7 +201,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 </header>
 
 <div class="content">
-<section class="page active" id="resellers"><div class="section-toolbar"><div><h2>Resellers</h2><p class="label">Manage your approved reseller network.</p></div><div class="toolbar-actions"><input class="search" id="fSearch" placeholder="Search resellers..." style="min-width:180px"><button class="btn primary" onclick="openResellerModal()"><i class="fa-solid fa-plus"></i> Add Reseller</button></div></div><div class="card"><div class="table-wrap"><table class="table"><thead><tr><th>Reseller</th><th>Code</th><th>Payment</th><th>Orders</th><th>Sales</th><th>Earned</th><th>Status</th><th>Actions</th></tr></thead><tbody id="resBody"></tbody></table></div></div></section>
+<section class="page active" id="resellers"><div class="section-toolbar"><div><h2>Resellers</h2><p class="label">Manage your approved reseller network.</p></div><div class="toolbar-actions"><input class="search" id="fSearch" placeholder="Search resellers..." style="min-width:180px"><a class="btn primary" href="reseller-requests.html"><i class="fa-solid fa-clipboard-check"></i> Review Applications</a></div></div><div class="card"><div class="table-wrap"><table class="table"><thead><tr><th>Reseller</th><th>Code</th><th>Payment</th><th>Products</th><th>Orders</th><th>Sales</th><th>Earned</th><th>Status</th><th>Actions</th></tr></thead><tbody id="resBody"></tbody></table></div></div></section>
 </div>
 </main>
 </div>
@@ -240,7 +240,6 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-functions-compat.js"></script>
 <script src="../../assets/js/firebase-config.js"></script>
 <script src="../../assets/js/sub-core.js"></script>
 <script src="assets/js/common.js"></script>

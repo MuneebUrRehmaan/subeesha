@@ -875,6 +875,47 @@ function confirmPlaceOrder() {
 }
 
 /* ---------- INIT HELPERS ---------- */
+function loginRequiredState() {
+    const title = document.querySelector(".page-title h1")
+    if (title) title.textContent = "Login Required"
+
+    const next = "page/billing.html" + location.search
+    const loginUrl = SUB.url("account.html?next=" + encodeURIComponent(next))
+    const heading = cartMode ? "Login first to add product to your cart" : "Login first to continue with Buy Now"
+    const message = cartMode
+        ? "Please sign in to view your cart, add products and continue with checkout."
+        : "Please sign in to continue with your selected product and complete checkout."
+    const area = document.querySelector("#stageProduct .product-area")
+
+    if (area) {
+        area.innerHTML = `
+            <div class="checkout-empty-state">
+                <span class="checkout-empty-icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
+                <h3>${esc(heading)}</h3>
+                <p>${esc(message)}</p>
+                <a href="${esc(loginUrl)}" class="checkout-btn checkout-empty-button">Login / Create Account</a>
+                <a href="${SUB.url("page/shop.html")}" style="margin-top:8px;color:var(--primary,#800000);font-size:13px;font-weight:600">Continue Shopping</a>
+            </div>`
+    }
+
+    const actions = document.querySelector("#stageProduct .checkout-actions")
+    if (actions) actions.style.display = "none"
+
+    const summaryCard = document.querySelector(".right .card")
+    if (summaryCard) {
+        summaryCard.innerHTML = `
+            <div class="checkout-empty-summary">
+                <span class="checkout-empty-icon"><ion-icon name="person-circle-outline"></ion-icon></span>
+                <h2>Sign in to continue</h2>
+                <p>Your cart and order summary will be available after you log in.</p>
+                <a href="${esc(loginUrl)}" class="checkout-btn checkout-empty-button">Login First</a>
+            </div>`
+    }
+
+    const steps = document.querySelector(".steps")
+    if (steps) steps.style.display = "none"
+}
+
 function emptyState(message) {
     const title = document.querySelector(".page-title h1")
     if (title) title.textContent = message
@@ -927,14 +968,21 @@ function lineFrom(product, quantity, extra) {
 
 async function initCheckout() {
     cartMode = SUB.qs("cart") === "1"
-    if ($("useWallet")) $("useWallet").checked = false
-    setupPayments()
-    setupLocation()
 
     if (!SUB.configured) {
         emptyState(cartMode ? "Your cart is unavailable" : "Product details are unavailable")
         return
     }
+
+    await SUB.ready
+    if (!SUB.isAuthenticated()) {
+        loginRequiredState()
+        return
+    }
+
+    if ($("useWallet")) $("useWallet").checked = false
+    setupPayments()
+    setupLocation()
 
     const [catalog, shipping] = await Promise.all([
         SUB.catalog(),
@@ -967,7 +1015,10 @@ async function initCheckout() {
         if (!product) return emptyState("Product not found")
 
         const quantity = Math.max(1, Math.min(10, parseInt(SUB.qs("qty"), 10) || 1))
-        items = [lineFrom(product, Math.min(quantity, Math.max(1, product._stock)))]
+        items = [lineFrom(product, Math.min(quantity, Math.max(1, product._stock)), {
+            color: SUB.qs("color") || "",
+            size: SUB.qs("size") || ""
+        })]
         renderSingle()
 
         if (product._stock <= 0) {

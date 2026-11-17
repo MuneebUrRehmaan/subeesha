@@ -290,24 +290,174 @@
     };
 
     /* =====================================================
-       RESELLER ACCOUNT CREATION
-       A callable Cloud Function links an existing Firebase
-       account or creates a new account without signing out
-       the current admin session.
+       RESELLER APPROVAL (SPARK-COMPATIBLE)
+       Applicants authenticate before submitting the form.
+       Approval only promotes their existing Auth/Firestore UID.
+       Legacy applications can be linked to an existing user or
+       receive a one-time password-created account when required.
        ===================================================== */
-    A.createReseller = function (o) {
-        if (!firebase.functions) {
-            return Promise.reject(new Error("Reseller account service is unavailable. Deploy the Firebase Functions update and reload this page."));
-        }
-        var callable = firebase.functions().httpsCallable("createResellerAccount");
-        return callable(o || {}).then(function (result) { return result.data || {}; });
+    function makeResellerCode() {
+        var chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789", out = "SUB";
+        var bytes = new Uint8Array(4);
+        if (w.crypto && w.crypto.getRandomValues) w.crypto.getRandomValues(bytes);
+        else for (var i = 0; i < bytes.length; i++) bytes[i] = Math.floor(Math.random() * 256);
+        for (var j = 0; j < bytes.length; j++) out += chars[bytes[j] % chars.length];
+        return out;
+    }
+
+    A.approveResellerApplication = function (applicationId, temporaryPassword) {
+        var db = SUB.db, appRef = db.collection("resellerApplications").doc(applicationId);
+
+        return appRef.get().then(function (appSnap) {
+            if (!appSnap.exists) throw new Error("This reseller application no longer exists.");
+            var app = appSnap.data() || {};
+            if (app.status !== "Pending") throw new Error("Only pending applications can be approved.");
+            // Preserve the exact Firebase Auth email casing saved with the application;
+            // Firestore rules compare it directly with request.auth.token.email.
+            var email = String(app.email || "").trim();
+            var emailLower = email.toLowerCase();
+            if (!email) throw new Error("The application does not contain an email address.");
+
+            var resolveAccount;
+            if (app.applicantUid) {
+                resolveAccount = Promise.resolve({ uid: app.applicantUid, existingAccount: true, password: null });
+            } else {
+                // Compatibility for applications submitted before the Spark update.
+                resolveAccount = db.collection("users").where("email", "==", email).limit(2).get().then(function (usersSnap) {
+                    if (usersSnap.size > 1) throw new Error("More than one customer profile uses this email. Resolve the duplicate profiles before approving.");
+                    if (!usersSnap.empty) {
+                        return { uid: usersSnap.docs[0].id, existingAccount: true, password: null };
+                    }
+                    // Older profiles may have saved the same address with different letter casing.
+                    return db.collection("users").get().then(function (allUsers) {
+                        var matches = allUsers.docs.filter(function (doc) {
+                            return String((doc.data() || {}).email || "").trim().toLowerCase() === emailLower;
+                        });
+                        if (matches.length > 1) throw new Error("More than one customer profile uses this email. Resolve the duplicate profiles before approving.");
+                        if (matches.length === 1) {
+                            return { uid: matches[0].id, existingAccount: true, password: null };
+                        }
+                        if (!temporaryPassword || temporaryPassword.length < 6) {
+                            throw new Error("This older application has no linked login. Enter a temporary password to create its account.");
+                        }
+                        return SUB.createAccount(email, temporaryPassword).then(function (uid) {
+                            return { uid: uid, existingAccount: false, password: temporaryPassword };
+                        }).catch(function (error) {
+                            if (error && error.code === "auth/email-already-in-use") {
+                                throw new Error("This email already has a Firebase login but no linked customer profile. Ask the applicant to sign in and submit the updated reseller form so the UID can be linked safely.");
+                            }
+                            throw new Error(SUB.authError(error));
+                        });
+                    });
+                });
+            }
+
+            return resolveAccount.then(function (account) {
+                var uid = account.uid;
+                var userRef = db.collection("users").doc(uid);
+
+                // Attach legacy applications to their account before applying
+                // the role-change rules, which validate this UID relationship.
+                var attachApplicant = app.applicantUid === uid
+                    ? Promise.resolve()
+                    : appRef.update({ applicantUid: uid, email: email });
+
+                return attachApplicant.then(function () {
+                    function commitApproval(attemptsLeft) {
+                        var code = makeResellerCode();
+                        var codeRef = db.collection("resellerCodes").doc(code);
+
+                        return db.runTransaction(function (tx) {
+                            return Promise.all([
+                                tx.get(appRef),
+                                tx.get(userRef),
+                                tx.get(codeRef)
+                            ]).then(function (snaps) {
+                                var currentAppSnap = snaps[0], userSnap = snaps[1], codeSnap = snaps[2];
+                                if (!currentAppSnap.exists) throw new Error("This reseller application no longer exists.");
+                                var currentApp = currentAppSnap.data() || {};
+                                if (currentApp.status !== "Pending") throw new Error("Only pending applications can be approved.");
+                                if (currentApp.applicantUid !== uid) throw new Error("The applicant account does not match this application.");
+                                if (codeSnap.exists) {
+                                    var collision = new Error("Please retry reseller code generation.");
+                                    collision.code = "reseller-code-collision";
+                                    throw collision;
+                                }
+
+                                var previous = userSnap.exists ? userSnap.data() || {} : {};
+                                if (previous.role === "admin") throw new Error("This email belongs to an admin account and cannot be converted into a reseller.");
+                                if (SUB.isBlocked(previous) || (previous.status && previous.status !== "active")) {
+                                    throw new Error("This customer account is blocked or inactive. Activate the customer account before approving the reseller application.");
+                                }
+                                if (previous.email && String(previous.email).trim().toLowerCase() !== emailLower) throw new Error("The linked account email does not match the application email.");
+
+                                var now = SUB.now();
+                                var resellerProfile = {
+                                    name: app.fullName || previous.name || "",
+                                    email: email,
+                                    phone: app.phone || previous.phone || previous.whatsapp || "",
+                                    whatsapp: app.phone || previous.whatsapp || previous.phone || "",
+                                    city: app.city || previous.city || "",
+                                    cnic: app.cnic || previous.cnic || "",
+                                    paymentMethod: app.paymentMethod || previous.paymentMethod || "",
+                                    account: app.accountNumber || previous.account || "",
+                                    resellerDocuments: app.documents || previous.resellerDocuments || {},
+                                    role: "reseller",
+                                    status: "active",
+                                    access: "Allowed",
+                                    resellerCode: code,
+                                    assignedProductIds: Array.isArray(previous.assignedProductIds) ? previous.assignedProductIds : [],
+                                    points: Number.isFinite(Number(previous.points)) ? Number(previous.points) : 0,
+                                    wallet: Number.isFinite(Number(previous.wallet)) ? Number(previous.wallet) : 0,
+                                    walletUsed: Number.isFinite(Number(previous.walletUsed)) ? Number(previous.walletUsed) : 0,
+                                    createdAt: previous.createdAt || now,
+                                    updatedAt: now,
+                                    createdBy: previous.createdBy || (A.me && A.me.name) || "Admin",
+                                    resellerApplicationId: applicationId
+                                };
+
+                                tx.set(userRef, resellerProfile, { merge: true });
+                                // Referral documents are publicly readable by code; store no personal data here.
+                                tx.set(codeRef, { uid: uid, updatedAt: now }, { merge: true });
+                                tx.update(appRef, {
+                                    status: "Approved",
+                                    applicantUid: uid,
+                                    resellerUid: uid,
+                                    resellerCode: resellerProfile.resellerCode,
+                                    processedAt: now,
+                                    processedBy: (A.me && A.me.name) || "Admin"
+                                });
+
+                                return {
+                                    uid: uid,
+                                    code: resellerProfile.resellerCode,
+                                    password: account.password,
+                                    existingAccount: account.existingAccount,
+                                    alreadyApproved: false
+                                };
+                            });
+                        }).catch(function (error) {
+                            if (error && error.code === "reseller-code-collision" && attemptsLeft > 1) {
+                                return commitApproval(attemptsLeft - 1);
+                            }
+                            throw error;
+                        });
+                    }
+
+                    return commitApproval(8);
+                }).then(function (result) {
+                    A.refreshBadges();
+                    return result;
+                });
+            });
+        });
     };
 
     A.showCredentials = function (title, email, pass, code, existingAccount) {
         var loginUrl = location.origin + location.pathname.replace(/admin\/[^/]*$/, "reseller/index.html");
         var accountMessage = existingAccount
-            ? '<div class="a-note ok">This existing account has been linked to the reseller application. The reseller can sign in with the <b>same email and current password</b>. Use Forgot Password if they need to reset it.</div>'
-            : '<div class="a-note ok">Reseller account created. <b>Copy the temporary password now</b> - it is shown only once and is not stored anywhere. The reseller can change it after signing in.</div>';
+            ? '<div class="a-note ok">The applicant account has been approved as a reseller. They can sign in with the <b>same email and password used during application</b>. Use Forgot Password if needed.</div>'
+            : '<div class="a-note ok">A reseller login was created for this older application. <b>Copy the temporary password now</b>; it is shown only once and is not stored anywhere.</div>';
         var passwordRow = existingAccount ? "" : '<b>Temporary password</b><span><code id="cPw">' + esc(pass) + "</code></span>";
         openModal(title,
             accountMessage +

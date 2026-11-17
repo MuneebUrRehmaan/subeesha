@@ -150,15 +150,19 @@ function addToCart(idOrName, price){
             showToast(p.name + " is out of stock.", "error", "Out of Stock");
             return;
         }
-        SUB.cart.add({ id:p.id, name:p.name, price:p._price, image:p._img, qty:1 });
+        if (!SUB.cart.add({ id:p.id, name:p.name, price:p._price, image:p._img, qty:1 })) return;
         showToast(p.name + " added to your cart.", "success", "Added to Cart");
         return;
     }
-    SUB.cart.add({ id:"demo-" + SUB.slug(idOrName), name:idOrName, price:Number(price) || 0, qty:1 });
+    if (!SUB.cart.add({ id:"demo-" + SUB.slug(idOrName), name:idOrName, price:Number(price) || 0, qty:1 })) return;
     showToast(idOrName + " added to your cart.", "success", "Added to Cart");
 }
 
 function showCart(){
+    if (!SUB.isAuthenticated()) {
+        window.location.href = SUB.url("page/billing.html?cart=1");
+        return;
+    }
     const items = SUB.cart.get();
     if(!items.length){
         showToast("Your shopping bag is currently empty.", "warning", "Warning");
